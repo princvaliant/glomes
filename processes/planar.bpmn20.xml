@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="nwLED">
+  <process id="planar" name="Fab Planar" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="contact_pattering" name="Contact patterning" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1020"></userTask>
+    <userTask id="contact_pr_liftoff" name="Contact PR liftoff" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1130"></userTask>
+    <sequenceFlow id="flow4" name="to contact pr liftoff" sourceRef="metal_deposition" targetRef="contact_pr_liftoff"></sequenceFlow>
+    <userTask id="ito_ebeam_deposition" name="ITO ebeam deposition" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1070"></userTask>
+    <endEvent id="end" name="End"></endEvent>
+    <userTask id="mesa_patterning" name="Mesa patterning" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1075"></userTask>
+    <userTask id="ito_anneal" name="ITO anneal" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1090"></userTask>
+    <userTask id="mesa_etch" name="Mesa etch" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1085"></userTask>
+    <sequenceFlow id="flow12" name="to mesa etch" sourceRef="mesa_patterning" targetRef="mesa_etch"></sequenceFlow>
+    <sequenceFlow id="flow13" name="to ito anneal" sourceRef="resist_strip" targetRef="ito_anneal">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow19" name="to mesa patterning" sourceRef="ito_ebeam_deposition" targetRef="mesa_patterning"></sequenceFlow>
+    <userTask id="metal_deposition" name="Metal deposition" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1025"></userTask>
+    <sequenceFlow id="flow23" name="to metal deposition" sourceRef="contact_pattering" targetRef="metal_deposition"></sequenceFlow>
+    <sequenceFlow id="flow26" name="to contact patterning" sourceRef="ito_anneal" targetRef="contact_pattering"></sequenceFlow>
+    <sequenceFlow id="flow27" sourceRef="startevent1" targetRef="ito_ebeam_deposition"></sequenceFlow>
+    <sequenceFlow id="flow28" name="to test queue" sourceRef="final_inspection" targetRef="end"></sequenceFlow>
+    <userTask id="resist_strip" name="Resist strip" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1087"></userTask>
+    <sequenceFlow id="flow29" name="to resist strip" sourceRef="mesa_etch" targetRef="resist_strip"></sequenceFlow>
+    <sequenceFlow id="flow30" name="to contact patterning" sourceRef="resist_strip" targetRef="contact_pattering">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="final_inspection" name="Final inspection" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1145"></userTask>
+    <sequenceFlow id="flow31" name="to final inspection" sourceRef="contact_pr_liftoff" targetRef="final_inspection"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_planar">
+    <bpmndi:BPMNPlane bpmnElement="planar" id="BPMNPlane_planar">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="135.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="contact_pattering" id="BPMNShape_contact_pattering">
+        <omgdc:Bounds height="55.0" width="171.0" x="390.0" y="88.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="contact_pr_liftoff" id="BPMNShape_contact_pr_liftoff">
+        <omgdc:Bounds height="55.0" width="171.0" x="390.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ito_ebeam_deposition" id="BPMNShape_ito_ebeam_deposition">
+        <omgdc:Bounds height="55.0" width="161.0" x="72.0" y="119.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="1080.0" y="640.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mesa_patterning" id="BPMNShape_mesa_patterning">
+        <omgdc:Bounds height="55.0" width="161.0" x="72.0" y="218.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ito_anneal" id="BPMNShape_ito_anneal">
+        <omgdc:Bounds height="55.0" width="161.0" x="72.0" y="510.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mesa_etch" id="BPMNShape_mesa_etch">
+        <omgdc:Bounds height="55.0" width="161.0" x="72.0" y="315.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="metal_deposition" id="BPMNShape_metal_deposition">
+        <omgdc:Bounds height="55.0" width="171.0" x="390.0" y="173.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="resist_strip" id="BPMNShape_resist_strip">
+        <omgdc:Bounds height="55.0" width="161.0" x="72.0" y="410.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="final_inspection" id="BPMNShape_final_inspection">
+        <omgdc:Bounds height="55.0" width="171.0" x="390.0" y="349.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="475.0" y="228.0"></omgdi:waypoint>
+        <omgdi:waypoint x="475.0" y="260.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="152.0" y="273.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="315.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="152.0" y="465.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="510.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="152.0" y="174.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="218.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="475.0" y="143.0"></omgdi:waypoint>
+        <omgdi:waypoint x="475.0" y="173.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
+        <omgdi:waypoint x="233.0" y="537.0"></omgdi:waypoint>
+        <omgdi:waypoint x="337.0" y="537.0"></omgdi:waypoint>
+        <omgdi:waypoint x="337.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="390.0" y="115.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="-97.0" y="148.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
+        <omgdi:waypoint x="152.0" y="55.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="119.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow28" id="BPMNEdge_flow28">
+        <omgdi:waypoint x="561.0" y="376.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1097.0" y="376.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1097.0" y="640.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow29" id="BPMNEdge_flow29">
+        <omgdi:waypoint x="152.0" y="370.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="410.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow30" id="BPMNEdge_flow30">
+        <omgdi:waypoint x="233.0" y="437.0"></omgdi:waypoint>
+        <omgdi:waypoint x="338.0" y="437.0"></omgdi:waypoint>
+        <omgdi:waypoint x="338.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="390.0" y="115.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="-98.0" y="100.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="475.0" y="315.0"></omgdi:waypoint>
+        <omgdi:waypoint x="475.0" y="349.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

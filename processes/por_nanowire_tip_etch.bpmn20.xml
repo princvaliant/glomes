@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="nwLED">
+  <process id="por_nanowire_tip_etch" name="POR Nanowire Tip Etch" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="ito_ebeam_deposition" name="ITO ebeam deposition" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1043"></userTask>
+    <endEvent id="end" name="End"></endEvent>
+    <userTask id="mesa_patterning" name="Mesa patterning" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1053"></userTask>
+    <userTask id="mesa_etch" name="Mesa etch" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1063"></userTask>
+    <sequenceFlow id="flow12" name="to mesa etch" sourceRef="mesa_patterning" targetRef="mesa_etch"></sequenceFlow>
+    <sequenceFlow id="flow19" name="to mesa patterning" sourceRef="ito_sputtered" targetRef="mesa_patterning"></sequenceFlow>
+    <userTask id="resist_strip" name="Resist strip" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1073"></userTask>
+    <sequenceFlow id="flow29" name="to resist strip" sourceRef="mesa_etch" targetRef="resist_strip"></sequenceFlow>
+    <sequenceFlow id="flow33" sourceRef="startevent1" targetRef="ito_ebeam_deposition"></sequenceFlow>
+    <userTask id="ito_sputtered" name="ITO sputtered" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1046"></userTask>
+    <sequenceFlow id="flow34" name="to mesa patterning" sourceRef="ito_ebeam_deposition" targetRef="mesa_patterning"></sequenceFlow>
+    <userTask id="post_anneal" name="Post Anneal" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1120"></userTask>
+    <sequenceFlow id="flow35" name="to post anneal" sourceRef="resist_strip" targetRef="post_anneal"></sequenceFlow>
+    <userTask id="final_inspection" name="Final inspection" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1121"></userTask>
+    <sequenceFlow id="flow36" name="to final inspection" sourceRef="post_anneal" targetRef="final_inspection"></sequenceFlow>
+    <userTask id="pre_tip_etch_test1" name="Pre tip etch test1" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1122"></userTask>
+    <sequenceFlow id="flow37" name="to pre tip etch test 1" sourceRef="final_inspection" targetRef="pre_tip_etch_test1"></sequenceFlow>
+    <userTask id="tip_etch_pr_patterning1" name="Tip etch PR patterning1" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1123"></userTask>
+    <sequenceFlow id="flow38" name="to tip etch patterning 1" sourceRef="pre_tip_etch_test1" targetRef="tip_etch_pr_patterning1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="tip_etch1" name="Tip etch1" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1124"></userTask>
+    <sequenceFlow id="flow39" name="to tip etch 1" sourceRef="tip_etch_pr_patterning1" targetRef="tip_etch1"></sequenceFlow>
+    <userTask id="tip_etch_pr_patterning2" name="Tip etch PR patterning2" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1125"></userTask>
+    <sequenceFlow id="flow40" name="to tip etch pr patterning 2" sourceRef="tip_etch1" targetRef="tip_etch_pr_patterning2"></sequenceFlow>
+    <userTask id="tip_etch2" name="Tip etch2" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1126"></userTask>
+    <sequenceFlow id="flow41" name="to tip etch 2" sourceRef="tip_etch_pr_patterning2" targetRef="tip_etch2"></sequenceFlow>
+    <userTask id="tip_etch_sem1" name="Tip etch SEM1" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1127"></userTask>
+    <sequenceFlow id="flow42" name="to tip etch sem 1" sourceRef="tip_etch2" targetRef="tip_etch_sem1"></sequenceFlow>
+    <userTask id="tip_etch3" name="Tip etch3" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1128"></userTask>
+    <sequenceFlow id="flow43" name="to tip etch 3" sourceRef="tip_etch_sem1" targetRef="tip_etch3"></sequenceFlow>
+    <userTask id="tip_etch_sem2" name="Tip etch SEM2" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1129"></userTask>
+    <sequenceFlow id="flow44" name="to tip etch sem 2" sourceRef="tip_etch3" targetRef="tip_etch_sem2"></sequenceFlow>
+    <userTask id="fa_queue" name="FA queue" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1119"></userTask>
+    <sequenceFlow id="flow45" name="to fa queue" sourceRef="pre_tip_etch_test1" targetRef="fa_queue">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="final_tip_etch_test" name="Final tip etch test" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1130"></userTask>
+    <sequenceFlow id="flow46" name="to final tip etch test" sourceRef="tip_etch_sem1" targetRef="final_tip_etch_test"></sequenceFlow>
+    <sequenceFlow id="flow47" name="to final tip etch test" sourceRef="tip_etch_sem2" targetRef="final_tip_etch_test"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_por_nanowire_tip_etch">
+    <bpmndi:BPMNPlane bpmnElement="por_nanowire_tip_etch" id="BPMNPlane_por_nanowire_tip_etch">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="325.0" y="70.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ito_ebeam_deposition" id="BPMNShape_ito_ebeam_deposition">
+        <omgdc:Bounds height="55.0" width="161.0" x="262.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="1210.0" y="823.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mesa_patterning" id="BPMNShape_mesa_patterning">
+        <omgdc:Bounds height="55.0" width="161.0" x="262.0" y="289.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mesa_etch" id="BPMNShape_mesa_etch">
+        <omgdc:Bounds height="55.0" width="161.0" x="262.0" y="383.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="resist_strip" id="BPMNShape_resist_strip">
+        <omgdc:Bounds height="55.0" width="161.0" x="262.0" y="486.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ito_sputtered" id="BPMNShape_ito_sputtered">
+        <omgdc:Bounds height="55.0" width="161.0" x="70.0" y="213.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="post_anneal" id="BPMNShape_post_anneal">
+        <omgdc:Bounds height="55.0" width="171.0" x="257.0" y="669.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="final_inspection" id="BPMNShape_final_inspection">
+        <omgdc:Bounds height="55.0" width="171.0" x="257.0" y="766.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pre_tip_etch_test1" id="BPMNShape_pre_tip_etch_test1">
+        <omgdc:Bounds height="55.0" width="171.0" x="656.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tip_etch_pr_patterning1" id="BPMNShape_tip_etch_pr_patterning1">
+        <omgdc:Bounds height="55.0" width="166.0" x="659.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tip_etch1" id="BPMNShape_tip_etch1">
+        <omgdc:Bounds height="55.0" width="166.0" x="659.0" y="340.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tip_etch_pr_patterning2" id="BPMNShape_tip_etch_pr_patterning2">
+        <omgdc:Bounds height="55.0" width="167.0" x="658.0" y="432.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tip_etch2" id="BPMNShape_tip_etch2">
+        <omgdc:Bounds height="55.0" width="166.0" x="659.0" y="522.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tip_etch_sem1" id="BPMNShape_tip_etch_sem1">
+        <omgdc:Bounds height="55.0" width="168.0" x="659.0" y="616.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="fa_queue" id="BPMNShape_fa_queue">
+        <omgdc:Bounds height="55.0" width="105.0" x="970.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tip_etch3" id="BPMNShape_tip_etch3">
+        <omgdc:Bounds height="55.0" width="171.0" x="657.0" y="710.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tip_etch_sem2" id="BPMNShape_tip_etch_sem2">
+        <omgdc:Bounds height="55.0" width="169.0" x="658.0" y="810.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="final_tip_etch_test" id="BPMNShape_final_tip_etch_test">
+        <omgdc:Bounds height="55.0" width="171.0" x="953.0" y="710.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="342.0" y="344.0"></omgdi:waypoint>
+        <omgdi:waypoint x="342.0" y="383.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="62.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="150.0" y="268.0"></omgdi:waypoint>
+        <omgdi:waypoint x="150.0" y="316.0"></omgdi:waypoint>
+        <omgdi:waypoint x="262.0" y="316.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="89.0" x="-22.0" y="-33.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow29" id="BPMNEdge_flow29">
+        <omgdi:waypoint x="342.0" y="438.0"></omgdi:waypoint>
+        <omgdi:waypoint x="342.0" y="486.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="63.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow33" id="BPMNEdge_flow33">
+        <omgdi:waypoint x="342.0" y="105.0"></omgdi:waypoint>
+        <omgdi:waypoint x="342.0" y="140.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow34" id="BPMNEdge_flow34">
+        <omgdi:waypoint x="342.0" y="195.0"></omgdi:waypoint>
+        <omgdi:waypoint x="342.0" y="289.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="89.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow35" id="BPMNEdge_flow35">
+        <omgdi:waypoint x="342.0" y="541.0"></omgdi:waypoint>
+        <omgdi:waypoint x="342.0" y="669.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="68.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow36" id="BPMNEdge_flow36">
+        <omgdi:waypoint x="342.0" y="724.0"></omgdi:waypoint>
+        <omgdi:waypoint x="342.0" y="766.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="84.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow37" id="BPMNEdge_flow37">
+        <omgdi:waypoint x="342.0" y="821.0"></omgdi:waypoint>
+        <omgdi:waypoint x="342.0" y="847.0"></omgdi:waypoint>
+        <omgdi:waypoint x="542.0" y="847.0"></omgdi:waypoint>
+        <omgdi:waypoint x="542.0" y="79.0"></omgdi:waypoint>
+        <omgdi:waypoint x="741.0" y="79.0"></omgdi:waypoint>
+        <omgdi:waypoint x="741.0" y="140.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="96.0" x="-142.0" y="384.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow38" id="BPMNEdge_flow38">
+        <omgdi:waypoint x="741.0" y="195.0"></omgdi:waypoint>
+        <omgdi:waypoint x="742.0" y="240.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="11.0" y="-18.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow39" id="BPMNEdge_flow39">
+        <omgdi:waypoint x="742.0" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="742.0" y="340.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="56.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow40" id="BPMNEdge_flow40">
+        <omgdi:waypoint x="742.0" y="395.0"></omgdi:waypoint>
+        <omgdi:waypoint x="741.0" y="432.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="9.0" y="-23.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow41" id="BPMNEdge_flow41">
+        <omgdi:waypoint x="741.0" y="487.0"></omgdi:waypoint>
+        <omgdi:waypoint x="742.0" y="522.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="56.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow42" id="BPMNEdge_flow42">
+        <omgdi:waypoint x="742.0" y="577.0"></omgdi:waypoint>
+        <omgdi:waypoint x="743.0" y="616.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="79.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow43" id="BPMNEdge_flow43">
+        <omgdi:waypoint x="743.0" y="671.0"></omgdi:waypoint>
+        <omgdi:waypoint x="742.0" y="710.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="56.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow44" id="BPMNEdge_flow44">
+        <omgdi:waypoint x="742.0" y="765.0"></omgdi:waypoint>
+        <omgdi:waypoint x="742.0" y="810.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="79.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow45" id="BPMNEdge_flow45">
+        <omgdi:waypoint x="827.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="970.0" y="167.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="55.0" x="-28.0" y="3.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow46" id="BPMNEdge_flow46">
+        <omgdi:waypoint x="827.0" y="643.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1038.0" y="643.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1038.0" y="710.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="91.0" x="-17.0" y="-20.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow47" id="BPMNEdge_flow47">
+        <omgdi:waypoint x="827.0" y="837.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1038.0" y="837.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1038.0" y="765.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="91.0" x="-20.0" y="11.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="DC">
+  <process id="equipment" name="Equipment">
+    <startEvent id="s1" name="Start"></startEvent>
+    <endEvent id="End" name="End"></endEvent>
+    <userTask id="tiger_optics" name="Tiger optics" activiti:candidateGroups="ROLE_EQUIPMENT_ENG,ROLE_EQUIPMENT_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="5"></userTask>
+    <sequenceFlow id="flow4" name="" sourceRef="s1" targetRef="tiger_optics"></sequenceFlow>
+    <sequenceFlow id="flow6" name="End" sourceRef="tiger_optics" targetRef="End"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_equipment">
+    <bpmndi:BPMNPlane bpmnElement="equipment" id="BPMNPlane_equipment">
+      <bpmndi:BPMNShape bpmnElement="s1" id="BPMNShape_s1">
+        <omgdc:Bounds height="35" width="35" x="203" y="10"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End" id="BPMNShape_End">
+        <omgdc:Bounds height="35" width="35" x="900" y="660"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tiger_optics" id="BPMNShape_tiger_optics">
+        <omgdc:Bounds height="55" width="161" x="140" y="80"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="220" y="45"></omgdi:waypoint>
+        <omgdi:waypoint x="220" y="80"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="301" y="107"></omgdi:waypoint>
+        <omgdi:waypoint x="917" y="107"></omgdi:waypoint>
+        <omgdi:waypoint x="917" y="660"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

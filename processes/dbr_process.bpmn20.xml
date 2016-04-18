@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="nwLED">
+  <process id="dbr_process" name="DBR Process" isExecutable="true">
+    <startEvent id="s1" name="Start"></startEvent>
+    <endEvent id="End" name="End"></endEvent>
+    <userTask id="dbr_complete" name="DBR compete" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="2790"></userTask>
+    <sequenceFlow id="flow92" name="to dicing queue" sourceRef="dbr_complete" targetRef="End"></sequenceFlow>
+    <userTask id="plasma_clean" name="Plasma Clean" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="2710"></userTask>
+    <sequenceFlow id="flow95" name="to plasma clean" sourceRef="s1" targetRef="plasma_clean"></sequenceFlow>
+    <userTask id="dbr" name="DBR" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="2720"></userTask>
+    <sequenceFlow id="flow96" name="to dbr" sourceRef="plasma_clean" targetRef="dbr"></sequenceFlow>
+    <userTask id="post_dbr_test" name="Post DBR test" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN" activiti:formKey="2730"></userTask>
+    <sequenceFlow id="flow97" name="to post dbr test" sourceRef="dbr_characterization" targetRef="post_dbr_test"></sequenceFlow>
+    <userTask id="dbr_characterization" name="DBR characterization" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="2740"></userTask>
+    <sequenceFlow id="flow98" name="to dbr characterization" sourceRef="dbr" targetRef="dbr_characterization"></sequenceFlow>
+    <sequenceFlow id="flow99" name="to dbr complete" sourceRef="dbr_final_inspection" targetRef="dbr_complete">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="al_deposition" name="Al deposition" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="2750"></userTask>
+    <sequenceFlow id="flow100" name="to al depostion" sourceRef="dbr_characterization" targetRef="al_deposition">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow101" name="to post dbr test" sourceRef="al_deposition" targetRef="post_dbr_test"></sequenceFlow>
+    <userTask id="dbr_street_patterning" name="DBR street patterning" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN" activiti:formKey="2732"></userTask>
+    <sequenceFlow id="flow102" name="to dbr street patterning" sourceRef="post_dbr_test" targetRef="dbr_street_patterning"></sequenceFlow>
+    <userTask id="dbr_street_etch" name="DBR street etch" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN" activiti:formKey="2733"></userTask>
+    <sequenceFlow id="flow103" name="to dbr street etch" sourceRef="dbr_street_patterning" targetRef="dbr_street_etch"></sequenceFlow>
+    <userTask id="dbr_street_etch_resist_strip" name="DBR street etch resist strip" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN" activiti:formKey="2734"></userTask>
+    <sequenceFlow id="flow104" name="to dbr street etch resist strip" sourceRef="dbr_street_etch" targetRef="dbr_street_etch_resist_strip"></sequenceFlow>
+    <userTask id="dbr_final_inspection" name="DBR final inspection" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN" activiti:formKey="2735"></userTask>
+    <sequenceFlow id="flow105" name="to dbr final inspection" sourceRef="dbr_street_etch_resist_strip" targetRef="dbr_final_inspection"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_dbr_process">
+    <bpmndi:BPMNPlane bpmnElement="dbr_process" id="BPMNPlane_dbr_process">
+      <bpmndi:BPMNShape bpmnElement="s1" id="BPMNShape_s1">
+        <omgdc:Bounds height="35.0" width="35.0" x="304.0" y="70.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End" id="BPMNShape_End">
+        <omgdc:Bounds height="35.0" width="35.0" x="1030.0" y="860.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="plasma_clean" id="BPMNShape_plasma_clean">
+        <omgdc:Bounds height="55.0" width="105.0" x="269.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dbr" id="BPMNShape_dbr">
+        <omgdc:Bounds height="55.0" width="105.0" x="269.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dbr_complete" id="BPMNShape_dbr_complete">
+        <omgdc:Bounds height="55.0" width="107.0" x="601.0" y="850.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="post_dbr_test" id="BPMNShape_post_dbr_test">
+        <omgdc:Bounds height="55.0" width="105.0" x="269.0" y="450.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dbr_characterization" id="BPMNShape_dbr_characterization">
+        <omgdc:Bounds height="55.0" width="105.0" x="269.0" y="336.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="al_deposition" id="BPMNShape_al_deposition">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="336.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dbr_street_patterning" id="BPMNShape_dbr_street_patterning">
+        <omgdc:Bounds height="55.0" width="105.0" x="269.0" y="545.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dbr_street_etch" id="BPMNShape_dbr_street_etch">
+        <omgdc:Bounds height="55.0" width="105.0" x="269.0" y="642.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dbr_street_etch_resist_strip" id="BPMNShape_dbr_street_etch_resist_strip">
+        <omgdc:Bounds height="55.0" width="105.0" x="269.0" y="733.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dbr_final_inspection" id="BPMNShape_dbr_final_inspection">
+        <omgdc:Bounds height="55.0" width="105.0" x="269.0" y="850.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow92" id="BPMNEdge_flow92">
+        <omgdi:waypoint x="708.0" y="877.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1030.0" y="877.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow95" id="BPMNEdge_flow95">
+        <omgdi:waypoint x="321.0" y="105.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="150.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="75.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow96" id="BPMNEdge_flow96">
+        <omgdi:waypoint x="321.0" y="205.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="250.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="28.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow97" id="BPMNEdge_flow97">
+        <omgdi:waypoint x="321.0" y="391.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="450.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="73.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow98" id="BPMNEdge_flow98">
+        <omgdi:waypoint x="321.0" y="305.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="336.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow99" id="BPMNEdge_flow99">
+        <omgdi:waypoint x="374.0" y="877.0"></omgdi:waypoint>
+        <omgdi:waypoint x="601.0" y="877.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="74.0" x="11.0" y="-2.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow100" id="BPMNEdge_flow100">
+        <omgdi:waypoint x="374.0" y="363.0"></omgdi:waypoint>
+        <omgdi:waypoint x="480.0" y="363.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="70.0" x="-37.0" y="14.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow101" id="BPMNEdge_flow101">
+        <omgdi:waypoint x="532.0" y="391.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="477.0"></omgdi:waypoint>
+        <omgdi:waypoint x="374.0" y="477.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="73.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow102" id="BPMNEdge_flow102">
+        <omgdi:waypoint x="321.0" y="505.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="545.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="10.0" y="-18.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow103" id="BPMNEdge_flow103">
+        <omgdi:waypoint x="321.0" y="600.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="642.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="83.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow104" id="BPMNEdge_flow104">
+        <omgdi:waypoint x="321.0" y="697.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="733.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="10.0" y="-13.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow105" id="BPMNEdge_flow105">
+        <omgdi:waypoint x="321.0" y="788.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="850.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="10.0" y="-16.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

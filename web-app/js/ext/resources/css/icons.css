@@ -1,0 +1,252 @@
+#msg-div {
+    position:absolute;
+    left:35%;
+    top:10px;
+    width:300px;
+    z-index:20000;
+}
+#msg-div .msg {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #F6F6F6;
+    border: 2px solid #ccc;
+    margin-top: 2px;
+    padding: 10px 15px;
+    color: #555;
+}
+#msg-div .msg h3 {
+    margin: 0 0 8px;
+    font-weight: bold;
+    font-size: 15px;
+}
+#msg-div .msg p {
+    margin: 0;
+}
+
+.mandatory-column .x-btn-inner {
+	font-weight:bold;
+	color:#222;
+}
+
+.wordwrap { 
+   white-space: pre-wrap;      /* CSS3 */   
+   white-space: -moz-pre-wrap; /* Firefox */    
+   white-space: -pre-wrap;     /* Opera <7 */
+   white-space: -o-pre-wrap;   /* Opera 7 */    
+   word-wrap: break-word;      /* IE */
+}
+
+.spcvtext {
+    font-family:"Verdana";
+    color:#111111;
+    font-size:8px;
+}
+
+.pagebreak {
+    break-after: always;
+    font-family:"Verdana";
+    color:#111111;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.column_nocomments { 
+	background: url(../icons/comments_add_icon.png) !important;
+	width: 16px; 
+	height: 16px;
+}
+.column_comments { 
+	background: url(../icons/comments.png ) !important;
+	width: 16px; 
+	height: 16px;
+}
+.column_delete { 
+	background: url(../icons/delete.png ) !important;
+	width: 16px; 
+	height: 16px;
+}
+.column_edit { 
+	background: url(../icons/table_edit.png ) !important;
+	width: 16px; 
+	height: 16px;
+}
+.column_nofiles { 
+	background: '';
+	width: 16px; 
+	height: 16px;
+}
+.column_files { 
+	background: url(../icons/files.png ) !important;
+	width: 16px; 
+	height: 16px;
+}
+.column_download { 
+	background: url(../icons/download_file.png ) !important;
+	width: 16px; 
+	height: 16px;
+}
+.column_details { 
+	background: url(../icons/info_icon.png ) !important;
+	width: 16px; 
+	height: 16px;
+}
+
+.x-grid-row-selected {
+    background-color: #5FA2FA !important;
+}
+.x-grid-row-selected TD {
+    background-color: #5FA2FA !important;
+}
+.row_red_background { 
+     background-color: #FFBCBA !important;
+}
+.row_red_background TD {	
+	 background-color: #FFBCBA !important;
+}
+.row_red_background.x-grid-row-alt {
+     background-color: #F2B5B3 !important;
+}
+.row_red_background.x-grid-row-alt TD {
+	 background-color: #F2B5B3 !important;
+}
+.row_red_background.x-grid-row-selected {
+     background-color: #ED9393 !important;
+}
+.row_red_background.x-grid-row-selected TD {
+	 background-color: #ED9393 !important;
+}
+.row_red_background.x-grid-row-alt.x-grid-row-selected {
+     background-color: #ED9393 !important;
+}
+.row_red_background.x-grid-row-alt.x-grid-row-selected TD {
+	 background-color: #ED9393 !important;
+}
+.row_yellow_background { 
+     background-color: #FCF188 !important;
+}
+.row_yellow_background TD {	
+	 background-color: #FCF188 !important;
+}
+.row_yellow_background.x-grid-row-alt { 
+     background-color: #F4E982 !important;
+}
+.row_yellow_background.x-grid-row-alt TD {	
+	 background-color: #F4E982 !important;
+}
+.row_yellow_background.x-grid-row-selected { 
+     background-color: #DDD062 !important;
+}
+.row_yellow_background.x-grid-row-selected TD {	
+	 background-color: #DDD062 !important;
+}
+.row_yellow_background.x-grid-row-alt.x-grid-row-selected { 
+     background-color: #DDD062 !important;
+}
+.row_yellow_background.x-grid-row-alt.x-grid-row-selected TD {	
+	 background-color: #DDD062 !important;
+}
+
+#mainHeader_header_hd-textEl {
+	color:#00FF00;
+	font-weight:bold;
+	font-size:16px;
+}
+
+#mainHeader_header {
+	background-color: #282828;
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0.2, rgb(29,
+		28, 24) ), color-stop(0.8, rgb(60, 60, 50) ) );
+	background: -moz-linear-gradient(center bottom, rgb(39, 38, 34) 20%,
+		rgb(50, 50, 50) 80% );
+	padding: -2,0,0,0;
+	margin: -2,0,0,0;
+}
+
+/*
+ * RangeMenu Styles
+ */
+
+.ux-rangemenu-icon {
+    display: block;
+    height: 16px;
+    background: no-repeat 5px center;
+}
+
+.ux-rangemenu-gt {
+    background-image: url(../icons/greater_than.png) !important;
+}
+
+.ux-rangemenu-lt {
+    background-image: url(../icons/less_than.png) !important;
+}
+
+.ux-rangemenu-eq {
+    background-image: url(../icons/equals.png) !important;
+}
+
+/*
+ * GridFilters Styles
+ */
+
+.ux-filtered-column {
+    font-style: italic;
+    font-weight: bold;
+}
+
+.ux-gridfilter-text-icon {
+    background-image: url(../icons/find.png) !important;
+}
+
+
+.remove-sort-icon { background-image: url(../icons/hmenu-rrmv.gif) !important; }
+.icon-barcode { background-image: url(../icons/barcode-icon.png) !important; }
+.icon-test { background-image: url(../icons/test-icon32.png) !important; }
+.icon-auto-route { background-image: url(../icons/auto-route-icon.png) !important; }
+.icon-pctg { background-image: url(../icons/pctg-icon.png) !important; }
+.icon-logout { background-image: url(../icons/logout.png) !important; }
+.icon-clear-selection { background-image: url(../icons/shape_square_delete.png) !important; }
+.icon-add-comment { background-image: url(../icons/comments_add_icon.png) !important; }
+.icon-configuration { background-image: url(../icons/configuration-icon.png) !important; }
+.icon-dashboard { background-image: url(../icons/dashboard-icon.png) !important; }
+.icon-equipmentlarge { background-image: url(../icons/equipment-icon.png) !important; }
+.icon-flowchart { background-image: url(../icons/flowchart-icon.png) !important; }
+.icon-chart { background-image: url(../icons/chart-icon.png) !important; }
+.icon-play { background-image: url(../icons/play-icon.png) !important; }
+.icon-printer { background-image: url(../icons/printer_icon.png) !important; }
+.icon-excel { background-image: url(../icons/excel.gif) !important; }
+.icon-excel32 { background-image: url(../icons/excel-icon.png) !important; }
+.icon-epirun { background-image: url(../icons/epirun-icon.png) !important; }
+.icon-equipment { background-image: url(../icons/equipment.png) !important; }
+.icon-settings { background-image: url(../icons/settings.png) !important; }
+.icon-home { background-image: url(../icons/home.png) !important; }
+.icon-rework { background-image: url(../icons/arrow_redo.png) !important; }
+.icon-arrowdown { background-image: url(../icons/arrow_down.png) !important; }
+.icon-report { background-image: url(../icons/report.png) !important; }
+.icon-file_upload { background-image: url(../icons/file_upload.png) !important; }
+.icon-report2 { background-image: url(../icons/stats-icon.png) !important; }
+.icon-spc { background-image: url(../icons/spc-icon.png) !important; }
+.icon-left { background-image: url(../icons/left-icon.png) !important; }
+.icon-application_home { background-image: url(../icons/application_home.png) !important; }
+.icon-arrow_down { background-image: url(../icons/arrow_down.png) !important; }
+.icon-arrow_redo { background-image: url(../icons/arrow_redo.png) !important; }
+.icon-arrow_refresh { background-image: url(../icons/arrow_refresh.png) !important; }
+.icon-bullet_tick { background-image: url(../icons/bullet_tick.png) !important; width:16px;height:16px;margin:0;}
+.icon-calculator_add { background-image: url(../icons/calculator-add-icon.png) !important; }
+.icon-chart_organisation { background-image: url(../icons/chart_organisation.png) !important; }
+.icon-comments { background-image: url(../icons/comments.png) !important; }
+.icon-delete { background-image: url(../icons/delete.png) !important; }
+.icon-disk_multiple { background-image: url(../icons/disk_multiple.png) !important; }
+.icon-report { background-image: url(../icons/report.png) !important; }
+.icon-report_go { background-image: url(../icons/report_go.png) !important; }
+.icon-ruby_go { background-image: url(../icons/ruby_go.png) !important; }
+.icon-shape_square_add { background-image: url(../icons/shape_square_add.png) !important; }
+.icon-shape_square_delete { background-image: url(../icons/shape_square_delete.png) !important; }
+.icon-tab_go { background-image: url(../icons/tab_go.png) !important; }
+.icon-table_delete { background-image: url(../icons/table_delete.png) !important; }
+.icon-table_edit { background-image: url(../icons/table_edit.png) !important; }
+.icon-start { background-image: url(../icons/start-icon.png) !important; }
+.icon-ok { background-image: url(../icons/ok.png) !important; }
+.icon-cancel { background-image: url(../icons/cancel.png) !important; }
+
+
+

@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="Die">
+  <process id="packaging" name="Packaging" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="end" name="End"></endEvent>
+    <sequenceFlow id="flow2" sourceRef="lamp_inventory" targetRef="end"></sequenceFlow>
+    <userTask id="sphere_test_lamp" name="Sphere test Lamp" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4030"></userTask>
+    <userTask id="die_attach_lamp" name="Die attach Lamp" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4010"></userTask>
+    <sequenceFlow id="flow5" name="to die attach lamp" sourceRef="packaging_queue" targetRef="die_attach_lamp">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="wirebond_lamp" name="Wirebond Lamp" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4020"></userTask>
+    <sequenceFlow id="flow7" name="to wirebond" sourceRef="die_attach_lamp" targetRef="wirebond_lamp"></sequenceFlow>
+    <userTask id="lamp_inventory" name="Lamp inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4060"></userTask>
+    <userTask id="sphere_test2_lamp" name="Sphere test 2 Lamp" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4050"></userTask>
+    <userTask id="packaging_queue" name="Packaging queue" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4000"></userTask>
+    <sequenceFlow id="flow13" sourceRef="startevent1" targetRef="packaging_queue"></sequenceFlow>
+    <userTask id="die_attach_rel" name="Die attach Rel" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4015"></userTask>
+    <sequenceFlow id="flow14" name="to attach die Rel" sourceRef="packaging_queue" targetRef="die_attach_rel">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="wirebond_rel" name="Wirebond Rel" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4025"></userTask>
+    <sequenceFlow id="flow16" name="to wirebond" sourceRef="die_attach_rel" targetRef="wirebond_rel"></sequenceFlow>
+    <sequenceFlow id="flow18" name="to lamp inventory" sourceRef="sphere_test2_lamp" targetRef="lamp_inventory"></sequenceFlow>
+    <userTask id="die_attach_samples" name="Die attach Samples" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4016"></userTask>
+    <userTask id="wirebond_samples" name="Wirebond samples" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4026"></userTask>
+    <sequenceFlow id="flow23" name="to wirebond" sourceRef="die_attach_samples" targetRef="wirebond_samples"></sequenceFlow>
+    <userTask id="d65_before_encap" name="D65 before encap" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4036"></userTask>
+    <sequenceFlow id="flow24" name="to d65 before encap" sourceRef="wirebond_samples" targetRef="d65_before_encap">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="encapsulation_samples" name="Encapsulation Samples" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4046"></userTask>
+    <sequenceFlow id="flow25" name="to encapsulation" sourceRef="d65_before_encap" targetRef="encapsulation_samples"></sequenceFlow>
+    <userTask id="d65_after_encap" name="D65 after encap" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4056"></userTask>
+    <sequenceFlow id="flow26" name="to d65 after encap" sourceRef="encapsulation_samples" targetRef="d65_after_encap"></sequenceFlow>
+    <userTask id="rel_inventory" name="Rel inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4070"></userTask>
+    <userTask id="samples_inventory" name="Samples inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4066"></userTask>
+    <sequenceFlow id="flow29" name="to inventory" sourceRef="d65_after_encap" targetRef="samples_inventory"></sequenceFlow>
+    <userTask id="test_rel" name="Test Rel" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4065"></userTask>
+    <sequenceFlow id="flow35" name="to rel inventory" sourceRef="wirebond_rel" targetRef="rel_inventory"></sequenceFlow>
+    <sequenceFlow id="flow36" name="to test rel" sourceRef="rel_inventory" targetRef="test_rel">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="poststress_inventory" name="Post-stress inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4075"></userTask>
+    <sequenceFlow id="flow37" name="to post-stress inventory" sourceRef="test_rel" targetRef="poststress_inventory"></sequenceFlow>
+    <sequenceFlow id="flow39" sourceRef="poststress_inventory" targetRef="end"></sequenceFlow>
+    <userTask id="test_rel_board" name="Test rel board" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4067"></userTask>
+    <sequenceFlow id="flow40" name="to rel board test" sourceRef="rel_inventory" targetRef="test_rel_board">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow41" name="to post-stress inventory" sourceRef="test_rel_board" targetRef="poststress_inventory">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[6]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="sphere_test_lamp_board" name="Sphere board test lamp" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4031"></userTask>
+    <sequenceFlow id="flow43" name="to sphere board test" sourceRef="wirebond_lamp" targetRef="sphere_test_lamp_board">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="encapsulation_lamp" name="Encapsulation lamp" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4041"></userTask>
+    <sequenceFlow id="flow44" name="to encapsulation" sourceRef="sphere_test_lamp_board" targetRef="encapsulation_lamp"></sequenceFlow>
+    <userTask id="sphere_test2_lamp_board" name="Sphere board test 2 lamp" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4051"></userTask>
+    <sequenceFlow id="flow45" name="to sphere board test 2" sourceRef="encapsulation_lamp" targetRef="sphere_test2_lamp_board"></sequenceFlow>
+    <sequenceFlow id="flow46" name="to lamp inventory" sourceRef="sphere_test2_lamp_board" targetRef="lamp_inventory"></sequenceFlow>
+    <userTask id="spc_standard_board" name="SPC standard board" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_ADMIN" activiti:formKey="4068"></userTask>
+    <sequenceFlow id="flow48" name="to spc standard board" sourceRef="rel_inventory" targetRef="spc_standard_board"></sequenceFlow>
+    <sequenceFlow id="flow49" name="End" sourceRef="spc_standard_board" targetRef="end"></sequenceFlow>
+    <userTask id="lost_found" name="Lost and found" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4800"></userTask>
+    <sequenceFlow id="flow52" sourceRef="lost_found" targetRef="end"></sequenceFlow>
+    <sequenceFlow id="flow53" sourceRef="samples_inventory" targetRef="end"></sequenceFlow>
+    <sequenceFlow id="flow54" name="to encapsulation" sourceRef="wirebond_lamp" targetRef="encapsulation_lamp">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow55" name="to encapsulation" sourceRef="sphere_test_lamp" targetRef="encapsulation_lamp"></sequenceFlow>
+    <sequenceFlow id="flow56" name="to encapsulation" sourceRef="wirebond_samples" targetRef="encapsulation_samples">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="used_samples" name="Used samples" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4070"></userTask>
+    <sequenceFlow id="flow57" name="to used samples" sourceRef="samples_inventory" targetRef="used_samples">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[3]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="d65_rel_test" name="D65 Rel Test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4068"></userTask>
+    <sequenceFlow id="flow58" name="to d65 rel test" sourceRef="samples_inventory" targetRef="d65_rel_test">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow59" name="to d65 rel test" sourceRef="d65_stress" targetRef="d65_rel_test"></sequenceFlow>
+    <userTask id="d65_stress" name="D65 Stress" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4069"></userTask>
+    <sequenceFlow id="flow60" name="to d65 stress" sourceRef="d65_rel_test" targetRef="d65_stress"></sequenceFlow>
+    <sequenceFlow id="flow61" name="to samples inventory" sourceRef="d65_rel_test" targetRef="samples_inventory"></sequenceFlow>
+    <userTask id="htol" name="HTOL" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4070"></userTask>
+    <sequenceFlow id="flow62" name="to htol" sourceRef="test_rel_board" targetRef="htol">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="whtol" name="WHTOL" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4071"></userTask>
+    <sequenceFlow id="flow63" name="to whtol" sourceRef="test_rel_board" targetRef="whtol">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="rtol" name="RTOL" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4072"></userTask>
+    <sequenceFlow id="flow64" name="to rtol" sourceRef="test_rel_board" targetRef="rtol">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[3]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="thermal_shock" name="Thermal shock" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4073"></userTask>
+    <sequenceFlow id="flow65" name="to thermal shock" sourceRef="test_rel_board" targetRef="thermal_shock">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[4]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="esd" name="ESD" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4074"></userTask>
+    <sequenceFlow id="flow66" name="to esd" sourceRef="test_rel_board" targetRef="esd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[5]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow67" name="to test rel board" sourceRef="htol" targetRef="test_rel_board"></sequenceFlow>
+    <sequenceFlow id="flow68" name="to test rel board" sourceRef="whtol" targetRef="test_rel_board"></sequenceFlow>
+    <sequenceFlow id="flow69" name="to test rel board" sourceRef="rtol" targetRef="test_rel_board"></sequenceFlow>
+    <sequenceFlow id="flow70" name="to test rel board" sourceRef="thermal_shock" targetRef="test_rel_board"></sequenceFlow>
+    <sequenceFlow id="flow71" name="to post-stress inventory" sourceRef="esd" targetRef="poststress_inventory"></sequenceFlow>
+    <userTask id="mrb_packaging" name="MRB packaging" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4081"></userTask>
+    <sequenceFlow id="flow72" name="to mrb" sourceRef="packaging_queue" targetRef="mrb_packaging">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[4]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="die_wst" name="Die WST" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN,ROLE_FAB_ADMIN,ROLE_EPI_ADMIN" activiti:formKey="4061"></userTask>
+    <sequenceFlow id="flow73" name="to die wst" sourceRef="lamp_inventory" targetRef="die_wst">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow74" name="to lamp inventory" sourceRef="die_wst" targetRef="lamp_inventory"></sequenceFlow>
+    <userTask id="create_assembly" name="Create assembly" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="4082"></userTask>
+    <sequenceFlow id="flow75" name="to create assembly" sourceRef="packaging_queue" targetRef="create_assembly">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[5]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_packaging">
+    <bpmndi:BPMNPlane bpmnElement="packaging" id="BPMNPlane_packaging">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="27.0" y="90.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="1189.0" y="857.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sphere_test_lamp" id="BPMNShape_sphere_test_lamp">
+        <omgdc:Bounds height="55.0" width="137.0" x="48.0" y="425.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="die_attach_lamp" id="BPMNShape_die_attach_lamp">
+        <omgdc:Bounds height="55.0" width="137.0" x="211.0" y="199.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="wirebond_lamp" id="BPMNShape_wirebond_lamp">
+        <omgdc:Bounds height="55.0" width="137.0" x="211.0" y="305.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="lamp_inventory" id="BPMNShape_lamp_inventory">
+        <omgdc:Bounds height="55.0" width="137.0" x="211.0" y="762.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sphere_test2_lamp" id="BPMNShape_sphere_test2_lamp">
+        <omgdc:Bounds height="55.0" width="137.0" x="38.0" y="647.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="packaging_queue" id="BPMNShape_packaging_queue">
+        <omgdc:Bounds height="55.0" width="105.0" x="110.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="die_attach_rel" id="BPMNShape_die_attach_rel">
+        <omgdc:Bounds height="55.0" width="155.0" x="617.0" y="147.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="wirebond_rel" id="BPMNShape_wirebond_rel">
+        <omgdc:Bounds height="55.0" width="155.0" x="617.0" y="238.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="die_attach_samples" id="BPMNShape_die_attach_samples">
+        <omgdc:Bounds height="55.0" width="145.0" x="1032.0" y="157.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="wirebond_samples" id="BPMNShape_wirebond_samples">
+        <omgdc:Bounds height="55.0" width="145.0" x="1032.0" y="259.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="d65_before_encap" id="BPMNShape_d65_before_encap">
+        <omgdc:Bounds height="55.0" width="145.0" x="1205.0" y="324.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="encapsulation_samples" id="BPMNShape_encapsulation_samples">
+        <omgdc:Bounds height="55.0" width="145.0" x="1032.0" y="414.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="d65_after_encap" id="BPMNShape_d65_after_encap">
+        <omgdc:Bounds height="55.0" width="145.0" x="1032.0" y="502.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="rel_inventory" id="BPMNShape_rel_inventory">
+        <omgdc:Bounds height="55.0" width="155.0" x="617.0" y="324.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="samples_inventory" id="BPMNShape_samples_inventory">
+        <omgdc:Bounds height="55.0" width="145.0" x="1032.0" y="590.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="test_rel" id="BPMNShape_test_rel">
+        <omgdc:Bounds height="55.0" width="122.0" x="410.0" y="762.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="poststress_inventory" id="BPMNShape_poststress_inventory">
+        <omgdc:Bounds height="55.0" width="134.0" x="628.0" y="762.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="test_rel_board" id="BPMNShape_test_rel_board">
+        <omgdc:Bounds height="55.0" width="159.0" x="615.0" y="446.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sphere_test_lamp_board" id="BPMNShape_sphere_test_lamp_board">
+        <omgdc:Bounds height="55.0" width="141.0" x="303.0" y="430.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="encapsulation_lamp" id="BPMNShape_encapsulation_lamp">
+        <omgdc:Bounds height="55.0" width="131.0" x="214.0" y="552.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sphere_test2_lamp_board" id="BPMNShape_sphere_test2_lamp_board">
+        <omgdc:Bounds height="55.0" width="157.0" x="201.0" y="647.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="spc_standard_board" id="BPMNShape_spc_standard_board">
+        <omgdc:Bounds height="55.0" width="125.0" x="850.0" y="762.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="lost_found" id="BPMNShape_lost_found">
+        <omgdc:Bounds height="55.0" width="121.0" x="1281.0" y="847.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="used_samples" id="BPMNShape_used_samples">
+        <omgdc:Bounds height="55.0" width="151.0" x="1029.0" y="762.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="d65_rel_test" id="BPMNShape_d65_rel_test">
+        <omgdc:Bounds height="55.0" width="121.0" x="1230.0" y="666.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="d65_stress" id="BPMNShape_d65_stress">
+        <omgdc:Bounds height="55.0" width="121.0" x="1230.0" y="762.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="htol" id="BPMNShape_htol">
+        <omgdc:Bounds height="55.0" width="105.0" x="550.0" y="527.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="whtol" id="BPMNShape_whtol">
+        <omgdc:Bounds height="55.0" width="105.0" x="550.0" y="594.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="rtol" id="BPMNShape_rtol">
+        <omgdc:Bounds height="55.0" width="105.0" x="550.0" y="666.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="thermal_shock" id="BPMNShape_thermal_shock">
+        <omgdc:Bounds height="55.0" width="105.0" x="733.0" y="527.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="esd" id="BPMNShape_esd">
+        <omgdc:Bounds height="55.0" width="105.0" x="733.0" y="594.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mrb_packaging" id="BPMNShape_mrb_packaging">
+        <omgdc:Bounds height="55.0" width="105.0" x="380.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="die_wst" id="BPMNShape_die_wst">
+        <omgdc:Bounds height="55.0" width="105.0" x="54.0" y="847.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="create_assembly" id="BPMNShape_create_assembly">
+        <omgdc:Bounds height="55.0" width="116.0" x="1235.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="348.0" y="789.0"></omgdi:waypoint>
+        <omgdi:waypoint x="373.0" y="790.0"></omgdi:waypoint>
+        <omgdi:waypoint x="373.0" y="874.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1189.0" y="874.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="215.0" y="107.0"></omgdi:waypoint>
+        <omgdi:waypoint x="279.0" y="107.0"></omgdi:waypoint>
+        <omgdi:waypoint x="279.0" y="199.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="84.0" x="3.0" y="27.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="279.0" y="254.0"></omgdi:waypoint>
+        <omgdi:waypoint x="279.0" y="305.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="58.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="62.0" y="107.0"></omgdi:waypoint>
+        <omgdi:waypoint x="110.0" y="107.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="215.0" y="107.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="107.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="147.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="77.0" x="239.0" y="27.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="694.0" y="202.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="238.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="58.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="106.0" y="702.0"></omgdi:waypoint>
+        <omgdi:waypoint x="106.0" y="789.0"></omgdi:waypoint>
+        <omgdi:waypoint x="211.0" y="789.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="82.0" x="-7.0" y="-57.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="1104.0" y="212.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1104.0" y="259.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="58.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="1177.0" y="286.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1277.0" y="286.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1277.0" y="324.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="98.0" x="-33.0" y="-31.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
+        <omgdi:waypoint x="1277.0" y="379.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1277.0" y="441.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1177.0" y="441.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="79.0" x="-15.0" y="10.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
+        <omgdi:waypoint x="1104.0" y="469.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1104.0" y="502.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="89.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow29" id="BPMNEdge_flow29">
+        <omgdi:waypoint x="1104.0" y="557.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1104.0" y="590.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="57.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow35" id="BPMNEdge_flow35">
+        <omgdi:waypoint x="694.0" y="293.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="324.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow36" id="BPMNEdge_flow36">
+        <omgdi:waypoint x="617.0" y="351.0"></omgdi:waypoint>
+        <omgdi:waypoint x="471.0" y="351.0"></omgdi:waypoint>
+        <omgdi:waypoint x="471.0" y="762.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="45.0" x="38.0" y="-151.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow37" id="BPMNEdge_flow37">
+        <omgdi:waypoint x="532.0" y="789.0"></omgdi:waypoint>
+        <omgdi:waypoint x="628.0" y="789.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="-34.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow39" id="BPMNEdge_flow39">
+        <omgdi:waypoint x="695.0" y="817.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="874.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1189.0" y="874.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow40" id="BPMNEdge_flow40">
+        <omgdi:waypoint x="694.0" y="379.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="446.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="76.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow41" id="BPMNEdge_flow41">
+        <omgdi:waypoint x="694.0" y="501.0"></omgdi:waypoint>
+        <omgdi:waypoint x="695.0" y="762.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="6.0" y="89.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow43" id="BPMNEdge_flow43">
+        <omgdi:waypoint x="348.0" y="332.0"></omgdi:waypoint>
+        <omgdi:waypoint x="373.0" y="333.0"></omgdi:waypoint>
+        <omgdi:waypoint x="373.0" y="430.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="98.0" x="-16.0" y="-50.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow44" id="BPMNEdge_flow44">
+        <omgdi:waypoint x="373.0" y="485.0"></omgdi:waypoint>
+        <omgdi:waypoint x="373.0" y="580.0"></omgdi:waypoint>
+        <omgdi:waypoint x="345.0" y="579.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="79.0" x="2.0" y="-24.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow45" id="BPMNEdge_flow45">
+        <omgdi:waypoint x="279.0" y="607.0"></omgdi:waypoint>
+        <omgdi:waypoint x="279.0" y="647.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="10.0" y="-18.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow46" id="BPMNEdge_flow46">
+        <omgdi:waypoint x="279.0" y="702.0"></omgdi:waypoint>
+        <omgdi:waypoint x="279.0" y="762.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="82.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow48" id="BPMNEdge_flow48">
+        <omgdi:waypoint x="772.0" y="351.0"></omgdi:waypoint>
+        <omgdi:waypoint x="912.0" y="351.0"></omgdi:waypoint>
+        <omgdi:waypoint x="912.0" y="762.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="-75.0" y="-181.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow49" id="BPMNEdge_flow49">
+        <omgdi:waypoint x="912.0" y="817.0"></omgdi:waypoint>
+        <omgdi:waypoint x="912.0" y="874.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1189.0" y="874.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="18.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow52" id="BPMNEdge_flow52">
+        <omgdi:waypoint x="1281.0" y="874.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1224.0" y="874.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow53" id="BPMNEdge_flow53">
+        <omgdi:waypoint x="1032.0" y="617.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1002.0" y="616.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1002.0" y="874.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1189.0" y="874.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow54" id="BPMNEdge_flow54">
+        <omgdi:waypoint x="279.0" y="360.0"></omgdi:waypoint>
+        <omgdi:waypoint x="279.0" y="552.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="79.0" x="-90.0" y="-80.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow55" id="BPMNEdge_flow55">
+        <omgdi:waypoint x="116.0" y="480.0"></omgdi:waypoint>
+        <omgdi:waypoint x="116.0" y="579.0"></omgdi:waypoint>
+        <omgdi:waypoint x="214.0" y="579.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="79.0" x="7.0" y="-72.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow56" id="BPMNEdge_flow56">
+        <omgdi:waypoint x="1104.0" y="314.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1104.0" y="414.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="79.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow57" id="BPMNEdge_flow57">
+        <omgdi:waypoint x="1104.0" y="645.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1104.0" y="762.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="79.0" x="10.0" y="38.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow58" id="BPMNEdge_flow58">
+        <omgdi:waypoint x="1104.0" y="645.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1104.0" y="693.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1230.0" y="693.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="66.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow59" id="BPMNEdge_flow59">
+        <omgdi:waypoint x="1351.0" y="789.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1400.0" y="789.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1400.0" y="693.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1351.0" y="693.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="66.0" x="-71.0" y="-7.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow60" id="BPMNEdge_flow60">
+        <omgdi:waypoint x="1290.0" y="721.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1290.0" y="762.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="64.0" x="-72.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow61" id="BPMNEdge_flow61">
+        <omgdi:waypoint x="1290.0" y="666.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1290.0" y="617.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1177.0" y="617.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="-27.0" y="-21.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow62" id="BPMNEdge_flow62">
+        <omgdi:waypoint x="694.0" y="501.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="555.0"></omgdi:waypoint>
+        <omgdi:waypoint x="655.0" y="554.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="29.0" x="-35.0" y="-16.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow63" id="BPMNEdge_flow63">
+        <omgdi:waypoint x="694.0" y="501.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="622.0"></omgdi:waypoint>
+        <omgdi:waypoint x="655.0" y="621.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="39.0" x="-40.0" y="20.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow64" id="BPMNEdge_flow64">
+        <omgdi:waypoint x="694.0" y="501.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="694.0"></omgdi:waypoint>
+        <omgdi:waypoint x="655.0" y="693.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="27.0" x="-34.0" y="51.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow65" id="BPMNEdge_flow65">
+        <omgdi:waypoint x="694.0" y="501.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="555.0"></omgdi:waypoint>
+        <omgdi:waypoint x="733.0" y="554.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="79.0" x="6.0" y="-33.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow66" id="BPMNEdge_flow66">
+        <omgdi:waypoint x="694.0" y="501.0"></omgdi:waypoint>
+        <omgdi:waypoint x="694.0" y="621.0"></omgdi:waypoint>
+        <omgdi:waypoint x="733.0" y="621.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="30.0" x="6.0" y="21.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow67" id="BPMNEdge_flow67">
+        <omgdi:waypoint x="550.0" y="554.0"></omgdi:waypoint>
+        <omgdi:waypoint x="501.0" y="554.0"></omgdi:waypoint>
+        <omgdi:waypoint x="501.0" y="473.0"></omgdi:waypoint>
+        <omgdi:waypoint x="615.0" y="473.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="76.0" x="9.0" y="33.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow68" id="BPMNEdge_flow68">
+        <omgdi:waypoint x="550.0" y="621.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="621.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="473.0"></omgdi:waypoint>
+        <omgdi:waypoint x="615.0" y="473.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="76.0" x="10.0" y="66.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow69" id="BPMNEdge_flow69">
+        <omgdi:waypoint x="550.0" y="693.0"></omgdi:waypoint>
+        <omgdi:waypoint x="499.0" y="693.0"></omgdi:waypoint>
+        <omgdi:waypoint x="499.0" y="473.0"></omgdi:waypoint>
+        <omgdi:waypoint x="615.0" y="473.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="76.0" x="11.0" y="100.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow70" id="BPMNEdge_flow70">
+        <omgdi:waypoint x="838.0" y="554.0"></omgdi:waypoint>
+        <omgdi:waypoint x="859.0" y="551.0"></omgdi:waypoint>
+        <omgdi:waypoint x="859.0" y="473.0"></omgdi:waypoint>
+        <omgdi:waypoint x="774.0" y="473.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="76.0" x="-80.0" y="5.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow71" id="BPMNEdge_flow71">
+        <omgdi:waypoint x="785.0" y="649.0"></omgdi:waypoint>
+        <omgdi:waypoint x="785.0" y="789.0"></omgdi:waypoint>
+        <omgdi:waypoint x="762.0" y="789.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="4.0" y="-38.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow72" id="BPMNEdge_flow72">
+        <omgdi:waypoint x="162.0" y="80.0"></omgdi:waypoint>
+        <omgdi:waypoint x="162.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="380.0" y="47.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="30.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow73" id="BPMNEdge_flow73">
+        <omgdi:waypoint x="279.0" y="817.0"></omgdi:waypoint>
+        <omgdi:waypoint x="278.0" y="874.0"></omgdi:waypoint>
+        <omgdi:waypoint x="159.0" y="874.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="-36.0" y="-22.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow74" id="BPMNEdge_flow74">
+        <omgdi:waypoint x="106.0" y="847.0"></omgdi:waypoint>
+        <omgdi:waypoint x="106.0" y="789.0"></omgdi:waypoint>
+        <omgdi:waypoint x="211.0" y="789.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="82.0" x="-22.0" y="26.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow75" id="BPMNEdge_flow75">
+        <omgdi:waypoint x="215.0" y="107.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1235.0" y="107.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="92.0" x="389.0" y="-17.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="Edgelit">
+  <process id="e55" name="5-5 inch" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="end" name="End"></endEvent>
+    <userTask id="iblu_incomming_inspection" name="iBlu incomming inspection" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6010"></userTask>
+    <sequenceFlow id="flow13" sourceRef="startevent1" targetRef="iblu_incomming_inspection"></sequenceFlow>
+    <userTask id="wirebond_lb" name="Wirebond LB" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6026"></userTask>
+    <userTask id="lit_test" name="LIT test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6036"></userTask>
+    <sequenceFlow id="flow24" name="to lit test" sourceRef="wirebond_lb" targetRef="lit_test">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="encapsulation_lb" name="Encapsulation LB" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6046"></userTask>
+    <sequenceFlow id="flow62" name="to wirebond lb" sourceRef="die_attach_lb" targetRef="wirebond_lb">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="mrb_iblu" name="MRB iBLU" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6700"></userTask>
+    <userTask id="die_attach_lb" name="Die attach LB" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6020"></userTask>
+    <sequenceFlow id="flow65" name="to die attach lb" sourceRef="iblu_incomming_inspection" targetRef="die_attach_lb"></sequenceFlow>
+    <sequenceFlow id="flow70" name="to saw singulate" sourceRef="encapsulation_lb" targetRef="saw_singulate"></sequenceFlow>
+    <userTask id="saw_singulate" name="Saw Singulate" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6054"></userTask>
+    <sequenceFlow id="flow75" name="to encapsulation lb" sourceRef="lit_test" targetRef="encapsulation_lb"></sequenceFlow>
+    <userTask id="fpc_attach" name="FPC Attach" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6060"></userTask>
+    <sequenceFlow id="flow76" name="to fpc attach" sourceRef="saw_singulate" targetRef="fpc_attach"></sequenceFlow>
+    <userTask id="light_bar_test" name="Light Bar Test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6080"></userTask>
+    <sequenceFlow id="flow78" name="to light bar test" sourceRef="fpc_attach" targetRef="light_bar_test">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ilgp_assembly" name="iLGP Assembly" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6090"></userTask>
+    <sequenceFlow id="flow79" name="to ilgp assembly" sourceRef="light_bar_test_inventory" targetRef="ilgp_assembly"></sequenceFlow>
+    <userTask id="ilgp_test" name="iLGP test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6100"></userTask>
+    <sequenceFlow id="flow80" name="to ilgp test" sourceRef="ilgp_assembly" targetRef="ilgp_test">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="iblu_assembly" name="iBLU assembly" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6120"></userTask>
+    <sequenceFlow id="flow81" name="to iblu assembly" sourceRef="ilgp_test" targetRef="iblu_assembly"></sequenceFlow>
+    <userTask id="iblu_test" name="iBLU Test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6130"></userTask>
+    <sequenceFlow id="flow82" name="to iblu test" sourceRef="iblu_assembly" targetRef="iblu_test">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="display_assembly" name="Display Assembly" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6140"></userTask>
+    <sequenceFlow id="flow83" name="to display assembly" sourceRef="iblu_test" targetRef="display_assembly"></sequenceFlow>
+    <userTask id="display_test" name="Display Test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6150"></userTask>
+    <sequenceFlow id="flow84" name="to display test" sourceRef="display_assembly" targetRef="display_test"></sequenceFlow>
+    <userTask id="inventory_display" name="Inventory Display" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6160"></userTask>
+    <sequenceFlow id="flow85" name="to inventory display " sourceRef="display_test" targetRef="inventory_display"></sequenceFlow>
+    <sequenceFlow id="flow86" sourceRef="inventory_display" targetRef="end"></sequenceFlow>
+    <userTask id="iblu_overtemp_test" name="IBLU Overtemp Test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6121"></userTask>
+    <sequenceFlow id="flow89" name="to iblu overtemp test" sourceRef="iblu_assembly" targetRef="iblu_overtemp_test">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow90" name="to iblu test" sourceRef="iblu_overtemp_test" targetRef="iblu_test"></sequenceFlow>
+    <userTask id="iblu_color_uniformity" name="iBLU color uniformity" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6135"></userTask>
+    <sequenceFlow id="flow93" name="to color uniformity" sourceRef="iblu_test" targetRef="iblu_color_uniformity"></sequenceFlow>
+    <userTask id="display_color_uniformity" name="Display color uniformity" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6155"></userTask>
+    <sequenceFlow id="flow94" name="to color uniformity" sourceRef="display_test" targetRef="display_color_uniformity"></sequenceFlow>
+    <sequenceFlow id="flow96" name="to inventory display " sourceRef="display_color_uniformity" targetRef="inventory_display"></sequenceFlow>
+    <userTask id="iblu_sphere_test" name="iBLU Sphere Test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6132"></userTask>
+    <sequenceFlow id="flow97" name="to iblu sphere test" sourceRef="iblu_test" targetRef="iblu_sphere_test"></sequenceFlow>
+    <sequenceFlow id="flow98" name="to display assembly" sourceRef="iblu_sphere_test" targetRef="display_assembly"></sequenceFlow>
+    <userTask id="outside_camera_test" name="Outside camera test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6131"></userTask>
+    <sequenceFlow id="flow101" name="to outside camera test" sourceRef="iblu_test" targetRef="outside_camera_test"></sequenceFlow>
+    <userTask id="glo_camera_test" name="GLO camera test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6132"></userTask>
+    <sequenceFlow id="flow102" name="to glo camera test" sourceRef="outside_camera_test" targetRef="glo_camera_test"></sequenceFlow>
+    <sequenceFlow id="flow103" name="to glo camera test" sourceRef="iblu_test" targetRef="glo_camera_test"></sequenceFlow>
+    <sequenceFlow id="flow104" name="to display assembly" sourceRef="glo_camera_test_inventory" targetRef="display_assembly"></sequenceFlow>
+    <sequenceFlow id="flow105" name="to outside camera test" sourceRef="iblu_incomming_inspection" targetRef="outside_camera_test"></sequenceFlow>
+    <userTask id="outside_light_bar_test" name="Outside light bar test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6079"></userTask>
+    <sequenceFlow id="flow106" name="to outside light bar test" sourceRef="fpc_attach" targetRef="outside_light_bar_test"></sequenceFlow>
+    <sequenceFlow id="flow107" name="to light bar test" sourceRef="outside_light_bar_test" targetRef="light_bar_test"></sequenceFlow>
+    <userTask id="ilgp_mechanical_characterization" name="iLGP mechanical characterization" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6101"></userTask>
+    <userTask id="iblu_top200_test" name="IBLU Top 200 Test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6134"></userTask>
+    <sequenceFlow id="flow112" name="to iblu top 200 test" sourceRef="iblu_assembly" targetRef="iblu_top200_test">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow113" name="to display assembly" sourceRef="iblu_top200_test" targetRef="display_assembly"></sequenceFlow>
+    <userTask id="display_top200_test" name="Display Top 200 Test" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6156"></userTask>
+    <sequenceFlow id="flow114" name="to display top 200 test" sourceRef="display_assembly" targetRef="display_top200_test"></sequenceFlow>
+    <sequenceFlow id="flow115" name="to inventory display" sourceRef="display_top200_test" targetRef="inventory_display"></sequenceFlow>
+    <userTask id="light_bar_test_inventory" name="Tested light bar inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6085"></userTask>
+    <sequenceFlow id="flow116" name="to light bar test inventory" sourceRef="light_bar_test" targetRef="light_bar_test_inventory">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ilb_inventory" name="iLB inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6102"></userTask>
+    <userTask id="glo_camera_test_inventory" name="Post GLO camera test inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6133"></userTask>
+    <sequenceFlow id="flow117" name="to glo camera test inventory" sourceRef="glo_camera_test" targetRef="glo_camera_test_inventory"></sequenceFlow>
+    <userTask id="outside_vendor" name="Outside vendor" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6106"></userTask>
+    <userTask id="lost_and_found" name="Lost and found" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6107"></userTask>
+    <userTask id="ilibrary_queue" name="iLibrary queue" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6103"></userTask>
+    <sequenceFlow id="flow118" name="to iLibrary queue" sourceRef="ilb_inventory" targetRef="ilibrary_queue"></sequenceFlow>
+    <userTask id="ilibrary" name="iLibrary" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6104"></userTask>
+    <sequenceFlow id="flow119" name="to Library" sourceRef="ilibrary_queue" targetRef="ilibrary"></sequenceFlow>
+    <userTask id="office_inventory" name="Office inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_PACKAGING_TECHNICIAN,ROLE_PACKAGING_ADMIN" activiti:formKey="6160"></userTask>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_e55">
+    <bpmndi:BPMNPlane bpmnElement="e55" id="BPMNPlane_e55">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="41.0" width="43.0" x="70.0" y="9.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="1351.0" y="840.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="iblu_incomming_inspection" id="BPMNShape_iblu_incomming_inspection">
+        <omgdc:Bounds height="55.0" width="134.0" x="178.0" y="2.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="wirebond_lb" id="BPMNShape_wirebond_lb">
+        <omgdc:Bounds height="55.0" width="145.0" x="172.0" y="171.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="lit_test" id="BPMNShape_lit_test">
+        <omgdc:Bounds height="55.0" width="145.0" x="172.0" y="254.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="encapsulation_lb" id="BPMNShape_encapsulation_lb">
+        <omgdc:Bounds height="55.0" width="145.0" x="172.0" y="346.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mrb_iblu" id="BPMNShape_mrb_iblu">
+        <omgdc:Bounds height="55.0" width="134.0" x="178.0" y="670.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="die_attach_lb" id="BPMNShape_die_attach_lb">
+        <omgdc:Bounds height="55.0" width="145.0" x="172.0" y="93.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="saw_singulate" id="BPMNShape_saw_singulate">
+        <omgdc:Bounds height="55.0" width="145.0" x="172.0" y="438.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="fpc_attach" id="BPMNShape_fpc_attach">
+        <omgdc:Bounds height="55.0" width="145.0" x="172.0" y="531.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="light_bar_test" id="BPMNShape_light_bar_test">
+        <omgdc:Bounds height="55.0" width="144.0" x="572.0" y="91.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ilgp_assembly" id="BPMNShape_ilgp_assembly">
+        <omgdc:Bounds height="55.0" width="142.0" x="573.0" y="242.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ilgp_test" id="BPMNShape_ilgp_test">
+        <omgdc:Bounds height="55.0" width="143.0" x="573.0" y="312.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="iblu_assembly" id="BPMNShape_iblu_assembly">
+        <omgdc:Bounds height="55.0" width="143.0" x="573.0" y="384.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="iblu_test" id="BPMNShape_iblu_test">
+        <omgdc:Bounds height="55.0" width="142.0" x="573.0" y="455.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="display_assembly" id="BPMNShape_display_assembly">
+        <omgdc:Bounds height="55.0" width="142.0" x="574.0" y="578.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="display_test" id="BPMNShape_display_test">
+        <omgdc:Bounds height="55.0" width="142.0" x="573.0" y="678.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inventory_display" id="BPMNShape_inventory_display">
+        <omgdc:Bounds height="55.0" width="143.0" x="573.0" y="750.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="iblu_overtemp_test" id="BPMNShape_iblu_overtemp_test">
+        <omgdc:Bounds height="55.0" width="143.0" x="389.0" y="455.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="iblu_color_uniformity" id="BPMNShape_iblu_color_uniformity">
+        <omgdc:Bounds height="55.0" width="145.0" x="388.0" y="531.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="display_color_uniformity" id="BPMNShape_display_color_uniformity">
+        <omgdc:Bounds height="55.0" width="144.0" x="811.0" y="678.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="iblu_sphere_test" id="BPMNShape_iblu_sphere_test">
+        <omgdc:Bounds height="58.0" width="141.0" x="734.0" y="515.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="outside_camera_test" id="BPMNShape_outside_camera_test">
+        <omgdc:Bounds height="55.0" width="136.0" x="1069.0" y="516.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="glo_camera_test" id="BPMNShape_glo_camera_test">
+        <omgdc:Bounds height="55.0" width="125.0" x="1250.0" y="516.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="outside_light_bar_test" id="BPMNShape_outside_light_bar_test">
+        <omgdc:Bounds height="55.0" width="133.0" x="400.0" y="93.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ilgp_mechanical_characterization" id="BPMNShape_ilgp_mechanical_characterization">
+        <omgdc:Bounds height="55.0" width="145.0" x="1204.0" y="29.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="iblu_top200_test" id="BPMNShape_iblu_top200_test">
+        <omgdc:Bounds height="55.0" width="145.0" x="896.0" y="516.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="display_top200_test" id="BPMNShape_display_top200_test">
+        <omgdc:Bounds height="55.0" width="156.0" x="1009.0" y="678.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="light_bar_test_inventory" id="BPMNShape_light_bar_test_inventory">
+        <omgdc:Bounds height="55.0" width="147.0" x="570.0" y="168.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ilb_inventory" id="BPMNShape_ilb_inventory">
+        <omgdc:Bounds height="55.0" width="145.0" x="1204.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="glo_camera_test_inventory" id="BPMNShape_glo_camera_test_inventory">
+        <omgdc:Bounds height="55.0" width="155.0" x="1236.0" y="606.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="outside_vendor" id="BPMNShape_outside_vendor">
+        <omgdc:Bounds height="55.0" width="145.0" x="1204.0" y="346.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="lost_and_found" id="BPMNShape_lost_and_found">
+        <omgdc:Bounds height="55.0" width="145.0" x="1204.0" y="414.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ilibrary_queue" id="BPMNShape_ilibrary_queue">
+        <omgdc:Bounds height="55.0" width="145.0" x="1204.0" y="175.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ilibrary" id="BPMNShape_ilibrary">
+        <omgdc:Bounds height="55.0" width="145.0" x="1204.0" y="254.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="office_inventory" id="BPMNShape_office_inventory">
+        <omgdc:Bounds height="55.0" width="150.0" x="1236.0" y="698.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="113.0" y="29.0"></omgdi:waypoint>
+        <omgdi:waypoint x="178.0" y="29.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="244.0" y="226.0"></omgdi:waypoint>
+        <omgdi:waypoint x="244.0" y="254.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="40.0" x="254.0" y="230.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow62" id="BPMNEdge_flow62">
+        <omgdi:waypoint x="244.0" y="148.0"></omgdi:waypoint>
+        <omgdi:waypoint x="244.0" y="171.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="67.0" x="265.0" y="155.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow65" id="BPMNEdge_flow65">
+        <omgdi:waypoint x="245.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="244.0" y="93.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="70.0" x="250.0" y="63.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow70" id="BPMNEdge_flow70">
+        <omgdi:waypoint x="244.0" y="401.0"></omgdi:waypoint>
+        <omgdi:waypoint x="244.0" y="438.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="78.0" x="255.0" y="413.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow75" id="BPMNEdge_flow75">
+        <omgdi:waypoint x="244.0" y="309.0"></omgdi:waypoint>
+        <omgdi:waypoint x="244.0" y="346.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="90.0" x="249.0" y="319.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow76" id="BPMNEdge_flow76">
+        <omgdi:waypoint x="244.0" y="493.0"></omgdi:waypoint>
+        <omgdi:waypoint x="244.0" y="531.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="60.0" x="254.0" y="501.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow78" id="BPMNEdge_flow78">
+        <omgdi:waypoint x="317.0" y="558.0"></omgdi:waypoint>
+        <omgdi:waypoint x="367.0" y="557.0"></omgdi:waypoint>
+        <omgdi:waypoint x="367.0" y="53.0"></omgdi:waypoint>
+        <omgdi:waypoint x="644.0" y="53.0"></omgdi:waypoint>
+        <omgdi:waypoint x="644.0" y="91.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="71.0" x="320.0" y="426.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow79" id="BPMNEdge_flow79">
+        <omgdi:waypoint x="643.0" y="223.0"></omgdi:waypoint>
+        <omgdi:waypoint x="644.0" y="242.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="78.0" x="653.0" y="223.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow80" id="BPMNEdge_flow80">
+        <omgdi:waypoint x="644.0" y="297.0"></omgdi:waypoint>
+        <omgdi:waypoint x="644.0" y="312.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="49.0" x="654.0" y="297.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow81" id="BPMNEdge_flow81">
+        <omgdi:waypoint x="644.0" y="367.0"></omgdi:waypoint>
+        <omgdi:waypoint x="644.0" y="384.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="78.0" x="654.0" y="367.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow82" id="BPMNEdge_flow82">
+        <omgdi:waypoint x="644.0" y="439.0"></omgdi:waypoint>
+        <omgdi:waypoint x="644.0" y="455.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="49.0" x="654.0" y="439.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow83" id="BPMNEdge_flow83">
+        <omgdi:waypoint x="644.0" y="510.0"></omgdi:waypoint>
+        <omgdi:waypoint x="645.0" y="578.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="96.0" x="619.0" y="537.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow84" id="BPMNEdge_flow84">
+        <omgdi:waypoint x="645.0" y="633.0"></omgdi:waypoint>
+        <omgdi:waypoint x="644.0" y="678.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="67.0" x="655.0" y="633.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow85" id="BPMNEdge_flow85">
+        <omgdi:waypoint x="644.0" y="733.0"></omgdi:waypoint>
+        <omgdi:waypoint x="644.0" y="750.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="97.0" x="654.0" y="733.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow86" id="BPMNEdge_flow86">
+        <omgdi:waypoint x="644.0" y="805.0"></omgdi:waypoint>
+        <omgdi:waypoint x="645.0" y="856.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1351.0" y="857.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow89" id="BPMNEdge_flow89">
+        <omgdi:waypoint x="573.0" y="411.0"></omgdi:waypoint>
+        <omgdi:waypoint x="460.0" y="411.0"></omgdi:waypoint>
+        <omgdi:waypoint x="460.0" y="455.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="98.0" x="436.0" y="389.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow90" id="BPMNEdge_flow90">
+        <omgdi:waypoint x="532.0" y="482.0"></omgdi:waypoint>
+        <omgdi:waypoint x="573.0" y="482.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="49.0" x="530.0" y="491.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow93" id="BPMNEdge_flow93">
+        <omgdi:waypoint x="644.0" y="510.0"></omgdi:waypoint>
+        <omgdi:waypoint x="460.0" y="531.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="86.0" x="838.0" y="452.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow94" id="BPMNEdge_flow94">
+        <omgdi:waypoint x="715.0" y="705.0"></omgdi:waypoint>
+        <omgdi:waypoint x="811.0" y="705.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="86.0" x="724.0" y="692.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow96" id="BPMNEdge_flow96">
+        <omgdi:waypoint x="883.0" y="733.0"></omgdi:waypoint>
+        <omgdi:waypoint x="883.0" y="777.0"></omgdi:waypoint>
+        <omgdi:waypoint x="716.0" y="777.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="97.0" x="834.0" y="738.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow97" id="BPMNEdge_flow97">
+        <omgdi:waypoint x="715.0" y="482.0"></omgdi:waypoint>
+        <omgdi:waypoint x="805.0" y="482.0"></omgdi:waypoint>
+        <omgdi:waypoint x="804.0" y="515.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="86.0" x="748.0" y="491.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow98" id="BPMNEdge_flow98">
+        <omgdi:waypoint x="804.0" y="573.0"></omgdi:waypoint>
+        <omgdi:waypoint x="804.0" y="605.0"></omgdi:waypoint>
+        <omgdi:waypoint x="716.0" y="605.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="96.0" x="720.0" y="583.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow101" id="BPMNEdge_flow101">
+        <omgdi:waypoint x="715.0" y="482.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1136.0" y="482.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1137.0" y="516.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="39.0" width="100.0" x="1039.0" y="479.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow102" id="BPMNEdge_flow102">
+        <omgdi:waypoint x="1205.0" y="543.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1250.0" y="543.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="87.0" x="1163.0" y="570.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow103" id="BPMNEdge_flow103">
+        <omgdi:waypoint x="715.0" y="482.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1312.0" y="482.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1312.0" y="516.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="87.0" x="1203.0" y="491.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow104" id="BPMNEdge_flow104">
+        <omgdi:waypoint x="1236.0" y="633.0"></omgdi:waypoint>
+        <omgdi:waypoint x="716.0" y="605.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="96.0" x="1124.0" y="650.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow105" id="BPMNEdge_flow105">
+        <omgdi:waypoint x="312.0" y="29.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1138.0" y="29.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1137.0" y="516.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="39.0" width="100.0" x="964.0" y="12.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow106" id="BPMNEdge_flow106">
+        <omgdi:waypoint x="317.0" y="558.0"></omgdi:waypoint>
+        <omgdi:waypoint x="364.0" y="558.0"></omgdi:waypoint>
+        <omgdi:waypoint x="364.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="466.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="466.0" y="93.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="39.0" width="100.0" x="390.0" y="298.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow107" id="BPMNEdge_flow107">
+        <omgdi:waypoint x="533.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="572.0" y="118.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="71.0" x="520.0" y="79.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow112" id="BPMNEdge_flow112">
+        <omgdi:waypoint x="644.0" y="439.0"></omgdi:waypoint>
+        <omgdi:waypoint x="968.0" y="482.0"></omgdi:waypoint>
+        <omgdi:waypoint x="968.0" y="516.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="88.0" x="787.0" y="448.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow113" id="BPMNEdge_flow113">
+        <omgdi:waypoint x="968.0" y="571.0"></omgdi:waypoint>
+        <omgdi:waypoint x="968.0" y="605.0"></omgdi:waypoint>
+        <omgdi:waypoint x="716.0" y="605.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="96.0" x="870.0" y="571.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow114" id="BPMNEdge_flow114">
+        <omgdi:waypoint x="645.0" y="633.0"></omgdi:waypoint>
+        <omgdi:waypoint x="646.0" y="659.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1086.0" y="659.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1087.0" y="678.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="39.0" width="100.0" x="889.0" y="634.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow115" id="BPMNEdge_flow115">
+        <omgdi:waypoint x="1087.0" y="733.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1086.0" y="777.0"></omgdi:waypoint>
+        <omgdi:waypoint x="716.0" y="777.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="94.0" x="993.0" y="759.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow116" id="BPMNEdge_flow116">
+        <omgdi:waypoint x="644.0" y="146.0"></omgdi:waypoint>
+        <omgdi:waypoint x="643.0" y="168.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="39.0" width="100.0" x="654.0" y="139.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow117" id="BPMNEdge_flow117">
+        <omgdi:waypoint x="1312.0" y="571.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1313.0" y="606.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="39.0" width="100.0" x="1322.0" y="571.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow118" id="BPMNEdge_flow118">
+        <omgdi:waypoint x="1276.0" y="155.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1276.0" y="175.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="81.0" x="1286.0" y="155.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow119" id="BPMNEdge_flow119">
+        <omgdi:waypoint x="1276.0" y="230.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1276.0" y="254.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="46.0" x="1286.0" y="230.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

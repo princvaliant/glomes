@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="nwLED">
+  <process id="sin_capacitor" name="SiN capacitor" isExecutable="true">
+    <startEvent id="s1" name="Start"></startEvent>
+    <endEvent id="End" name="End"></endEvent>
+    <userTask id="etch_patterning" name="Etch patterning" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1049"></userTask>
+    <sequenceFlow id="flow4" sourceRef="s1" targetRef="etch_patterning"></sequenceFlow>
+    <userTask id="dry_etch" name="Dry etch" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1059"></userTask>
+    <sequenceFlow id="flow7" name="to dry etch" sourceRef="etch_patterning" targetRef="dry_etch"></sequenceFlow>
+    <userTask id="photoresist_strip" name="Photoresist strip" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1063"></userTask>
+    <sequenceFlow id="flow8" name="to photoresist strip" sourceRef="dry_etch" targetRef="photoresist_strip"></sequenceFlow>
+    <userTask id="metal_deposition_patterning" name="Metal deposition patterning" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1065"></userTask>
+    <sequenceFlow id="flow13" name="to metal deposition patterning" sourceRef="photoresist_strip" targetRef="metal_deposition_patterning"></sequenceFlow>
+    <sequenceFlow id="flow14" name="to test" sourceRef="metal_photoresist_strip" targetRef="End"></sequenceFlow>
+    <userTask id="metal_deposition" name="Metal deposition" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1066"></userTask>
+    <sequenceFlow id="flow15" name="to metal deposition" sourceRef="metal_deposition_patterning" targetRef="metal_deposition"></sequenceFlow>
+    <userTask id="metal_photoresist_strip" name="Metal photoresist strip" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1067"></userTask>
+    <sequenceFlow id="flow16" name="to metal photoresist strip" sourceRef="metal_deposition" targetRef="metal_photoresist_strip"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_sin_capacitor">
+    <bpmndi:BPMNPlane bpmnElement="sin_capacitor" id="BPMNPlane_sin_capacitor">
+      <bpmndi:BPMNShape bpmnElement="s1" id="BPMNShape_s1">
+        <omgdc:Bounds height="35.0" width="35.0" x="184.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End" id="BPMNShape_End">
+        <omgdc:Bounds height="35.0" width="35.0" x="1080.0" y="600.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="etch_patterning" id="BPMNShape_etch_patterning">
+        <omgdc:Bounds height="55.0" width="143.0" x="130.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dry_etch" id="BPMNShape_dry_etch">
+        <omgdc:Bounds height="55.0" width="143.0" x="130.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="photoresist_strip" id="BPMNShape_photoresist_strip">
+        <omgdc:Bounds height="55.0" width="143.0" x="130.0" y="280.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="metal_deposition_patterning" id="BPMNShape_metal_deposition_patterning">
+        <omgdc:Bounds height="55.0" width="143.0" x="130.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="metal_deposition" id="BPMNShape_metal_deposition">
+        <omgdc:Bounds height="55.0" width="151.0" x="126.0" y="486.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="metal_photoresist_strip" id="BPMNShape_metal_photoresist_strip">
+        <omgdc:Bounds height="55.0" width="151.0" x="126.0" y="590.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="201.0" y="35.0"></omgdi:waypoint>
+        <omgdi:waypoint x="201.0" y="80.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="201.0" y="135.0"></omgdi:waypoint>
+        <omgdi:waypoint x="201.0" y="180.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="52.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="201.0" y="235.0"></omgdi:waypoint>
+        <omgdi:waypoint x="201.0" y="280.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="90.0" x="10.0" y="-18.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="201.0" y="335.0"></omgdi:waypoint>
+        <omgdi:waypoint x="201.0" y="380.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="5.0" y="-23.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="277.0" y="617.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1080.0" y="617.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="201.0" y="435.0"></omgdi:waypoint>
+        <omgdi:waypoint x="201.0" y="486.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="201.0" y="541.0"></omgdi:waypoint>
+        <omgdi:waypoint x="201.0" y="590.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="5.0" y="-22.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

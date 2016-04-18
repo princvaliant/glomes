@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="nwLED">
+  <process id="grind_lap" name="GrindLap" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="end" name="End"></endEvent>
+    <sequenceFlow id="flow2" name="DBR or dicing" sourceRef="grind_lap_inventory" targetRef="end"></sequenceFlow>
+    <userTask id="grinding_lapping" name="Grinding and Lapping" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="2510"></userTask>
+    <sequenceFlow id="flow5" name="to grinding and lapping" sourceRef="grind_queue" targetRef="grinding_lapping"></sequenceFlow>
+    <userTask id="grind_queue" name="Grind queue" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="2500"></userTask>
+    <sequenceFlow id="flow13" sourceRef="startevent1" targetRef="grind_queue"></sequenceFlow>
+    <userTask id="grind_lap_inventory" name="Grind and Lap inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="2520"></userTask>
+    <sequenceFlow id="flow15" name="to grind and lap inventory" sourceRef="grinding_lapping" targetRef="grind_lap_inventory"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_grind_lap">
+    <bpmndi:BPMNPlane bpmnElement="grind_lap" id="BPMNPlane_grind_lap">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="135.0" y="15.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="1060.0" y="758.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="grinding_lapping" id="BPMNShape_grinding_lapping">
+        <omgdc:Bounds height="55.0" width="165.0" x="70.0" y="174.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="grind_lap_inventory" id="BPMNShape_grind_lap_inventory">
+        <omgdc:Bounds height="55.0" width="165.0" x="70.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="grind_queue" id="BPMNShape_grind_queue">
+        <omgdc:Bounds height="55.0" width="165.0" x="70.0" y="85.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="152.0" y="320.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="775.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1060.0" y="775.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="152.0" y="140.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="174.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="10.0" y="-18.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="152.0" y="50.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="85.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="152.0" y="229.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="265.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="10.0" y="-19.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="nwLED">
+  <process id="bare_wafers" name="Bare Wafers" isExecutable="true">
+    <startEvent id="s1" name="Start"></startEvent>
+    <userTask id="incomming_bare_wafers" name="Inventory incoming" activiti:candidateGroups="ROLE_ADMIN,ROLE_OPERATOR" activiti:formKey="10"></userTask>
+    <endEvent id="End" name="End"></endEvent>
+    <sequenceFlow id="flow1" sourceRef="s1" targetRef="incomming_bare_wafers"></sequenceFlow>
+    <userTask id="epi_buffer" name="EPI buffer" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="30"></userTask>
+    <sequenceFlow id="flow47" name="to patterning" sourceRef="epi_buffer" targetRef="End"></sequenceFlow>
+    <userTask id="inspection_wafers" name="Inspection wafers" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="20"></userTask>
+    <sequenceFlow id="flow48" name="to inspection" sourceRef="incomming_bare_wafers" targetRef="inspection_wafers"></sequenceFlow>
+    <sequenceFlow id="flow49" name="to epi" sourceRef="inventory_bare_wafers" targetRef="epi_buffer">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="wafer_mrb" name="Wafer MRB" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="21"></userTask>
+    <sequenceFlow id="flow50" name="to mrb" sourceRef="inspection_wafers" targetRef="wafer_mrb">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="inventory_bare_wafers" name="Inventory Bare Wafers" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="25"></userTask>
+    <sequenceFlow id="flow51" name="to inventory" sourceRef="inspection_wafers" targetRef="inventory_bare_wafers">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="pre_epi_piranha_clean" name="Pre-epi Piranha Clean" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="27"></userTask>
+    <sequenceFlow id="flow52" name="to piranha clean" sourceRef="inventory_bare_wafers" targetRef="pre_epi_piranha_clean">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow53" name="to epi buffer" sourceRef="pre_epi_piranha_clean" targetRef="epi_buffer"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_bare_wafers">
+    <bpmndi:BPMNPlane bpmnElement="bare_wafers" id="BPMNPlane_bare_wafers">
+      <bpmndi:BPMNShape bpmnElement="s1" id="BPMNShape_s1">
+        <omgdc:Bounds height="35.0" width="35.0" x="95.0" y="11.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="incomming_bare_wafers" id="BPMNShape_incomming_bare_wafers">
+        <omgdc:Bounds height="61.0" width="105.0" x="60.0" y="66.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End" id="BPMNShape_End">
+        <omgdc:Bounds height="35.0" width="35.0" x="920.0" y="560.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="epi_buffer" id="BPMNShape_epi_buffer">
+        <omgdc:Bounds height="55.0" width="105.0" x="60.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inspection_wafers" id="BPMNShape_inspection_wafers">
+        <omgdc:Bounds height="55.0" width="105.0" x="60.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="wafer_mrb" id="BPMNShape_wafer_mrb">
+        <omgdc:Bounds height="55.0" width="105.0" x="237.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inventory_bare_wafers" id="BPMNShape_inventory_bare_wafers">
+        <omgdc:Bounds height="55.0" width="105.0" x="60.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pre_epi_piranha_clean" id="BPMNShape_pre_epi_piranha_clean">
+        <omgdc:Bounds height="55.0" width="105.0" x="237.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="112.0" y="46.0"></omgdi:waypoint>
+        <omgdi:waypoint x="112.0" y="66.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow47" id="BPMNEdge_flow47">
+        <omgdi:waypoint x="112.0" y="435.0"></omgdi:waypoint>
+        <omgdi:waypoint x="112.0" y="577.0"></omgdi:waypoint>
+        <omgdi:waypoint x="920.0" y="577.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="60.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow48" id="BPMNEdge_flow48">
+        <omgdi:waypoint x="112.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="112.0" y="150.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="61.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow49" id="BPMNEdge_flow49">
+        <omgdi:waypoint x="112.0" y="305.0"></omgdi:waypoint>
+        <omgdi:waypoint x="112.0" y="380.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="26.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow50" id="BPMNEdge_flow50">
+        <omgdi:waypoint x="165.0" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="237.0" y="177.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="30.0" x="-11.0" y="3.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow51" id="BPMNEdge_flow51">
+        <omgdi:waypoint x="112.0" y="205.0"></omgdi:waypoint>
+        <omgdi:waypoint x="112.0" y="250.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="57.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow52" id="BPMNEdge_flow52">
+        <omgdi:waypoint x="165.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="237.0" y="277.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="77.0" x="-40.0" y="14.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow53" id="BPMNEdge_flow53">
+        <omgdi:waypoint x="289.0" y="305.0"></omgdi:waypoint>
+        <omgdi:waypoint x="112.0" y="380.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="59.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

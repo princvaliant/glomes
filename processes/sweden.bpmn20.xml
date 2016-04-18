@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="nwLED">
+  <process id="sweden" name="Sweden" isExecutable="true">
+    <startEvent id="s1" name="Start"></startEvent>
+    <endEvent id="End" name="End"></endEvent>
+    <userTask id="inventory_ledgrowth_sweden" name="Inv. LED growth Sweden" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_SWEDEN" activiti:formKey="310"></userTask>
+    <sequenceFlow id="flow64" name="to inventory" sourceRef="ship_to_ab" targetRef="inventory_ledgrowth_sweden"></sequenceFlow>
+    <userTask id="ship_to_ab" name="Shipped to AB" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_SWEDEN" activiti:formKey="300"></userTask>
+    <userTask id="led_growth_sweden" name="LED Growth Sweden" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_SWEDEN" activiti:formKey="320"></userTask>
+    <sequenceFlow id="flow66" name="to led growth" sourceRef="inventory_ledgrowth_sweden" targetRef="led_growth_sweden">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ledgrowth_characterization_sweden" name="LED growth char. Sweden" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_SWEDEN" activiti:formKey="330"></userTask>
+    <sequenceFlow id="flow67" name="to characterization" sourceRef="led_growth_sweden" targetRef="ledgrowth_characterization_sweden"></sequenceFlow>
+    <userTask id="ship_to_us" name="Shipped to US" activiti:candidateGroups="ROLE_ADMIN,ROLE_OPERATOR" activiti:formKey="360"></userTask>
+    <sequenceFlow id="flow68" name="ship to us" sourceRef="inventory_sweden" targetRef="ship_to_us">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="inventory_sweden" name="Inventory Sweden" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_SWEDEN" activiti:formKey="340"></userTask>
+    <sequenceFlow id="flow70" name="to archive" sourceRef="ledgrowth_characterization_sweden" targetRef="inventory_sweden">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="sweden_mrb" name="Sweden MRB" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_SWEDEN" activiti:formKey="350"></userTask>
+    <sequenceFlow id="flow89" name="to sweden mrb" sourceRef="inventory_sweden" targetRef="sweden_mrb">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow90" name="to sweden mrb" sourceRef="inventory_ledgrowth_sweden" targetRef="sweden_mrb">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow91" sourceRef="s1" targetRef="ship_to_ab"></sequenceFlow>
+    <sequenceFlow id="flow92" sourceRef="ship_to_us" targetRef="End"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_sweden">
+    <bpmndi:BPMNPlane bpmnElement="sweden" id="BPMNPlane_sweden">
+      <bpmndi:BPMNShape bpmnElement="s1" id="BPMNShape_s1">
+        <omgdc:Bounds height="35.0" width="35.0" x="308.0" y="10.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End" id="BPMNShape_End">
+        <omgdc:Bounds height="35.0" width="35.0" x="304.0" y="580.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inventory_ledgrowth_sweden" id="BPMNShape_inventory_ledgrowth_sweden">
+        <omgdc:Bounds height="55.0" width="143.0" x="250.0" y="161.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ship_to_ab" id="BPMNShape_ship_to_ab">
+        <omgdc:Bounds height="55.0" width="105.0" x="269.0" y="70.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="led_growth_sweden" id="BPMNShape_led_growth_sweden">
+        <omgdc:Bounds height="55.0" width="143.0" x="250.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ledgrowth_characterization_sweden" id="BPMNShape_ledgrowth_characterization_sweden">
+        <omgdc:Bounds height="55.0" width="143.0" x="250.0" y="320.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ship_to_us" id="BPMNShape_ship_to_us">
+        <omgdc:Bounds height="55.0" width="107.0" x="268.0" y="486.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inventory_sweden" id="BPMNShape_inventory_sweden">
+        <omgdc:Bounds height="55.0" width="143.0" x="250.0" y="398.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sweden_mrb" id="BPMNShape_sweden_mrb">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="275.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow64" id="BPMNEdge_flow64">
+        <omgdi:waypoint x="321.0" y="125.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="161.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow66" id="BPMNEdge_flow66">
+        <omgdi:waypoint x="321.0" y="216.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="240.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow67" id="BPMNEdge_flow67">
+        <omgdi:waypoint x="321.0" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="320.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow68" id="BPMNEdge_flow68">
+        <omgdi:waypoint x="321.0" y="453.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="486.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow70" id="BPMNEdge_flow70">
+        <omgdi:waypoint x="321.0" y="375.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="398.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow89" id="BPMNEdge_flow89">
+        <omgdi:waypoint x="393.0" y="425.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="425.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="330.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="-27.0" y="5.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow90" id="BPMNEdge_flow90">
+        <omgdi:waypoint x="393.0" y="188.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="188.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="275.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="-23.0" y="-18.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow91" id="BPMNEdge_flow91">
+        <omgdi:waypoint x="325.0" y="45.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="70.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow92" id="BPMNEdge_flow92">
+        <omgdi:waypoint x="321.0" y="541.0"></omgdi:waypoint>
+        <omgdi:waypoint x="321.0" y="580.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

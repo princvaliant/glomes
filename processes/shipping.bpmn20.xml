@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="Customers">
+  <process id="shipping" name="Shipping" isExecutable="true">
+    <startEvent id="s1" name="Start"></startEvent>
+    <endEvent id="End" name="End"></endEvent>
+    <userTask id="shipped" name="Shipped" activiti:candidateGroups="ROLE_ADMIN,ROLE_SHIPPING" activiti:formKey="920"></userTask>
+    <sequenceFlow id="flow5" sourceRef="shipped" targetRef="End"></sequenceFlow>
+    <userTask id="shipping_inventory" name="Shipping Inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_SHIPPING" activiti:formKey="900"></userTask>
+    <sequenceFlow id="flow8" sourceRef="s1" targetRef="shipping_inventory"></sequenceFlow>
+    <userTask id="rma_approved" name="RMA approved" activiti:candidateGroups="ROLE_ADMIN,ROLE_SHIPPING" activiti:formKey="930"></userTask>
+    <sequenceFlow id="flow10" name="to rma approved" sourceRef="shipped" targetRef="rma_approved"></sequenceFlow>
+    <userTask id="rma_received" name="RMA received" activiti:candidateGroups="ROLE_ADMIN,ROLE_SHIPPING" activiti:formKey="940"></userTask>
+    <sequenceFlow id="flow11" name="to RMA received" sourceRef="rma_approved" targetRef="rma_received"></sequenceFlow>
+    <sequenceFlow id="flow12" name="ship" sourceRef="shipping_inventory" targetRef="shipped"></sequenceFlow>
+    <userTask id="oem_returns" name="OEM returns" activiti:candidateGroups="ROLE_ADMIN,ROLE_SHIPPING" activiti:formKey="925"></userTask>
+    <sequenceFlow id="flow13" name="oem returns" sourceRef="shipped" targetRef="oem_returns"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_shipping">
+    <bpmndi:BPMNPlane bpmnElement="shipping" id="BPMNPlane_shipping">
+      <bpmndi:BPMNShape bpmnElement="s1" id="BPMNShape_s1">
+        <omgdc:Bounds height="35.0" width="35.0" x="213.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End" id="BPMNShape_End">
+        <omgdc:Bounds height="35.0" width="35.0" x="900.0" y="660.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="shipped" id="BPMNShape_shipped">
+        <omgdc:Bounds height="55.0" width="161.0" x="150.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="shipping_inventory" id="BPMNShape_shipping_inventory">
+        <omgdc:Bounds height="55.0" width="161.0" x="150.0" y="70.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="rma_approved" id="BPMNShape_rma_approved">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="205.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="rma_received" id="BPMNShape_rma_received">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="105.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="oem_returns" id="BPMNShape_oem_returns">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="330.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="230.0" y="315.0"></omgdi:waypoint>
+        <omgdi:waypoint x="230.0" y="677.0"></omgdi:waypoint>
+        <omgdi:waypoint x="900.0" y="677.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="230.0" y="35.0"></omgdi:waypoint>
+        <omgdi:waypoint x="230.0" y="70.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="311.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="260.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="79.0" x="-35.0" y="-17.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="522.0" y="205.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="160.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="80.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="230.0" y="125.0"></omgdi:waypoint>
+        <omgdi:waypoint x="230.0" y="260.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="20.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="230.0" y="315.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="330.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="-45.0" y="15.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="nwLED">
+  <process id="cl" name="CL samples">
+    <startEvent id="s1" name="Start"></startEvent>
+    <endEvent id="End" name="End"></endEvent>
+    <userTask id="cl_inventory" name="CL inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="420"></userTask>
+    <sequenceFlow id="flow5" name="" sourceRef="cl_inventory" targetRef="End"></sequenceFlow>
+    <userTask id="c_luminesece" name="CL wires" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="410"></userTask>
+    <sequenceFlow id="flow7" name="to cl inventory" sourceRef="c_luminesece" targetRef="cl_inventory"></sequenceFlow>
+    <userTask id="cl_queue" name="CL queue" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="400"></userTask>
+    <sequenceFlow id="flow8" name="" sourceRef="s1" targetRef="cl_queue"></sequenceFlow>
+    <sequenceFlow id="flow9" name="to cl wires" sourceRef="cl_queue" targetRef="c_luminesece"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_cl">
+    <bpmndi:BPMNPlane bpmnElement="cl" id="BPMNPlane_cl">
+      <bpmndi:BPMNShape bpmnElement="s1" id="BPMNShape_s1">
+        <omgdc:Bounds height="35" width="35" x="213" y="0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="End" id="BPMNShape_End">
+        <omgdc:Bounds height="35" width="35" x="900" y="660"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cl_inventory" id="BPMNShape_cl_inventory">
+        <omgdc:Bounds height="55" width="161" x="150" y="260"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="c_luminesece" id="BPMNShape_c_luminesece">
+        <omgdc:Bounds height="55" width="161" x="150" y="160"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cl_queue" id="BPMNShape_cl_queue">
+        <omgdc:Bounds height="55" width="161" x="150" y="70"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="230" y="315"></omgdi:waypoint>
+        <omgdi:waypoint x="230" y="677"></omgdi:waypoint>
+        <omgdi:waypoint x="900" y="677"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="230" y="215"></omgdi:waypoint>
+        <omgdi:waypoint x="230" y="260"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="230" y="35"></omgdi:waypoint>
+        <omgdi:waypoint x="230" y="70"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="230" y="125"></omgdi:waypoint>
+        <omgdi:waypoint x="230" y="160"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

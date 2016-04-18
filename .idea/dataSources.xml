@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="4254816592">
+    <data-source source="LOCAL" name="MySQL - glo@calserver04" uuid="539aff2b-4232-4951-89a8-2924458147cb">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://calserver04:3306/glo</jdbc-url>
+      <user-name>root</user-name>
+      <user-password>dfc7dfd3dfd9dfdbdfc6</user-password>
+      <driver-properties>
+        <property name="zeroDateTimeBehavior" value="convertToNull" />
+        <property name="tinyInt1isBit" value="false" />
+      </driver-properties>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="glo dev" uuid="d1e5a753-b8f6-48fd-acf3-df9f83bce2fd">
+      <driver-ref>mysql</driver-ref>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://calserver04:3306/glo?autoReconnect=true</jdbc-url>
+      <user-name>root</user-name>
+      <user-password>dfc7dfd3dfd9dfdbdfc6</user-password>
+      <libraries>
+        <library>
+          <url>file://$PROJECT_DIR$/target/work/plugins/mysql-connectorj-5.1.22.1/lib/mysql-connector-java-5.1.22-bin.jar</url>
+        </library>
+      </libraries>
+    </data-source>
+  </component>
+</project>
+

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="DVD">
+  <process id="wafer_submount_diced" name="Wafer diced submount" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="end" name="End"></endEvent>
+    <userTask id="xy_inspection" name="XY inspection" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="5030"></userTask>
+    <userTask id="clean" name="Clean" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="5020"></userTask>
+    <userTask id="ready_for_bonding" name="Ready for bonding" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="5040"></userTask>
+    <sequenceFlow id="flow58" name="to bonding inventory" sourceRef="xy_inspection" targetRef="ready_for_bonding"></sequenceFlow>
+    <sequenceFlow id="flow66" name="to xy inspection" sourceRef="clean" targetRef="xy_inspection"></sequenceFlow>
+    <userTask id="dicing_inventory" name="Dicing inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="5010"></userTask>
+    <sequenceFlow id="flow67" name="to clean" sourceRef="dicing" targetRef="clean"></sequenceFlow>
+    <sequenceFlow id="flow68" sourceRef="startevent1" targetRef="dicing_inventory"></sequenceFlow>
+    <sequenceFlow id="flow69" sourceRef="ready_for_bonding" targetRef="end"></sequenceFlow>
+    <userTask id="dicing" name="Dicing" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="5011"></userTask>
+    <sequenceFlow id="flow70" name="to dicing" sourceRef="dicing_inventory" targetRef="dicing"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_wafer_submount_diced">
+    <bpmndi:BPMNPlane bpmnElement="wafer_submount_diced" id="BPMNPlane_wafer_submount_diced">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="323.0" y="13.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="950.0" y="680.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="xy_inspection" id="BPMNShape_xy_inspection">
+        <omgdc:Bounds height="55.0" width="158.0" x="262.0" y="370.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="clean" id="BPMNShape_clean">
+        <omgdc:Bounds height="55.0" width="154.0" x="264.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ready_for_bonding" id="BPMNShape_ready_for_bonding">
+        <omgdc:Bounds height="55.0" width="153.0" x="264.0" y="480.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dicing_inventory" id="BPMNShape_dicing_inventory">
+        <omgdc:Bounds height="55.0" width="145.0" x="268.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dicing" id="BPMNShape_dicing">
+        <omgdc:Bounds height="55.0" width="145.0" x="268.0" y="176.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow58" id="BPMNEdge_flow58">
+        <omgdi:waypoint x="341.0" y="425.0"></omgdi:waypoint>
+        <omgdi:waypoint x="340.0" y="480.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="98.0" x="350.0" y="439.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow66" id="BPMNEdge_flow66">
+        <omgdi:waypoint x="341.0" y="325.0"></omgdi:waypoint>
+        <omgdi:waypoint x="341.0" y="370.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="76.0" x="349.0" y="341.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow67" id="BPMNEdge_flow67">
+        <omgdi:waypoint x="340.0" y="231.0"></omgdi:waypoint>
+        <omgdi:waypoint x="341.0" y="270.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="38.0" x="349.0" y="239.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow68" id="BPMNEdge_flow68">
+        <omgdi:waypoint x="340.0" y="48.0"></omgdi:waypoint>
+        <omgdi:waypoint x="340.0" y="80.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow69" id="BPMNEdge_flow69">
+        <omgdi:waypoint x="340.0" y="535.0"></omgdi:waypoint>
+        <omgdi:waypoint x="340.0" y="697.0"></omgdi:waypoint>
+        <omgdi:waypoint x="950.0" y="697.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow70" id="BPMNEdge_flow70">
+        <omgdi:waypoint x="340.0" y="135.0"></omgdi:waypoint>
+        <omgdi:waypoint x="340.0" y="176.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="40.0" x="349.0" y="149.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

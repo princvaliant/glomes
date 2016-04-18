@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="nwLED">
+  <process id="rehab" name="Wafer Rehab" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="sc1_clean" name="SC1 Clean" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1230"></userTask>
+    <endEvent id="end" name="End"></endEvent>
+    <userTask id="sin_etch" name="SiN etch" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1220"></userTask>
+    <userTask id="qev" name="QEV" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1075"></userTask>
+    <userTask id="rehab_inventory" name="Rehab inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1085"></userTask>
+    <sequenceFlow id="flow12" name="to inventory" sourceRef="qev" targetRef="rehab_inventory"></sequenceFlow>
+    <sequenceFlow id="flow24" name="to SiN etch" sourceRef="nil_resist_strip" targetRef="sin_etch">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow25" name="to resist strip" sourceRef="rehab_launch" targetRef="nil_resist_strip"></sequenceFlow>
+    <userTask id="nil_resist_strip" name="NIL Resist Strip" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1210"></userTask>
+    <userTask id="rehab_launch" name="Rehab launch" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1200"></userTask>
+    <sequenceFlow id="flow31" sourceRef="startevent1" targetRef="rehab_launch"></sequenceFlow>
+    <sequenceFlow id="flow35" name="to SC1 clean" sourceRef="sin_etch" targetRef="sc1_clean"></sequenceFlow>
+    <sequenceFlow id="flow40" sourceRef="rehab_inventory" targetRef="end"></sequenceFlow>
+    <sequenceFlow id="flow41" name="to qev" sourceRef="sc1_clean" targetRef="qev"></sequenceFlow>
+    <sequenceFlow id="flow42" name="to qev" sourceRef="nil_resist_strip" targetRef="qev">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_rehab">
+    <bpmndi:BPMNPlane bpmnElement="rehab" id="BPMNPlane_rehab">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="309.0" y="35.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sc1_clean" id="BPMNShape_sc1_clean">
+        <omgdc:Bounds height="55.0" width="173.0" x="480.0" y="413.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="1090.0" y="720.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sin_etch" id="BPMNShape_sin_etch">
+        <omgdc:Bounds height="55.0" width="173.0" x="480.0" y="320.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="qev" id="BPMNShape_qev">
+        <omgdc:Bounds height="55.0" width="171.0" x="241.0" y="606.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="rehab_inventory" id="BPMNShape_rehab_inventory">
+        <omgdc:Bounds height="55.0" width="166.0" x="243.0" y="710.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="nil_resist_strip" id="BPMNShape_nil_resist_strip">
+        <omgdc:Bounds height="55.0" width="173.0" x="240.0" y="228.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="rehab_launch" id="BPMNShape_rehab_launch">
+        <omgdc:Bounds height="55.0" width="166.0" x="243.0" y="127.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="326.0" y="661.0"></omgdi:waypoint>
+        <omgdi:waypoint x="326.0" y="710.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="413.0" y="255.0"></omgdi:waypoint>
+        <omgdi:waypoint x="566.0" y="255.0"></omgdi:waypoint>
+        <omgdi:waypoint x="566.0" y="320.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="-51.0" y="-15.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
+        <omgdi:waypoint x="326.0" y="182.0"></omgdi:waypoint>
+        <omgdi:waypoint x="326.0" y="228.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="326.0" y="70.0"></omgdi:waypoint>
+        <omgdi:waypoint x="326.0" y="127.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow35" id="BPMNEdge_flow35">
+        <omgdi:waypoint x="566.0" y="375.0"></omgdi:waypoint>
+        <omgdi:waypoint x="566.0" y="413.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow40" id="BPMNEdge_flow40">
+        <omgdi:waypoint x="409.0" y="737.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1090.0" y="737.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow41" id="BPMNEdge_flow41">
+        <omgdi:waypoint x="566.0" y="468.0"></omgdi:waypoint>
+        <omgdi:waypoint x="566.0" y="633.0"></omgdi:waypoint>
+        <omgdi:waypoint x="412.0" y="633.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="4.0" y="-35.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow42" id="BPMNEdge_flow42">
+        <omgdi:waypoint x="326.0" y="283.0"></omgdi:waypoint>
+        <omgdi:waypoint x="326.0" y="606.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

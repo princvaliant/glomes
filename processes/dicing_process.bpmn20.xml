@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="nwLED">
+  <process id="dicing" name="Dicing" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="tape_expansion" name="Tape expansion" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="3140"></userTask>
+    <endEvent id="end" name="End"></endEvent>
+    <sequenceFlow id="flow2" sourceRef="forward_to_packaging" targetRef="end"></sequenceFlow>
+    <userTask id="breaking" name="Breaking" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="3130"></userTask>
+    <userTask id="scribing" name="Scribing" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="3120"></userTask>
+    <sequenceFlow id="flow8" name="to breaking" sourceRef="scribing" targetRef="breaking"></sequenceFlow>
+    <userTask id="tape_inventory" name="Tape inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="3150"></userTask>
+    <sequenceFlow id="flow11" name="to tape inventory" sourceRef="tape_expansion" targetRef="tape_inventory"></sequenceFlow>
+    <userTask id="dicing_queue" name="Dicing queue" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="3100"></userTask>
+    <sequenceFlow id="flow13" sourceRef="startevent1" targetRef="dicing_queue"></sequenceFlow>
+    <sequenceFlow id="flow14" name="to tape expansion" sourceRef="breaking" targetRef="tape_expansion"></sequenceFlow>
+    <userTask id="forward_to_packaging" name="Forward to packaging" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="3170"></userTask>
+    <sequenceFlow id="flow16" name="to packaging" sourceRef="tape_inventory" targetRef="forward_to_packaging">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="pp_queue" name="PP queue" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="3161"></userTask>
+    <sequenceFlow id="flow17" name="to pick and place" sourceRef="tape_inventory" targetRef="pp_queue">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="pp_progress" name="PP progress" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="3162"></userTask>
+    <sequenceFlow id="flow19" name="generate file" sourceRef="pp_queue" targetRef="pp_progress">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="pp_inventory" name="PP inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="3163"></userTask>
+    <sequenceFlow id="flow20" name="create dies" sourceRef="pp_progress" targetRef="pp_inventory"></sequenceFlow>
+    <sequenceFlow id="flow22" name="to pick and place" sourceRef="pp_inventory" targetRef="pp_progress">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[1]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow23" name="to scribing" sourceRef="dicing_queue" targetRef="scribing"></sequenceFlow>
+    <userTask id="oem_pp_files" name="OEM PP files" activiti:candidateGroups="ROLE_ADMIN,ROLE_TEST_ADMIN,ROLE_TEST_TECHNICIAN,ROLE_FAB_TECHNICIAN" activiti:formKey="3164"></userTask>
+    <sequenceFlow id="flow24" name="generate pp file for SAE" sourceRef="pp_queue" targetRef="oem_pp_files">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow25" name="to PP inventory" sourceRef="oem_pp_files" targetRef="pp_inventory"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_dicing">
+    <bpmndi:BPMNPlane bpmnElement="dicing" id="BPMNPlane_dicing">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="135.0" y="15.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tape_expansion" id="BPMNShape_tape_expansion">
+        <omgdc:Bounds height="55.0" width="165.0" x="70.0" y="371.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="1060.0" y="758.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="breaking" id="BPMNShape_breaking">
+        <omgdc:Bounds height="55.0" width="165.0" x="70.0" y="268.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scribing" id="BPMNShape_scribing">
+        <omgdc:Bounds height="55.0" width="165.0" x="70.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="tape_inventory" id="BPMNShape_tape_inventory">
+        <omgdc:Bounds height="55.0" width="165.0" x="70.0" y="471.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dicing_queue" id="BPMNShape_dicing_queue">
+        <omgdc:Bounds height="55.0" width="165.0" x="70.0" y="85.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="forward_to_packaging" id="BPMNShape_forward_to_packaging">
+        <omgdc:Bounds height="55.0" width="165.0" x="70.0" y="748.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pp_queue" id="BPMNShape_pp_queue">
+        <omgdc:Bounds height="55.0" width="137.0" x="374.0" y="439.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pp_progress" id="BPMNShape_pp_progress">
+        <omgdc:Bounds height="55.0" width="137.0" x="374.0" y="543.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pp_inventory" id="BPMNShape_pp_inventory">
+        <omgdc:Bounds height="55.0" width="137.0" x="374.0" y="646.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="oem_pp_files" id="BPMNShape_oem_pp_files">
+        <omgdc:Bounds height="55.0" width="105.0" x="620.0" y="439.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="235.0" y="775.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1060.0" y="775.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="152.0" y="235.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="268.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="36.0" width="53.0" x="162.0" y="235.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="152.0" y="426.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="471.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="81.0" x="162.0" y="426.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="152.0" y="50.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="85.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="152.0" y="323.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="371.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="86.0" x="162.0" y="323.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="152.0" y="526.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="748.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="36.0" width="61.0" x="162.0" y="526.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="235.0" y="498.0"></omgdi:waypoint>
+        <omgdi:waypoint x="296.0" y="497.0"></omgdi:waypoint>
+        <omgdi:waypoint x="296.0" y="367.0"></omgdi:waypoint>
+        <omgdi:waypoint x="442.0" y="367.0"></omgdi:waypoint>
+        <omgdi:waypoint x="442.0" y="439.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="36.0" width="81.0" x="14.0" y="-46.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="442.0" y="494.0"></omgdi:waypoint>
+        <omgdi:waypoint x="442.0" y="543.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="59.0" x="452.0" y="494.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="442.0" y="598.0"></omgdi:waypoint>
+        <omgdi:waypoint x="442.0" y="646.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="54.0" x="452.0" y="598.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="511.0" y="673.0"></omgdi:waypoint>
+        <omgdi:waypoint x="612.0" y="673.0"></omgdi:waypoint>
+        <omgdi:waypoint x="612.0" y="570.0"></omgdi:waypoint>
+        <omgdi:waypoint x="511.0" y="570.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="36.0" width="81.0" x="549.0" y="599.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="152.0" y="140.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="180.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="50.0" x="162.0" y="140.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="511.0" y="466.0"></omgdi:waypoint>
+        <omgdi:waypoint x="620.0" y="466.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="36.0" width="100.0" x="521.0" y="466.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
+        <omgdi:waypoint x="725.0" y="466.0"></omgdi:waypoint>
+        <omgdi:waypoint x="832.0" y="466.0"></omgdi:waypoint>
+        <omgdi:waypoint x="832.0" y="673.0"></omgdi:waypoint>
+        <omgdi:waypoint x="511.0" y="673.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="74.0" x="735.0" y="466.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
