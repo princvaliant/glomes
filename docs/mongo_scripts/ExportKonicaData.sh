@@ -1,0 +1,1 @@
+mongoexport -h calserver07:27017 -d glo -c konicaData -q '{"code": {"$in": ["4G-1-12-24-1-A","4G-1-12-13-1-C","4G-12-16-1-A","4G-1-12-01-4CG","4G-1-12-09-2-A","4G-12-16-5-B"]},"testType": {"$in": ["135 spots","50 spots","13 spots"]}}' --csv --fields code,testId,testType,spot,red_current,green_current,blue_current,duv,x,y,u,v,Lv,X,Y,Z -o KonicaDataExport.csv

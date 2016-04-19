@@ -1,0 +1,1 @@
+select ps.id, ps.task_key, v.*  from `glo`.`variable` v, `glo`.`process_step` ps where v.process_step_id = ps.id and ps. process_id = 38 order by ps.idx;

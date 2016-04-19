@@ -1,0 +1,6 @@
+{
+  "TestType": "nbp_test_data_visualization",
+  "TimeRun": {
+    "$gte": ISODate("2014-07-01")
+  }
+}

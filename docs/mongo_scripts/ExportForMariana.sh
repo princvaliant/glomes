@@ -1,0 +1,1 @@
+mongoexport -h calserver07:27017 -d glo -c measures -q "{\"TestType\":\"nbp_test_data_visualization\",\"C\":\"5000\",\"TimeRun\":{\"\$gte\":  new Date(1404229600000)}}" --csv --fields WaferID,DeviceID,eqe,wpe,Volt,dominantWavelength,efficacy -o MarianaExportWithDie5.csv

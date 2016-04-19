@@ -1,0 +1,77 @@
+var h=new Object();
+
+h['UN0001010']='UN0001010-R';
+h['UN0001009']='UN0001009-R';
+h['UN0001013']='UN0001013-R';
+h['UN0001004']='UN0001004-R';
+h['UN0001003']='UN0001003-R';
+h['UN0001005']='UN0001005-R';
+h['UN0001054']='UN0001054-R';
+h['UN0001001']='UN0001001-R';
+h['UN0005840']='UN0005840-R';
+h['UN0005827']='UN0005827-R';
+h['UN0005757']='UN0005757-R';
+h['UN0006659']='UN0006659-R';
+h['UN0005801']='UN0005801-R';
+h['UN0005828']='UN0005828-R';
+h['UN0005751']='UN0005751-R';
+h['UN0005844']='UN0005844-R';
+
+
+for (k in h){db.history.update({
+                      'code' : k
+                      },
+                      {
+                      $set:{
+			'code': h[k]
+		},
+		$pull : {
+			'tags' : k
+		},
+		$push : {
+			'tags' : h[k]
+		}
+	},
+	false,
+	true
+);db.unit.update(
+	{
+		'code' : k
+	},
+	{
+		$set:{
+			'code': h[k]
+		},
+		$pull : {
+			'tags' : k
+		},
+		$push : {
+			'tags' : h[k]
+		}
+	},
+	false,
+	true
+);db.dataReport.update(
+	{
+		'code' : k
+	},
+	{
+		$set:{
+			'code': h[k]
+		}
+	},
+	false,
+	true
+);db.moves.update(
+	{
+		'code' : k
+	},
+	{
+		$set:{
+			'code': h[k]
+		}
+	},
+	false,
+	true
+);
+}

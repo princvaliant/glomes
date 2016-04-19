@@ -1,0 +1,1 @@
+load data local infile '~/Downloads/Workbook3.csv' into table variable fields terminated by ','

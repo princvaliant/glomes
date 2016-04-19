@@ -1,0 +1,24 @@
+show collections
+use glo
+show colelctions
+show collections
+db.find.providerType().toArray()
+db.equi
+db.providerType.find().toArray()
+use pp
+db.addUser({'root','mongodb'})
+db.addUser('root','mongodb')
+db.unit.find({'equipmentMaintenanceId':'EMID15'}).toArray()
+db.unit.find({'code':'EQMNT15'}).toArray()
+db.unit.find({'code':'EQMNT17'}).toArray()
+db.unit.find({'code':'EQMNT18'}).toArray()
+db.unit.find({'code':'EQMNT19'}).toArray()
+db.unit.find({'code':'EQMNT20'}).toArray()
+db.unit.find({'code':'EQMNT21'}).toArray()
+db.unit.find({'code':'EQMNT22'}).toArray()
+db.unit.remove({'code':'EQMNT8'})
+db.unit.remove({'code':'EQMNT9'})
+db.history.remove({'code':'EQMNT9'})
+db.history.remove({'code':'EQMNT8'})
+db.history.remove({'code':'EQMNT7'})
+db.unit.remove({'code':'EQMNT7'})
