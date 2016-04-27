@@ -6,16 +6,16 @@
     <userTask id="xy_inspection_on_wafer" name="XY inspection on wafer" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3000"></userTask>
     <sequenceFlow id="flow34" sourceRef="startevent1" targetRef="xy_inspection_on_wafer"></sequenceFlow>
     <userTask id="dicing" name="Dicing" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3010"></userTask>
-    <sequenceFlow id="flow40" sourceRef="bonding_inventory" targetRef="end"></sequenceFlow>
+    <sequenceFlow id="flow40" sourceRef="coupon_inventory" targetRef="end"></sequenceFlow>
     <userTask id="coupon_on_gelpack" name="Coupon on gelpack" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3030"></userTask>
     <sequenceFlow id="flow41" name="assign to gelpack" sourceRef="coupon_cleaning" targetRef="coupon_on_gelpack"></sequenceFlow>
     <userTask id="coupon_cleaning" name="Coupon cleaning" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3025"></userTask>
     <sequenceFlow id="flow42" name="to coupon cleaning" sourceRef="dicing" targetRef="coupon_cleaning"></sequenceFlow>
-    <userTask id="bonding_inventory" name="Coupon inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3046"></userTask>
+    <userTask id="coupon_inventory" name="Coupon inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3046"></userTask>
     <userTask id="dicing_inventory" name="Dicing inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3002"></userTask>
     <sequenceFlow id="flow44" name="to dicing inventory" sourceRef="xy_inspection_on_wafer" targetRef="dicing_inventory"></sequenceFlow>
     <sequenceFlow id="flow45" name="to dice" sourceRef="dicing_inventory" targetRef="dicing"></sequenceFlow>
-    <sequenceFlow id="flow47" name="to bonding inventory" sourceRef="coupon_on_gelpack" targetRef="bonding_inventory"></sequenceFlow>
+    <sequenceFlow id="flow47" name="to bonding inventory" sourceRef="coupon_on_gelpack" targetRef="coupon_inventory"></sequenceFlow>
     <userTask id="lost_and_found" name="Lost and found" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3050"></userTask>
     <userTask id="depop" name="Depop" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3040"></userTask>
     <userTask id="clean" name="Clean" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3041"></userTask>
@@ -26,7 +26,7 @@
     <userTask id="dv_eng_inventory" name="DV Eng inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3047"></userTask>
     <userTask id="dicing_on_hold" name="Dicing on hold" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3003"></userTask>
     <sequenceFlow id="flow53" name="to dicing on hold" sourceRef="xy_inspection_on_wafer" targetRef="dicing_on_hold"></sequenceFlow>
-    <sequenceFlow id="flow54" sourceRef="bonding_inventory" targetRef="depop"></sequenceFlow>
+    <sequenceFlow id="flow54" sourceRef="coupon_inventory" targetRef="depop"></sequenceFlow>
     <userTask id="depop_inventory" name="Depop inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3045"></userTask>
     <sequenceFlow id="to_depop_inventory" name="tp depop inventory" sourceRef="depop_inspection" targetRef="depop_inventory"></sequenceFlow>
     <sequenceFlow id="flow55" sourceRef="depop_inventory" targetRef="end"></sequenceFlow>
@@ -51,7 +51,7 @@
       <bpmndi:BPMNShape bpmnElement="coupon_cleaning" id="BPMNShape_coupon_cleaning">
         <omgdc:Bounds height="55.0" width="156.0" x="83.0" y="406.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="bonding_inventory" id="BPMNShape_bonding_inventory">
+      <bpmndi:BPMNShape bpmnElement="coupon_inventory" id="BPMNShape_coupon_inventory">
         <omgdc:Bounds height="55.0" width="156.0" x="325.0" y="603.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="dicing_inventory" id="BPMNShape_dicing_inventory">
@@ -154,7 +154,7 @@
         <omgdi:waypoint x="865.0" y="527.0"></omgdi:waypoint>
         <omgdi:waypoint x="980.0" y="527.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="13.0" width="100.0" x="880.0" y="510.0"></omgdc:Bounds>
+          <omgdc:Bounds height="13.0" width="90.0" x="880.0" y="510.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow55" id="BPMNEdge_flow55">

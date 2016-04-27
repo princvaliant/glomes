@@ -322,9 +322,9 @@ Ext.define('glo.controller.ProbeTestPanel', {
 								                position: 'bottom',
 								                fields: ['w'],
 								                title: 'Wavelength (nm)',
-								                minimum : 350,
-												maximum : 670,
-												majorTickSteps: 5,
+								                minimum : 400,
+												maximum : 750,
+												majorTickSteps: 6,
 												minorTickSteps: 4,
 												dashSize:4, 
 												grid:true

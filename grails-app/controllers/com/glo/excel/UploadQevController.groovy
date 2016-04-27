@@ -659,7 +659,7 @@ class UploadQevController {
         def query =  new BasicDBObject()
         query.put("parentCode", null)
         query.put("value.ni_dot_test.actualStart", new BasicDBObject('$exists', 1))
-        def df = new Date().clearTime() - 4
+        def df = new Date().clearTime() - 60
         query.put("value.ni_dot_test.actualStart", new BasicDBObject('$gt', df))
         def fields = new BasicDBObject()
         fields.put("id", 1)

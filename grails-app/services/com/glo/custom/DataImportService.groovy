@@ -61,6 +61,12 @@ class DataImportService {
             case "WSTCOMPLETE":
                 completeWST(options, toSave)
                 break
+            case "NIDOT":
+                processNIDOT(options, toSave)
+                break
+            case "NIDOTCOMPLETE":
+                completeNIDOT(options, toSave)
+                break
             case "XY":
                 processXY(options, toSave)
                 break
@@ -979,6 +985,51 @@ class DataImportService {
         startWSTProcess(db, var.sid)
     }
 
+    def processNIDOT(def var, def toSave) {
+
+        def tkey = var.TestType
+        def pkey
+        def pctg
+        if (tkey == "ni_dot_test") {
+            pkey = "epi"
+            pctg = "nwLED"
+        }
+        def sync = "probeTestSynced"
+
+        def db = mongo.getDB("glo")
+        def unitCode = var.WaferID + (var.DeviceID ? "_" + var.DeviceID : "")
+
+        if (!unitService.inStep(db, var.WaferID, "", tkey)) {
+            throw new RuntimeException("Unit " + unitCode + " never passed through step " + tkey)
+        }
+
+        def measure
+        if (toSave) {
+            measure = saveMeasureRecord(db, var.WaferID, var.DeviceID, tkey, var)
+        } else {
+            measure = var
+        }
+
+        def punit
+        punit = db.unit.find(new BasicDBObject("code", var.WaferID), new BasicDBObject()).collect { it }[0]
+        if (!punit[sync]) {
+            def bdoUnit = new BasicDBObject()
+            bdoUnit.put("id", punit["_id"])
+            bdoUnit.put(sync, "YES")
+            bdoUnit.put(sync + "Experiment", [punit.code])
+            bdoUnit.put("processCategory", pctg)
+            bdoUnit.put("processKey", pkey)
+            bdoUnit.put("taskKey", tkey)
+            unitService.update(bdoUnit, "admin", true)
+        }
+    }
+
+    def completeNIDOT(def var, def toSave) {
+
+        def db = mongo.getDB("glo")
+        startNIDOTProcess(db, var.sid)
+    }
+
     def processD65(def var, def toSave) {
 
         def pkey = "packaging"
@@ -1699,6 +1750,19 @@ class DataImportService {
             unitService.start(recv, "WST", "wst_summary")
         }
     }
+
+    private def startNIDOTProcess(def db, def sid) {
+
+        def query = new BasicDBObject("sid", sid)
+
+        def allMeasures = db.measures.find(query).collect { it }
+
+        if (allMeasures) {
+
+
+        }
+    }
+
 
     private def startSpcProcess(def db, def sid) {
 

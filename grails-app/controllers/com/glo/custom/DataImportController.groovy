@@ -261,6 +261,35 @@ class DataImportController {
 				render ([success:false, msg: "Complete error: " + exc.getMessage()] as JSON)
 			}
 		}
+
+
+    def nidot_upload = {
+
+        try {
+            def rec = request.JSON
+            dataImportService.enqueue("NIDOT",  rec, true)
+            render ([success:true] as JSON)
+
+        } catch (Exception exc) {
+            logr.error(exc)
+            render ([success:false, msg: "Nidot Upload error: " + exc.getMessage()] as JSON)
+        }
+    }
+
+    def nidot_complete = {
+
+        try {
+            def vars =  request.JSON
+            dataImportService.enqueue("NIDOTCOMPLETE",  vars, true)
+            render ([success:true] as JSON)
+
+        } catch (Exception exc) {
+            logr.error(exc)
+            render ([success:false, msg: "NiDot Complete error: " + exc.getMessage()] as JSON)
+        }
+    }
+
+
 	
 	def xy_upload = {
 		

@@ -122,7 +122,7 @@ class ReadFileService {
                         def v2 = row[1]?.trim()
                         if (v1 && v2 && v1.isFloat() && v2.isFloat()) {
                             def v1d = v1.toDouble()
-                            if (grp != "Datavoltage" && v1d >= 350 && v1d <= 670) {
+                            if (grp != "Datavoltage" && v1d >= 400 && v1d <= 750) {
                                 arr.add([v1d, v2.toDouble()])
                             } else if (grp == "Datavoltage") {
                                 arr.add([v1d, v2.toDouble()])
