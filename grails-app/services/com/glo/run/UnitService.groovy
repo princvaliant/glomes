@@ -1049,27 +1049,39 @@ class UnitService {
                     if (!unit.mask) {
                         throw new RuntimeException("Mask for this wafer is not defined.")
                     }
-                    def productMask = ProductMask.findByName(unit.mask)
-                    if (productMask?.product?.code != "CPN1000") {
-                        throw new RuntimeException("This mask is not valid.")
-                    }
+                    if (unit.mask == "MASK39") {
+                        ["0001", "0002", "0003", "0004", "0005", "0006"].each {
+                            def cpnCode = unit.code + "_" + it
+                            def subUnit = db.unit.find(new BasicDBObject("code", cpnCode), new BasicDBObject()).collect {
+                                it
+                            }[0]
+                            if (!subUnit) {
+                                createCoupon(db, unit, cpnCode, user, "DVD", "dvd_assembly", "xy_inspection_on_wafer", "XY inspection on wafer", "CPN1000")
+                            }
+                        }
+                    } else {
+                        def productMask = ProductMask.findByName(unit.mask)
+                        if (productMask?.product?.code != "CPN1000") {
+                            throw new RuntimeException("This mask is not valid.")
+                        }
 
-                    // Retieve unique coupon codes for mask
-                    def productMaskItems = ProductMaskItemCtlm.executeQuery("""
+                        // Retieve unique coupon codes for mask
+                        def productMaskItems = ProductMaskItemCtlm.executeQuery("""
 							select distinct ps.pm from ProductMaskItem as ps where ps.productMask.id = ?
 						""", [productMask.id])
-                    if (!productMaskItems) {
-                        throw new RuntimeException("This mask has no valid definition.")
-                    }
+                        if (!productMaskItems) {
+                            throw new RuntimeException("This mask has no valid definition.")
+                        }
 
-                    // Create coupon unit for each subunit
-                    productMaskItems.each {
-                        def cpnCode = unit.code + "_" + it.trim().replace("\r", "")
-                        def subUnit = db.unit.find(new BasicDBObject("code", cpnCode), new BasicDBObject()).collect {
-                            it
-                        }[0]
-                        if (!subUnit) {
-                            createCoupon(db, unit, cpnCode, user, "DVD", "dvd_assembly", "xy_inspection_on_wafer", "XY inspection on wafer", "CPN1000")
+                        // Create coupon unit for each subunit
+                        productMaskItems.each {
+                            def cpnCode = unit.code + "_" + it.trim().replace("\r", "")
+                            def subUnit = db.unit.find(new BasicDBObject("code", cpnCode), new BasicDBObject()).collect {
+                                it
+                            }[0]
+                            if (!subUnit) {
+                                createCoupon(db, unit, cpnCode, user, "DVD", "dvd_assembly", "xy_inspection_on_wafer", "XY inspection on wafer", "CPN1000")
+                            }
                         }
                     }
                 }

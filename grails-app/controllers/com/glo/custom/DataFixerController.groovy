@@ -1360,6 +1360,15 @@ class DataFixerController {
         unit
     }
 
+    def testtest = {
+        println(params);
+        def result = []
+        for (def i = 0 ; i < 300; i++) {
+            result.add([_id:i,name: 'Sasha' +i, category: 'Category1'])
+        }
+        render "${params.callback}(${result as JSON})"
+    }
+
 
     def omega = {
 
