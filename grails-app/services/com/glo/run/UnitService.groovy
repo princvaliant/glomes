@@ -1049,7 +1049,7 @@ class UnitService {
                     if (!unit.mask) {
                         throw new RuntimeException("Mask for this wafer is not defined.")
                     }
-                    if (unit.mask == "MASK39") {
+                    if (unit.mask?.toUpperCase() == "MASK39") {
                         ["0001", "0002", "0003", "0004", "0005", "0006"].each {
                             def cpnCode = unit.code + "_" + it
                             def subUnit = db.unit.find(new BasicDBObject("code", cpnCode), new BasicDBObject()).collect {
