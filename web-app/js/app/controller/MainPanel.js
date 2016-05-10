@@ -268,7 +268,7 @@ Ext.define('glo.controller.MainPanel', {
             displayField:'code',
             hideLabel: true,
             hideTrigger:true,
-            typeAhead:true,
+            typeAhead:false,
             listConfig: {
                 loadingText: 'Searching units ...',
                 valueNotFoundText : 'No matching units found.',
