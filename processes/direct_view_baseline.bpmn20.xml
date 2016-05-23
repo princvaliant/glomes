@@ -87,6 +87,7 @@
     <userTask id="planar_pss_rd" name="Planar PSS RD" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1151"></userTask>
     <sequenceFlow id="flow95" name="plan pss rd" sourceRef="post_polish_inspection" targetRef="planar_pss_rd"></sequenceFlow>
     <userTask id="post_polish_inspection_fail" name="Post polish inspection fail" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1143"></userTask>
+    <userTask id="pre_polish_inspection_fail" name="Pre polish inspection fail" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1144"></userTask>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_direct_view_baseline">
     <bpmndi:BPMNPlane bpmnElement="direct_view_baseline" id="BPMNPlane_direct_view_baseline">
@@ -215,6 +216,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="post_polish_inspection_fail" id="BPMNShape_post_polish_inspection_fail">
         <omgdc:Bounds height="55.0" width="181.0" x="250.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pre_polish_inspection_fail" id="BPMNShape_pre_polish_inspection_fail">
+        <omgdc:Bounds height="55.0" width="181.0" x="250.0" y="457.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow33" id="BPMNEdge_flow33">
         <omgdi:waypoint x="105.0" y="35.0"></omgdi:waypoint>

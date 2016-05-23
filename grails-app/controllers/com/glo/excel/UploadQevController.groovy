@@ -570,14 +570,14 @@ class UploadQevController {
 		def retList = [:]
 		try {
 
-      //      bdo.put('value.code','AAF27156011D-28');
+            bdo.put('value.code','UN0015525');
 			bdo.put("value.parentCode", null)
 			bdo.put("value.tkey", "test_data_visualization")
-            bdo.put("value.testId", ['$gt': 150501000000, '$lte': 150801000000])
+            bdo.put("value.testId", ['$gt': 150501000000, '$lte': 160801000000])
 	
 			def temp = db.testData.find(bdo, new BasicDBObject('value.data', 0)).collect{
 			
-				def unit = db.unit.find(["code": it.value.code, "mask": "MASK8"], ['code':1,'testDataIndex':1]).collect {it}[0]
+				def unit = db.unit.find(["code": it.value.code], ['code':1,'testDataIndex':1, mask: 1]).collect {it}[0]
 				if (unit && unit.testDataIndex) {
 					[tid:it._id,unitId:unit._id,code:it.value.code,testId:unit.testDataIndex[unit.testDataIndex.size()-1],mask:unit.mask]
 				} else {

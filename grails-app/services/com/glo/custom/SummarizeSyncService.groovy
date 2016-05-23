@@ -131,15 +131,22 @@ class SummarizeSyncService {
                 this.calculateTopSummary(db, bdo, testData["value"]["data"], unitCode, unitId, testId)
             } else {
 
-                prepareSummary(db, bdo, "0.2", testData["value"]["data"], unitCode, unitId, testId, adminFilters02, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "0.6", testData["value"]["data"], unitCode, unitId, testId, adminFilters06, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "1", testData["value"]["data"], unitCode, unitId, testId, adminFilters1, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "2", testData["value"]["data"], unitCode, unitId, testId, adminFilters2, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "5", testData["value"]["data"], unitCode, unitId, testId, adminFilters5, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "10", testData["value"]["data"], unitCode, unitId, testId, adminFilters10, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "20", testData["value"]["data"], unitCode, unitId, testId, adminFilters20, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "50", testData["value"]["data"], unitCode, unitId, testId, adminFilters50, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "100", testData["value"]["data"], unitCode, unitId, testId, adminFilters100, centers, testData["value"]["data"]["Current @ 2V"])
+                // Extract currents for current densities
+                def currents = getCurrentsForDensity([100000, 500000, 2000000, 8000000], testData["value"]["data"], maskObj);
+
+                currents.each {density, current ->
+                    prepareSummary(db, bdo, current, testData["value"]["data"], unitCode, unitId, testId, [], centers, testData["value"]["data"]["Current @ 2V"], density)
+                }
+
+                prepareSummary(db, bdo, "0.2mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters02, centers, testData["value"]["data"]["Current @ 2V"], 0)
+                prepareSummary(db, bdo, "0.6mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters06, centers, testData["value"]["data"]["Current @ 2V"], 0)
+                prepareSummary(db, bdo, "1mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters1, centers, testData["value"]["data"]["Current @ 2V"], 0)
+                prepareSummary(db, bdo, "2mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters2, centers, testData["value"]["data"]["Current @ 2V"], 0)
+                prepareSummary(db, bdo, "5mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters5, centers, testData["value"]["data"]["Current @ 2V"], 0)
+                prepareSummary(db, bdo, "10mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters10, centers, testData["value"]["data"]["Current @ 2V"], 0)
+                prepareSummary(db, bdo, "20mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters20, centers, testData["value"]["data"]["Current @ 2V"], 0)
+                prepareSummary(db, bdo, "50mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters50, centers, testData["value"]["data"]["Current @ 2V"], 0)
+                prepareSummary(db, bdo, "100mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters100, centers, testData["value"]["data"]["Current @ 2V"], 0)
 
                 if (testData["value"]["data"]["Current @ 2V"]) {
                     createSummary(db, "Current @ 2V", testData["value"]["data"], bdo, unitCode, testData["value"]["data"]["Current @ 2V"]["NA"].collect {
@@ -164,13 +171,34 @@ class SummarizeSyncService {
             bdo.put("taskKey", tkey)
             bdo.put("id", unitId)
 
-            unitService.update(bdo, "admin", true)
+         //   unitService.update(bdo, "admin", true)
         } else {
             db.unit.update(new BasicDBObject("code", unitCode), new BasicDBObject('$set', new BasicDBObject(getSyncVar(tkey), "FAIL")), false, false)
         }
         testData = null
 
         1
+    }
+
+    private def getCurrentsForDensity(densities, data, maskObj) {
+        def ret = [:]
+        def area = maskObj.activeArea
+        if (area == 0) {
+            return ret;
+        }
+        densities.each { density ->
+            def reqCurr = density * area / 1000 ;
+            TreeMap sorted = new TreeMap()
+            data.each { current, values ->
+                def curval = currValue(current)
+                if (curval > 0) {
+                    sorted.put((curval - reqCurr).abs(), current)
+                }
+            }
+            def s = sorted.sort()
+            ret.put(density, s.firstEntry().value)
+        }
+        return ret
     }
 
     private def calculateCenter(def db, def bdo, def unitCode, def unitId, def tkey, def testId, def mask) {
@@ -449,8 +477,7 @@ class SummarizeSyncService {
         if (curr.indexOf('uA') > 0) currVal2 = currVal * 1E-3
         if (curr.indexOf('nA') > 0) currVal2 = currVal * 1E-6
         if (curr.indexOf('pA') > 0) currVal2 = currVal * 1E-9
-        if (curr.indexOf('pA') > 0) currVal2 = currVal * 1E-12
-        if (curr.indexOf('fA') > 0) currVal2 = currVal * 1E-15
+        if (curr.indexOf('fA') > 0) currVal2 = currVal * 1E-12
         currVal2
 
     }
@@ -459,14 +486,17 @@ class SummarizeSyncService {
             def db,
             def bdo,
             def current,
-            def data, def unitCode, def unitId, def testId, def adminFilters, def centers, def currentsAt2) {
+            def data, def unitCode, def unitId, def testId, def adminFilters, def centers, def currentsAt2, def density) {
 
-        def currKey = "Data @ " + current + "mA"
-        if (current == "0.2") {
+        def currKey = "Data @ " + current
+        if (current == "0.2mA") {
             currKey = "Data @ 200uA"
         }
-        if (current == "0.6") {
+        if (current == "0.6mA") {
             currKey = "Data @ 600uA"
+        }
+        if (density > 0) {
+            currKey = current
         }
 
         Set filtered = new HashSet()
@@ -487,7 +517,7 @@ class SummarizeSyncService {
             }
         }
 
-        if (current in ["0.2", "0.6", "1", "2", "5", "20"]) {
+        if (current in ["0.2mA", "0.6mA", "1mA", "2mA", "5mA", "20mA"]) {
             try {
                 createSummary2(db, currKey, data, bdo, unitCode, filtered, testId, centers, currentsAt2)
             } catch (Exception exc) {
@@ -495,7 +525,7 @@ class SummarizeSyncService {
             }
         }
 
-        createSummary(db, currKey, data, bdo, unitCode, filtered, testId, centers, currentsAt2)
+        createSummary(db, currKey, data, bdo, unitCode, filtered, testId, centers, currentsAt2, density)
     }
 
     def createSummary2(
@@ -718,7 +748,7 @@ class SummarizeSyncService {
     }
 
     private def createSummary(
-            def db, def currKey, def data, def bdo, def code, def filtered, def testId, def centers, def currentsAt2) {
+            def db, def currKey, def data, def bdo, def code, def filtered, def testId, def centers, def currentsAt2, density) {
 
         def curr2Vs = currentsAt2 ? currentsAt2["NA"] : [:]
 

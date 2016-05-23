@@ -12,6 +12,7 @@ class ProductMask implements Comparable {
     boolean isPcm
     String recipe
     float kFactorCurrent
+    float activeArea
 	
 	static belongsTo = [
 		product: Product
@@ -30,7 +31,7 @@ class ProductMask implements Comparable {
         isPcm nullable:false
         recipe nullable:false
         kFactorCurrent nullable: false
-
+        activeArea nullable: true
 	}
 
 	String toString() {

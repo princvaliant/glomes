@@ -59,7 +59,7 @@ class Variable implements Comparable {
 			'Company',
 			'Equipment',
 			'Product',
-			'Part',
+			'Unit',
 			'User',
 			'Process',
 			'object',

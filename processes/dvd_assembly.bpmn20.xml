@@ -30,7 +30,7 @@
     <userTask id="depop_inventory" name="Depop inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3045"></userTask>
     <sequenceFlow id="to_depop_inventory" name="tp depop inventory" sourceRef="depop_inspection" targetRef="depop_inventory"></sequenceFlow>
     <sequenceFlow id="flow55" sourceRef="depop_inventory" targetRef="end"></sequenceFlow>
-    <userTask id="pre_polish_inspection_fail" name="Pre-polish inspection fail" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3004"></userTask>
+    <userTask id="dvd_hold_inventory" name="DVD hold inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="3004"></userTask>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_dvd_assembly">
     <bpmndi:BPMNPlane bpmnElement="dvd_assembly" id="BPMNPlane_dvd_assembly">
@@ -82,7 +82,7 @@
       <bpmndi:BPMNShape bpmnElement="depop_inventory" id="BPMNShape_depop_inventory">
         <omgdc:Bounds height="55.0" width="105.0" x="980.0" y="500.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="pre_polish_inspection_fail" id="BPMNShape_pre_polish_inspection_fail">
+      <bpmndi:BPMNShape bpmnElement="dvd_hold_inventory" id="BPMNShape_dvd_hold_inventory">
         <omgdc:Bounds height="55.0" width="141.0" x="300.0" y="310.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow34" id="BPMNEdge_flow34">

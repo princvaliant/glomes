@@ -1,5 +1,6 @@
 package com.glo.run
 
+import com.mongodb.BasicDBObject
 import grails.converters.JSON
 import grails.web.JSONBuilder
 import org.apache.commons.logging.LogFactory
@@ -17,6 +18,7 @@ class ContentsController extends Rest {
 	def operationService
 	def workCenterService
 	def workflowService
+    def mongo
 
 
 	def formFirstTaskDc = {
@@ -71,7 +73,9 @@ class ContentsController extends Rest {
 								type = 'string'
 							} else if (v.dataType == 'objectArray') {
 								type = 'string'
-							} else {
+							} else if (v.dataType == 'Unit') {
+                                type = 'string'
+                            } else {
 								type = v.dataType
 							}
 							if (v.dataType == "date") {
@@ -396,12 +400,30 @@ class ContentsController extends Rest {
 		}
 	}
 
+    private def getUnits(listValues) {
+        def db = mongo.getDB("glo")
+        def lst  = listValues.tokenize('|');
+        def query = new BasicDBObject()
+        query.put("tkey", lst[2])
+        query.put("pkey", lst[1])
+        query.put("pctg", lst[0])
+
+        def fields = new BasicDBObject()
+        fields.put("code", 1)
+        fields.put("id", 1)
+
+        def units = db.unit.find(query, fields).addSpecial('$orderby', new BasicDBObject('code', 1)).collect{[it.code, it.code]}
+        return units
+    }
+
 	private def comboData (def listValues, def dataType, def pkey, def tkey) {
 
 		if (dataType == 'Company') {
 			def companies = companyService.getByPkeyAndTkey(pkey, tkey)
 			companies.collect {[it.id, it.name]}
-		} else if (dataType == 'Location') {
+		} else if (dataType == 'Unit') {
+            getUnits(listValues)
+        } else if (dataType == 'Location') {
 			def locations = companyService.getLocationsByPkeyAndTkey(pkey, tkey)
 			locations.collect {[it.id, it.name]}
 		} else if (dataType == 'Equipment') {
@@ -430,5 +452,6 @@ class ContentsController extends Rest {
 			ret
 		}
 	}
+
 
 }
