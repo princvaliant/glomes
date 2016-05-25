@@ -151,17 +151,17 @@ class SummarizeSyncService {
                 if (testData["value"]["data"]["Current @ 2V"]) {
                     createSummary(db, "Current @ 2V", testData["value"]["data"], bdo, unitCode, testData["value"]["data"]["Current @ 2V"]["NA"].collect {
                         it.key
-                    }, testId, centers, testData["value"]["data"]["Current @ 2V"])
+                    }, testId, centers, testData["value"]["data"]["Current @ 2V"], 0)
                 }
                 if (testData["value"]["data"]["peakEqeCurrent"]) {
                     createSummary(db, "peakEqeCurrent", testData["value"]["data"], bdo, unitCode, testData["value"]["data"]["peakEqeCurrent"]["NA"].collect {
                         it.key
-                    }, testId, centers, testData["value"]["data"]["peakEqeCurrent"])
+                    }, testId, centers, testData["value"]["data"]["peakEqeCurrent"], 0)
                 }
                 if (testData["value"]["data"]["peakEqe"]) {
                     createSummary(db, "peakEqe", testData["value"]["data"], bdo, unitCode, testData["value"]["data"]["peakEqe"]["NA"].collect {
                         it.key
-                    }, testId, centers, testData["value"]["data"]["peakEqe"])
+                    }, testId, centers, testData["value"]["data"]["peakEqe"], 0)
                 }
             }
 
@@ -171,7 +171,7 @@ class SummarizeSyncService {
             bdo.put("taskKey", tkey)
             bdo.put("id", unitId)
 
-         //   unitService.update(bdo, "admin", true)
+            unitService.update(bdo, "admin", true)
         } else {
             db.unit.update(new BasicDBObject("code", unitCode), new BasicDBObject('$set', new BasicDBObject(getSyncVar(tkey), "FAIL")), false, false)
         }
@@ -205,7 +205,7 @@ class SummarizeSyncService {
 
         def prodMask = ProductMask.findByName(mask)
         Set s = ProductMaskItem.executeQuery("""
-				select ps.code from ProductMaskItem as ps where ps.productMask = ? and ps.pm = null and  SQRT(POW(ps.plX,2) + POW(ps.plY,2)) <= 6
+				select ps.code from ProductMaskItem as ps where ps.productMask = ? and  SQRT(POW(ps.plX,2) + POW(ps.plY,2)) <= 6
 			""", [prodMask])
         s
     }
@@ -517,9 +517,9 @@ class SummarizeSyncService {
             }
         }
 
-        if (current in ["0.2mA", "0.6mA", "1mA", "2mA", "5mA", "20mA"]) {
+        if (density > 0 || current in ["0.2mA", "0.6mA", "1mA", "2mA", "5mA", "20mA"]) {
             try {
-                createSummary2(db, currKey, data, bdo, unitCode, filtered, testId, centers, currentsAt2)
+                createSummary2(db, currKey, data, bdo, unitCode, filtered, testId, centers, currentsAt2, density)
             } catch (Exception exc) {
 
             }
@@ -529,12 +529,15 @@ class SummarizeSyncService {
     }
 
     def createSummary2(
-            def db, def currKey, def data, def bdo, def code, def filtered, def testId, def centers, def currentsAt2) {
+            def db, def currKey, def data, def bdo, def code, def filtered, def testId, def centers, def currentsAt2, def density ) {
 
         def curr2Vs = currentsAt2 ? currentsAt2["NA"] : [:]
         def peakEqe = data["peakEqe"] ? data["peakEqe"]["NA"] : [:]
         def peakEqeCurrent = data["peakEqeCurrent"] ? data["peakEqeCurrent"]["NA"] : [:]
         def cstr = currKey.tokenize(" ")[2]
+        if (density > 0) {
+            cstr = densityAsString(density)
+        }
 
         def percentile50 = { values ->
             def medianVal = values?.getPercentile(50)
@@ -553,7 +556,6 @@ class SummarizeSyncService {
 
 
         def currents = [:]
-
         data.each { currStr, currData ->
 
             try {
@@ -577,7 +579,9 @@ class SummarizeSyncService {
                 if (currData["EQE"]) {
                     currData["EQE"].each { devCode, devValue ->
                         eqesRaw.put(devCode, [:])
-                        if (filtered.contains(devCode)) {
+                        if (density == 0 && filtered.contains(devCode)) {
+                            eqesFiltered.put(devCode, [:])
+                        } else {
                             eqesFiltered.put(devCode, [:])
                         }
                     }
@@ -760,11 +764,16 @@ class SummarizeSyncService {
                 def retMap2 = [:]
                 def retMap3 = [:]
 
+                def cstr = k
+                if (density > 0) {
+                    cstr = densityAsString(density)
+                }
+
                 v.each { k1, v1 ->
 
                     v1.each { k2, v2 ->
 
-                        if (filtered.contains(k2)) {
+                        if (density > 0 || filtered.contains(k2)) {
 
                             retMap1.put(k2, v2)
 
@@ -778,6 +787,7 @@ class SummarizeSyncService {
                             }
                         }
                     }
+
 
                     DescriptiveStatistics stats2 = new DescriptiveStatistics((double[]) retMap1.collect {
                         (double) (it.value == null || !it.value.toString().isNumber() ? 0 : it.value)
@@ -803,11 +813,16 @@ class SummarizeSyncService {
                     if (stdVal.isNaN())
                         stdVal = "N/A"
 
-                    bdo.put(k + " " + k1 + " min", minVal)
-                    bdo.put(k + " " + k1 + " max", maxVal)
-                    bdo.put(k + " " + k1 + " mean", meanVal)
-                    bdo.put(k + " " + k1 + " median", medianVal)
-                    bdo.put(k + " " + k1 + " stddev", stdVal)
+                    def kf = cstr
+                    if (density > 0) {
+                        kf = "Data @ " + cstr
+                    }
+
+                    bdo.put(kf + " " + k1 + " min", minVal)
+                    bdo.put(kf + " " + k1 + " max", maxVal)
+                    bdo.put(kf + " " + k1 + " mean", meanVal)
+                    bdo.put(kf + " " + k1 + " median", medianVal)
+                    bdo.put(kf + " " + k1 + " stddev", stdVal)
 
                     // Calculate centers
                     DescriptiveStatistics stats22 = new DescriptiveStatistics((double[]) retMap2.collect {
@@ -839,6 +854,11 @@ class SummarizeSyncService {
                     if (k == "Current @ 2V") {
                         ky2 = "Center"
                     }
+
+                    if (density > 0) {
+                        ky = "Center @ " + cstr
+                    }
+
                     bdo.put(ky + " " + ky2 + " min", minVal2)
                     bdo.put(ky + " " + ky2 + " max", maxVal2)
                     bdo.put(ky + " " + ky2 + " mean", meanVal2)
@@ -1291,5 +1311,9 @@ class SummarizeSyncService {
         } else {
             return 0
         }
+    }
+
+    def densityAsString(density) {
+        return density/1000 + 'mAcm2'
     }
 }
