@@ -20,7 +20,7 @@ class BasicDataSyncService {
 	def readFileService
 	def unitService
 	def relSyncService
-	def probeSyncService
+	def probeNewSyncService
 	def fileService
 	def jmsService
 	def mongo
@@ -72,7 +72,7 @@ class BasicDataSyncService {
 			
 			def st = syncType.tokenize("|")
 			if (st[0] == "PROBETEST" ) {
-				probeSyncService.addProbeData(units,st[1])
+                probeNewSyncService.addProbeData(units,st[1])
 			}
 
 			

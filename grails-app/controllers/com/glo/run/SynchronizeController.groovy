@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject
 import grails.converters.JSON
 import org.apache.commons.logging.LogFactory
 
+
 class SynchronizeController {
 
 	private static final logr = LogFactory.getLog(this)
@@ -153,14 +154,9 @@ class SynchronizeController {
 		bd.put('value.ni_dot_test', new BasicDBObject('$exists',1))
 	
 		db.dataReport.find(bd, new BasicDBObject()).collect {
-	
-			def unit = db.unit.find(new BasicDBObject('code',it.code), new BasicDBObject()).collect {it}[0]
-	
+	    	def unit = db.unit.find(new BasicDBObject('code',it.code), new BasicDBObject()).collect {it}[0]
 			if (unit) {
-				File f = new File(dir + "\\" + unit.code)
-				if (f.exists()) {
-					unitsToBeSynched.put(f, unit)
-				}
+					unitsToBeSynched.put(unit, '')
 			}
 		}
 
