@@ -150,7 +150,7 @@ class SynchronizeController {
 		
 		def cnt = 0
 		def bd = new BasicDBObject('parentCode', null)
-        bd.put('code', params.code)
+        bd.put('code', new BasicDBObject('$in', params.code.tokenize(",")))
 		bd.put('value.ni_dot_test', new BasicDBObject('$exists',1))
 	
 		db.dataReport.find(bd, new BasicDBObject()).collect {
