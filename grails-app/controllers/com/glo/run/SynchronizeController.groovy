@@ -161,7 +161,7 @@ class SynchronizeController {
 		}
 
 		
-		basicDataSyncService.init("PROBETEST|ni_dot_test", unitsToBeSynched)
+		basicDataSyncService.init("PROBETESTNEW|ni_dot_test", unitsToBeSynched)
 
 		render(unitsToBeSynched.size())
 	}

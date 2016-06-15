@@ -319,6 +319,7 @@ class SyncService {
 
         String dir = grailsApplication.config.glo.probeTestDirectory
         String syncType = "PROBETEST|" + tkey
+        String syncTypeNew = "PROBETESTNEW|" + tkey
 
         if (tkey in [
                 "nw_ito_dot_test",
@@ -336,18 +337,23 @@ class SyncService {
         // Determine which units contain folder to be synched
         def db = mongo.getDB("glo")
         def unitsToBeSynched = [:]
+        def unitsToBeSynchedNew = [:]
         units.data.each {
 
-            File f = new File(dir + it.code)
+            File f = new File(dir + '/' + it.code)
             String isSync = it["probeTestSynced"] != null ? it["probeTestSynced"].trim() : ""
             if (f.exists() && it.tkey == tkey && isSync == "SYNC") {
-                db.unit.update(new BasicDBObject("code", it.code), new BasicDBObject('$set', new BasicDBObject("probeTestSynced", "---")), false, true)
                 unitsToBeSynched.put(f, it)
+            }
+            if (isSync == "SYNC") {
+                db.unit.update(new BasicDBObject("code", it.code), new BasicDBObject('$set', new BasicDBObject("probeTestSynced", "---")), false, true)
+                unitsToBeSynchedNew.put(it, '')
             }
         }
 
         basicDataSyncService.init(syncType, unitsToBeSynched)
-        unitsToBeSynched.size()
+        basicDataSyncService.init(syncTypeNew, unitsToBeSynchedNew)
+        unitsToBeSynchedNew.size()
     }
 
 
