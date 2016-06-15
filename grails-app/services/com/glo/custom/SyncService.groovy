@@ -340,7 +340,7 @@ class SyncService {
         def unitsToBeSynchedNew = [:]
         units.data.each {
 
-            File f = new File(dir + '/' + it.code)
+            File f = new File(dir + it.code)
             String isSync = it["probeTestSynced"] != null ? it["probeTestSynced"].trim() : ""
             if (f.exists() && it.tkey == tkey && isSync == "SYNC") {
                 unitsToBeSynched.put(f, it)
