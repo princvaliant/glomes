@@ -57,7 +57,7 @@ class ProbeNewSyncService {
                                     volt    : '$Volt',
                                     eqe     : '$eqe',
                                     wpe     : '$wpe',
-                                    peak    : '$PeakWavelength',
+                                    peak    : '$RawPeakWavelength',
                                     dominant: '$dominantWavelength',
                                     photometric: '$photometric',
                                     radiometric: '$radiometric',
