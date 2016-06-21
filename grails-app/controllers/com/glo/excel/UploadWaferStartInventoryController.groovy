@@ -150,7 +150,7 @@ class UploadWaferStartInventoryController {
 	]
 
     static Map CONFIG_UPLOAD_UNID = [
-            sheet:'Data 2',
+            sheet:'Sheet1',
             startRow: 4,
             columnMap:  [
                     'A':'cassetteId',

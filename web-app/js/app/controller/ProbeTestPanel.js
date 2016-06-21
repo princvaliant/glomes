@@ -245,7 +245,7 @@ Ext.define('glo.controller.ProbeTestPanel', {
 								                fields: ['current'],
 								                title: 'Current (mA)',
 								                minimum : 0,
-												maximum : 10,
+												maximum : 5,
 												majorTickSteps: 3,
 												minorTickSteps: 4,
 												dashSize:4, 

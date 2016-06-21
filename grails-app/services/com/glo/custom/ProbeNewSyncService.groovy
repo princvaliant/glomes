@@ -53,6 +53,7 @@ class ProbeNewSyncService {
                                 $push: [
                                     spectrum: '$wavelengthPowerScan.data',
                                     viswp   : '$VISwp.data',
+                                    virpp   : '$VIRPP.data',
                                     current : '$CurrentSet',
                                     volt    : '$Volt',
                                     eqe     : '$eqe',
@@ -273,44 +274,32 @@ class ProbeNewSyncService {
                     values.each {
 
                         // Sync NiDot rpp data /////////////////////////////////////////////////////////
-//                        if (it[0] == "NiDot_rpp") {
-//
-//                            def data = readFileService.readTestFileForGroup(it[2], "Datavoltage")
-//                            root.put("DatavoltageContact", data)
-//
-//                            if (!bdoUnit.containsKey("NiDotContact"))
-//                                bdoUnit.put("NiDotContact", [])
-//                            bdoUnit["NiDotContact"].add(deviceCode)
-//
-//                            if (data["data"] && data["data"].size() > 0) {
-//
-//                                def dataSorted = data["data"].sort { it[0] }
-//                                def sz = dataSorted.size()
-//                                def first = dataSorted[0][0]
-//                                def last = dataSorted[sz - 1][0]
-//                                def firstRange = dataSorted[(int) (sz / 10)][0]
-//                                def lastRange = dataSorted[(int) (sz - sz / 10)][0]
-//
-//                                SimpleRegression sreg1 = new SimpleRegression()
-//                                SimpleRegression sreg2 = new SimpleRegression()
-//                                dataSorted.each {
-//
-//                                    if (it[0] && it[1]) {
-//                                        if (it[0] >= first && it[0] <= firstRange) {
-//                                            sreg1.addData(it[1], it[0])
-//                                        }
-//                                        if (it[0] >= lastRange && it[0] <= last) {
-//                                            sreg2.addData(it[1], it[0])
-//                                        }
-//                                    }
-//                                }
-//
-//                                rpp = (sreg1.getSlope() + sreg2.getSlope()) / 2
-//                                vbp = (Math.abs(sreg1.getIntercept()) + Math.abs(sreg2.getIntercept())) / 2
-//                                statsVbp.addValue(vbp)
-//                                statsRpp.addValue(rpp)
-//                            }
-//                        }
+
+                        if (it.virpp && it.virpp.size() > 0) {
+                            def dataSorted = it.virpp.sort { it[0] }
+                            def sz = dataSorted.size()
+                            def first = dataSorted[0][0]
+                            def last = dataSorted[sz - 1][0]
+                            def firstRange = dataSorted[(int) (sz / 10)][0]
+                            def lastRange = dataSorted[(int) (sz - sz / 10)][0]
+                            SimpleRegression sreg1 = new SimpleRegression()
+                            SimpleRegression sreg2 = new SimpleRegression()
+                            dataSorted.each {
+                                if (it[0] && it[1]) {
+                                    if (it[0] >= first && it[0] <= firstRange) {
+                                        sreg1.addData(it[1], it[0])
+                                    }
+                                    if (it[0] >= lastRange && it[0] <= last) {
+                                        sreg2.addData(it[1], it[0])
+                                    }
+                                }
+                            }
+
+                            rpp = (sreg1.getSlope() + sreg2.getSlope()) / 2
+                            vbp = (Math.abs(sreg1.getIntercept()) + Math.abs(sreg2.getIntercept())) / 2
+                            statsVbp.addValue(vbp)
+                            statsRpp.addValue(rpp)
+                        }
 
                         // Sync NiDot performance voltage sweep data /////////////////////////////////////////////////////////
                         if (it.viswp) {
@@ -1099,26 +1088,13 @@ class ProbeNewSyncService {
                 if (!avg.isNaN())
                     bdoUnit.put("fwhm08", avg)
 
-//
-//                def vbpMean = statsVbp.getMean()
-//                if (!vbpMean.isNaN())
-//                    bdoUnit.put("vbp", vbpMean)
-//
-//                def rppMean = statsRpp.getMean()
-//                if (!rppMean.isNaN())
-//                    bdoUnit.put("rpp", rppMean)
-//
-//                def rnnMean = statsRnn.getMean()
-//                if (!rnnMean.isNaN())
-//                    bdoUnit.put("rnn", rnnMean)
-//
-//                def rddMean = statsRdd.getMean()
-//                if (!rddMean.isNaN())
-//                    bdoUnit.put("rdd", rddMean)
-//
-//                def ritoMean = statsRito.getMean()
-//                if (!ritoMean.isNaN())
-//                    bdoUnit.put("rito", ritoMean)
+                def vbpMean = statsVbp.getMean()
+                if (!vbpMean.isNaN())
+                    bdoUnit.put("vbp", vbpMean)
+
+                def rppMean = statsRpp.getMean()
+                if (!rppMean.isNaN())
+                    bdoUnit.put("rpp", rppMean)
 
                 // Update unit if new variable initialized
                 def pkey = "epi"
@@ -1193,7 +1169,7 @@ class ProbeNewSyncService {
             def pDiode = iv[1] * iDiode
             def wpeCorrected = null
             if (pDiode != 0) {
-                wpeCorrected = 100 * iv[2] / pDiode
+                wpeCorrected = 1000 * 100 * iv[2] / pDiode
             }
             def eqe = 0, eqeCorrected = 0
 
@@ -1213,10 +1189,10 @@ class ProbeNewSyncService {
 
             if (peakWave) {
                 if (iv[0] != 0) {
-                    eqe = (100 * iv[2]) / (1240 / peakWave) / iv[0]
+                    eqe = 1000 * (100 * iv[2]) / (1240 / peakWave) / iv[0]
                 }
                 if (iDiode != 0) {
-                    eqeCorrected = (100 * iv[2]) / (1240 / peakWave) / iDiode
+                    eqeCorrected = 1000 * (100 * iv[2]) / (1240 / peakWave) / iDiode
                 }
             }
             def j = (iv[0] / 1000) / deviceArray
@@ -1245,14 +1221,6 @@ class ProbeNewSyncService {
             // Calculate leakage at 10
             if (iv[0] > 9.80 && !leakageData.containsKey(10) && root["Data @ 10mA"] && eqeCorrected > 0) {
                 leakageData.put(10, calculateLeakage(eqeCorrected, root["Data @ 10mA"]["Peak (nm)"]))
-            }
-            // Calculate leakage at 20
-            if (iv[0] > 19.00 && !leakageData.containsKey(20) && root["Data @ 20mA"] && eqeCorrected > 0) {
-                leakageData.put(20, calculateLeakage(eqeCorrected, root["Data @ 20mA"]["Peak (nm)"]))
-            }
-            // Calculate leakage at 50
-            if (iv[0] > 49.00 && !leakageData.containsKey(50) && root["Data @ 50mA"] && eqeCorrected > 0) {
-                leakageData.put(50, calculateLeakage(eqeCorrected, root["Data @ 50mA"]["Peak (nm)"]))
             }
         }
         currents.put("v5", "I diode (mA)")
