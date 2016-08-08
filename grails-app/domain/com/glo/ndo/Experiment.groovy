@@ -1,7 +1,5 @@
 package com.glo.ndo
 
-import com.glo.security.User
-
 class Experiment  {
 
 	static auditable = true
@@ -9,15 +7,11 @@ class Experiment  {
 	String name
 	boolean isClosed
     
-   static belongsTo = [
-	   user: User
-   ]
-   
-   static constraints = {
-	    code blank:false,maxSize:100
-		name blank:false,maxSize:100
+    static constraints = {
+	    code blank:false,maxSize:1000,unique:true
+		name blank:false,maxSize:1000
 		isClosed nullable: true
-   }
+    }
    
    String toString() {
 	  code 

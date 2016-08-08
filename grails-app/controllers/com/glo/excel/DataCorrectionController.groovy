@@ -21,6 +21,7 @@ class DataCorrectionController {
 	def historyService
     def epiRunService
 	def sequenceGeneratorService
+    def experimentDataService
 
 	private static final logr = LogFactory.getLog(this)
 
@@ -626,6 +627,10 @@ class DataCorrectionController {
 		workbook.write(f)
 		f.close()
 	}
+
+    def expData = {
+        experimentDataService.importFiles()
+    }
 	
 
 	private def addRecord (def results, def variable, def issue) {
