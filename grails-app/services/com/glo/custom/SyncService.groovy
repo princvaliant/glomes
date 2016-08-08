@@ -960,6 +960,10 @@ class SyncService {
                             suffix = "spl"
                         else if (fileName.indexOf("_04_spl") > 0)
                             suffix = "spl"
+                        else if (fileName.indexOf("_05_spl") > 0)
+                            suffix = "spl"
+                        else if (fileName.indexOf("_06_spl") > 0)
+                            suffix = "spl"
                         else if (fileName.indexOf("_07_spl") > 0)
                             suffix = "spl"
                         else if (fileName.indexOf("_08_spl") > 0)
@@ -995,6 +999,9 @@ class SyncService {
                         } else {
                             suffix = ""
                         }
+
+
+                        System.println(suffix);
 
                         if (suffix in ["405", "1mW", "2mW", "4mW", "25mW"]) {
 

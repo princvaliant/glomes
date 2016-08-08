@@ -14,7 +14,7 @@ class ProbeNewSyncService {
     def readFileService
     def summarizeSyncService
     def mongo
-
+    def grailsApplication
     def transactional = true
 
     static float deviceArray = 36057.0 / 100000000.0
@@ -29,6 +29,7 @@ class ProbeNewSyncService {
         // Create list of unique files grouped by wafer id
         def unitData = [:]
         def dt = null
+        String dir = grailsApplication.config.glo.probeNewTestDirectory
 
         units.keySet().each {
 
@@ -255,6 +256,17 @@ class ProbeNewSyncService {
                 def corr08 = [:]
                 def corrCenter08 = [:]
 
+                File f = new File(dir + code)
+                if (f.exists()) {
+                    def dirloc = f.listFiles([accept: { file -> file ==~ /.*?\.jpg/ }] as FileFilter)?.toList()
+                    dirloc.each { img ->
+                        fileArray.add([
+                                img,
+                                code + "_" + img.getName(),
+                                unit["_id"]
+                        ])
+                    }
+                }
 
                 value.each { listPerDevice ->
 
@@ -1116,7 +1128,6 @@ class ProbeNewSyncService {
                         bdoUnit.put("taskKey", "spc_ni_dot_test")
                     }
                     unitService.update(bdoUnit, "admin", true)
-
                     db.unit.update(new BasicDBObject("code", code), new BasicDBObject('$set', new BasicDBObject("probeTestSynced", "YES")), false, true)
 
                 } else {

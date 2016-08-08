@@ -8,7 +8,7 @@
     <userTask id="post_anneal_inv" name="Post anneal inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1121"></userTask>
     <userTask id="metal_deposition" name="Metal deposition" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1146"></userTask>
     <userTask id="polish" name="Polish" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1140"></userTask>
-    <userTask id="xy_inspection_inventory" name="XY inspection inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1170"></userTask>
+    <userTask id="visual_inspection_inventory" name="Visual inspection inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1170"></userTask>
     <sequenceFlow id="flow33" sourceRef="startevent1" targetRef="polish"></sequenceFlow>
     <userTask id="dv_intermediate_test" name="DV Intermediate Test" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1150"></userTask>
     <userTask id="post_anneal" name="Post Anneal" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1120"></userTask>
@@ -24,7 +24,7 @@
     <sequenceFlow id="flow44" name="to metal deposition" sourceRef="post_anneal_inv" targetRef="metal_deposition"></sequenceFlow>
     <userTask id="ito_etch" name="ITO Etch" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1054"></userTask>
     <sequenceFlow id="flow55" name="to isolation patterning" sourceRef="post_test_inspection" targetRef="isolation_patterning"></sequenceFlow>
-    <sequenceFlow id="flow58" name="to xy inspection inventory" sourceRef="post_isolation_bond_pad_inspection" targetRef="xy_inspection_inventory">
+    <sequenceFlow id="flow58" name="to visual inspection inventory" sourceRef="post_isolation_bond_pad_inspection" targetRef="visual_inspection_inventory">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[2]]></conditionExpression>
     </sequenceFlow>
     <userTask id="post_bond_pad_inspection" name="Post bond pad inspection" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1147"></userTask>
@@ -112,7 +112,7 @@
       <bpmndi:BPMNShape bpmnElement="polish" id="BPMNShape_polish">
         <omgdc:Bounds height="55.0" width="161.0" x="25.0" y="60.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="xy_inspection_inventory" id="BPMNShape_xy_inspection_inventory">
+      <bpmndi:BPMNShape bpmnElement="visual_inspection_inventory" id="BPMNShape_visual_inspection_inventory">
         <omgdc:Bounds height="55.0" width="171.0" x="708.0" y="1229.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="dv_intermediate_test" id="BPMNShape_dv_intermediate_test">

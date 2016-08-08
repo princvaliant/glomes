@@ -73,7 +73,7 @@ class BasicDataSyncService {
 			
 			def st = syncType.tokenize("|")
 			if (st[0] == "PROBETEST" ) {
-                probeSyncService.addProbeData(units,st[1])
+//                probeSyncService.addProbeData(units,st[1])
 			}
             if (st[0] == "PROBETESTNEW" ) {
                 probeNewSyncService.addProbeData(units,st[1])

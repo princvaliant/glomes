@@ -1044,7 +1044,7 @@ class UnitService {
                     readPickPlaceFile(moved.user, unit)
                 }
 
-                if (moved.taskKeyEng == "xy_inspection_inventory" && moved.processKeyEng == "direct_view_baseline") {
+                if (moved.taskKeyEng == "visual_inspection_inventory" && moved.processKeyEng == "direct_view_baseline") {
                     // Split wafer to coupons according to mask definition and start coupon in new process flow
                     if (!unit.mask) {
                         throw new RuntimeException("Mask for this wafer is not defined.")
@@ -1127,7 +1127,7 @@ class UnitService {
                 if (moved.taskKeyEng == "dicing" && moved.processKeyEng == "dvd_assembly" ) {
                     def cpnCode = unit.code.tokenize("_")[0]
                     def dbo = new BasicDBObject("code", cpnCode)
-                    dbo.put("tkey", "xy_inspection_inventory")
+                    dbo.put("tkey", "visual_inspection_inventory")
                     def uu = db.unit.find(dbo, new BasicDBObject()).collect {
                         it
                     }[0]
