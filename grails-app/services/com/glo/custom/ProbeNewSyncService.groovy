@@ -54,7 +54,7 @@ class ProbeNewSyncService {
                                 $push: [
                                     spectrum: '$wavelengthPowerScan.data',
                                     viswp   : '$VISwp.data',
-                                    virpp   : '$VIRPP.data',
+                                    virpp   : '$VIRPPSwp.data',
                                     current : '$CurrentSet',
                                     volt    : '$Volt',
                                     eqe     : '$eqe',
