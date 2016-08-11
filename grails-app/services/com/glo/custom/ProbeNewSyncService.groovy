@@ -297,12 +297,12 @@ class ProbeNewSyncService {
                             SimpleRegression sreg1 = new SimpleRegression()
                             SimpleRegression sreg2 = new SimpleRegression()
                             dataSorted.each {
-                                if (it[0] && it[1]) {
+                                if (it[0] && it[1] && it[1] < 10) {
                                     if (it[0] >= first && it[0] <= firstRange) {
-                                        sreg1.addData(it[1], it[0])
+                                        sreg1.addData(it[1] * 1000, it[0])
                                     }
                                     if (it[0] >= lastRange && it[0] <= last) {
-                                        sreg2.addData(it[1], it[0])
+                                        sreg2.addData(it[1] * 1000, it[0])
                                     }
                                 }
                             }
@@ -776,7 +776,7 @@ class ProbeNewSyncService {
                 // Corr current or peak center
                 avg = avgCurr20Center.getMean()
                 if (!avg.isNaN())
-                    bdoUnit.put("CorrEQE-20mA-Center-Avg", avg)
+                    bdoUnit.put("CorrEQE-20mA-Centepp-Avg", avg)
                 avg = avgCurr20Center.getMax()
                 if (!avg.isNaN()) {
                     bdoUnit.put("CorrEQE-20mA-Center-Best", avg)
@@ -1158,7 +1158,7 @@ class ProbeNewSyncService {
         SimpleRegression sreg = new SimpleRegression()
         for (def iv in voltages.data) {
             if (iv[0] >= 0.45) {
-                sreg.addData(iv[1], iv[0])
+                sreg.addData(iv[1] * 1000, iv[0])
             }
             if (iv[0] > 1.55)
                 break
@@ -1167,7 +1167,7 @@ class ProbeNewSyncService {
 
         // Add corrected current to IV data
         for (def iv in voltages.data) {
-            iv.add(iv[1] - (iv[0] * 1000 / slopeIv))
+            iv.add(iv[1] * 1000 - (iv[0] * 1000 / slopeIv))
         }
         voltages.put("v3", "currCorr (mA)")
 
