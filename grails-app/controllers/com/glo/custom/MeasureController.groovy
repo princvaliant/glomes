@@ -328,7 +328,8 @@ class MeasureController extends com.glo.run.Rest {
                 groupByX = rows.groupBy { it[groupField] }
             } else if (!(groupField in [
                     "wavelengthPowerScan",
-                    "VISwp"
+                    "VISwp",
+                    "VIRPPSwp"
             ])) {
                 retChart.put('xAxisType', 'Numeric')
                 groupByX = rows.groupBy { it[groupField] }

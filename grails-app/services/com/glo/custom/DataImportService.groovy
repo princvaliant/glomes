@@ -2042,6 +2042,8 @@ class DataImportService {
             objMeasure.put("wavelengthPowerScan", var.wavelengthPowerScan)
         if (var.VISwp)
             objMeasure.put("VISwp", var.VISwp)
+        if (var.VIRPPSwp)
+            objMeasure.put("VIRPPSwp", var.VIRPPSwp)
 
         objMeasure.putAll(addUnitData(db, parentCode + "_" + deviceCode))
 
