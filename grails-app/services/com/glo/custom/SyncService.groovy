@@ -797,7 +797,7 @@ class SyncService {
             def grp, line, val
             def output = [:]
 
-            def dirloc = new File(dir + "\\" + k).listFiles([accept: { file -> file ==~ /.*?\.txt/ }] as FileFilter)?.toList()
+            def dirloc = new File(dir + k).listFiles([accept: { file -> file ==~ /.*?\.txt/ }] as FileFilter)?.toList()
             dirloc.each { file ->
 
                 try {
@@ -910,7 +910,7 @@ class SyncService {
 
             def unitFiles = [:]
             def unitData = [:]
-            def dirloc = new File(dir + "/" + k).listFiles([accept: { file -> file ==~ /.*?\.txt/ }] as FileFilter)?.toList()
+            def dirloc = new File(dir + k).listFiles([accept: { file -> file ==~ /.*?\.txt/ }] as FileFilter)?.toList()
 
             v.each { unit ->
 
@@ -989,10 +989,9 @@ class SyncService {
                         def laserPower
                         if (suffix == "spm") {
                             def pwr = output["LaserParametersPower"]?.replace(" mW", "")?.toDouble()
-                            if (pwr > 3.3 && pwr < 4.7 && output["LaserParametersWavelength"]?.indexOf("405") >= 0)
+                            if (pwr >= 3.2 && pwr <= 4.8 && output["LaserParametersWavelength"]?.indexOf("405") >= 0)
                                 suffix = "405"
                         } else if (suffix == "spl") {
-
                             def pwr = output["LaserParametersPower"]?.replace(" mW", "")?.toDouble()
                             suffix = pwr.round(0).toInteger() + "mW"
                             laserPower = pwr
