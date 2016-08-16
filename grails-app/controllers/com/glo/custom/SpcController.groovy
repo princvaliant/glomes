@@ -369,7 +369,8 @@ class SpcController extends com.glo.run.Rest {
                 spcObj.samples = getMeasureSamples(db, sampleSize, spc.filter, var, filters)
             } else if (!spcObj.samples) {
                 spcObj.path = (procStep ? proc + " / " + procStep : proc)
-                spcObj.samples = getSamples(db, sampleSize, spc.filter, proc, path, var, expId, runNumber, prods, filters)
+                def ctg = it.variable.process?.category ?: it.variable.processStep?.process?.category
+                spcObj.samples = getSamples(db, sampleSize, spc.filter, proc, path, var, expId, runNumber, prods, filters, ctg)
             }
 
             DescriptiveStatistics stats = new DescriptiveStatistics((double[]) spcObj.samples.collect { it[1] })
@@ -662,10 +663,14 @@ class SpcController extends com.glo.run.Rest {
         temp.find { obj ->
 
             def val = obj[var]
-            def sd = df.format(obj.dateCreated)
-            if (val != null && val.toString().isNumber()) {
-                cnt++
-                ret.put(sd + "_" + obj.runNumber, [obj.runNumber, val.toDouble(), obj.dateCreated, "", sd])
+            try {
+                def sd = df.format(obj.dateCreated)
+                if (val != null && val.toString().isNumber()) {
+                    cnt++
+                    ret.put(sd + "_" + obj.runNumber, [obj.runNumber, val.toDouble(), obj.dateCreated, "", sd])
+                }
+            } catch(Exception exc) {
+
             }
         }
 
@@ -770,13 +775,18 @@ class SpcController extends com.glo.run.Rest {
     private def getSamples(
             def db,
             def sampleSize,
-            def filter, def process, def path, def var, def expId, def runNumber, def prods, def filters) {
+            def filter, def process, def path, def var, def expId, def runNumber, def prods, def filters, def category) {
 
         def query = new BasicDBObject()
         def temp
 
         query.put("parentCode", null)
         query.put("value.active", "true")
+        if (process && category) {
+             query.put("value.tags", category + '|' + process)
+        } else if (process) {
+             query.put("value.pkey", process)
+        }
         if (prods) {
             query.put("value.productCode", new BasicDBObject('$in', prods))
         }

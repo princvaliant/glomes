@@ -41,12 +41,10 @@ Ext
                                             '<link rel="stylesheet" href="js/ext/resources/css/icons.css" />' +
                                             '</head>' + DocumentContainer.innerHTML);
 
-                                        WindowObject.document.close();
-										WindowObject.focus();
-										WindowObject.print();
-
-
-
+                                        setTimeout(function() {
+                                            WindowObject.focus();
+                                            WindowObject.print();
+                                        }, 1000);
 									}
 								},
 								{

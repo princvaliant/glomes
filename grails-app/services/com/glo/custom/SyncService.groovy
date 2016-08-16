@@ -142,10 +142,10 @@ class SyncService {
                                 if (row.length > 70) {
                                     counter++
                                     if (counter > 5) {
-                                        if (row[15].isNumber()) throttle.addValue((double) Double.parseDouble(row[15]))
-                                        if (row[35].isNumber()) tune.addValue((double) Double.parseDouble(row[35]))
-                                        if (row[39].isNumber()) load.addValue((double) Double.parseDouble(row[39]))
-                                        if (row[43].isNumber()) dcBias.addValue((double) Double.parseDouble(row[43]))
+                                        if (row[17].isNumber()) throttle.addValue((double) Double.parseDouble(row[17]))
+                                        if (row[37].isNumber()) tune.addValue((double) Double.parseDouble(row[37]))
+                                        if (row[41].isNumber()) load.addValue((double) Double.parseDouble(row[41]))
+                                        if (row[45].isNumber()) dcBias.addValue((double) Double.parseDouble(row[45]))
                                     }
                                 } else  if (row.length > 25) {
                                     counter++

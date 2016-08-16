@@ -47,6 +47,12 @@ class ImportEquipmentDCJob {
             def db = mongo.getDB("glo")
 
             try {
+                eBeamData(db)
+            }
+            catch (Exception exc) {
+                logr.error(exc.getMessage())
+            }
+            try {
                 tempHumidity(db)
             }
             catch (Exception exc) {
@@ -196,6 +202,134 @@ class ImportEquipmentDCJob {
             persistenceInterceptor.destroy()
         }
     }
+
+
+    def eBeamData(db) {
+
+        persistenceInterceptor.init()
+
+        String dir = grailsApplication.config.glo.eBeamDirectory
+        if (!dir) {
+            logr.error("eBeam directory not specified.")
+            return
+        }
+
+        java.io.File f = new java.io.File(dir)
+        if (!f.exists()) {
+            logr.error("eBeam '" + dir + "' does not exist.")
+            return
+        }
+
+        def files = f.listFiles([accept: { file -> file ==~ /.*?\.TXT/ }] as FileFilter)?.toList()
+        files.each { file ->
+            def fn = file.getName().replace(".TXT", "").toUpperCase().tokenize("-")
+            def run = fn[0]
+            def exps = fn[1].tokenize(",")
+
+            if (room == "room304" || room == "room306") {
+
+                def bdo = new BasicDBObject()
+                bdo.put("parentCode", null)
+                bdo.put("value.tags", [
+                        "EquipmentStatus",
+                        "omega_sensor",
+                        room
+                ])
+                bdo.put("value.pkey", "omega_sensor")
+                def lastEntry = db.dataReport.find(bdo, new BasicDBObject()).addSpecial('$orderby', new BasicDBObject("code", -1)).limit(1).collect {
+                    it
+                }[0]
+                int hourOfDay = 0
+                def lastDate = "2016-01-01"
+                if (lastEntry) {
+                    hourOfDay = lastEntry.value.hourOfDay
+                    lastDate = lastEntry.value.actualStart.format("yyyy-MM-dd")
+                }
+
+
+                FileReader fr = null
+                BufferedReader br = null
+                try {
+
+                    fr = new FileReader(file)
+                    br = new BufferedReader(fr)
+
+                    def resMap = [:]
+                    def resMap1 = [:]
+
+                    def line
+
+                    while ((line = br.readLine()) != null) {
+                        if (line?.trim() != "") {
+                            def row = line.split(',')
+                            if (row.length > 2) {
+                                def datetime = row[1]?.trim()
+                                def temperature = row[2]?.trim()
+                                def humidity = row[3]?.trim()
+                                if (datetime && temperature && humidity) {
+                                    def dt = datetime.tokenize(' ')
+                                    if (temperature.isFloat() && humidity.isFloat()) {
+                                        float fT = temperature.toFloat()
+                                        float fH = humidity.toFloat()
+                                        if (dt.size() == 2) {
+                                            def actst = dt[0].tokenize("-")
+                                            def actualStart =
+                                                    String.format("%02d", actst[0].toInteger()) + "-" +
+                                                            String.format("%02d", actst[1].toInteger()) + "-" +
+                                                            String.format("%02d", actst[2].toInteger())
+                                            def dthm = dt[1].tokenize(":")
+                                            int dth = dthm[0].toInteger()
+                                            int dtm = dthm[1].toInteger()
+
+                                            if (actualStart + "_" + String.format("%02d", dth) >= lastDate + "_" + String.format("%02d", hourOfDay)) {
+
+                                                def dr = new BasicDBObject()
+                                                dr.put("parentCode", null)
+                                                def code = "OSS" + sequenceGeneratorService.next("omega_sensor").toString().padLeft(6, '0')
+                                                dr.put("code", code)
+
+                                                def obj = new BasicDBObject()
+                                                obj.put("active", "true")
+                                                obj.put("tags", [
+                                                        "EquipmentStatus",
+                                                        "omega_sensor",
+                                                        room
+                                                ])
+                                                obj.put("pkey", "omega_sensor")
+                                                obj.put("sensor", room)
+                                                obj.put("temperature", fT)
+                                                obj.put("temperature_max", fT)
+                                                obj.put("humidity", fH)
+                                                obj.put("humidity_max", fH)
+                                                obj.put('actualStart', new Date().parse("yyyy-MM-dd HH:mm", actualStart + " " + dth + ":" + dtm))
+                                                obj.put('hourOfDay', dth)
+                                                obj.put('valuePerMinute', dtm)
+
+                                                dr.put("value", obj)
+                                                db.dataReport.save(dr)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                } catch (Exception exc) {
+                    logr.warn(file?.getName() + ": " + exc.toString())
+                }
+                finally {
+                    if (br != null)
+                        br.close()
+                    if (fr != null)
+                        fr.close()
+                    br = null
+                    fr = null
+                }
+            }
+        }
+    }
+
 
 
     def omegaSensor(db) {
