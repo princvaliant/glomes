@@ -139,7 +139,7 @@ Ext.define('glo.controller.ProbeTestPanel', {
                                                         if (curr === 400) currFile = '0.4';
                                                         if (curr === 600) currFile = '0.6';
                                                         if (curr === 800) currFile = '0.8';
-                                                        var img = code + "_" + propCombo.value + "_" + currFile + "mA.jpg"
+                                                        var img = code + "_" + propCombo.value + "_" + currFile + "mA." + Ext.getCmp('probeTestImageId').tag
                                                         Ext.getCmp('probeTestImageId').setSrc(img);
                                                         Ext.each(chart.series.items, function(ser) {
                                                             var c = parseInt(ser.yField.replace(/[^0-9\.]/g, ''));
@@ -512,6 +512,7 @@ Ext.define('glo.controller.ProbeTestPanel', {
 					d.setSource(obj.data);
 					
 					Ext.getCmp('probeTestImageId').setSrc(obj.image);
+                    Ext.getCmp('probeTestImageId').tag = obj.extens;
 
 					Ext.getCmp('datavoltagechartid').store.loadData(obj.Datavoltage);
 

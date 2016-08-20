@@ -142,18 +142,17 @@ class SyncService {
                                 if (row.length > 70) {
                                     counter++
                                     if (counter > 5) {
-                                        if (row[17].isNumber()) throttle.addValue((double) Double.parseDouble(row[17]))
-                                        if (row[37].isNumber()) tune.addValue((double) Double.parseDouble(row[37]))
-                                        if (row[41].isNumber()) load.addValue((double) Double.parseDouble(row[41]))
-                                        if (row[45].isNumber()) dcBias.addValue((double) Double.parseDouble(row[45]))
-                                    }
-                                } else  if (row.length > 25) {
-                                    counter++
-                                    if (counter > 5) {
-                                        if (row[9].isNumber()) throttle.addValue((double) Double.parseDouble(row[9]))
-                                        if (row[21].isNumber()) tune.addValue((double) Double.parseDouble(row[21]))
-                                        if (row[23].isNumber()) load.addValue((double) Double.parseDouble(row[23]))
-                                        if (row[25].isNumber()) dcBias.addValue((double) Double.parseDouble(row[25]))
+                                        if ( grailsApplication.config.glo.icpDataLogDirectory == "ICP") {
+                                            if (row[17].isNumber()) throttle.addValue((double) Double.parseDouble(row[17]))
+                                            if (row[37].isNumber()) tune.addValue((double) Double.parseDouble(row[37]))
+                                            if (row[41].isNumber()) load.addValue((double) Double.parseDouble(row[41]))
+                                            if (row[45].isNumber()) dcBias.addValue((double) Double.parseDouble(row[45]))
+                                        } else {
+                                            if (row[17].isNumber()) throttle.addValue((double) Double.parseDouble(row[17]))
+                                            if (row[37].isNumber()) tune.addValue((double) Double.parseDouble(row[37]))
+                                            if (row[41].isNumber()) load.addValue((double) Double.parseDouble(row[41]))
+                                            if (row[45].isNumber()) dcBias.addValue((double) Double.parseDouble(row[45]))
+                                        }
                                     }
                                 }
                             }
@@ -989,7 +988,8 @@ class SyncService {
                         def laserPower
                         if (suffix == "spm") {
                             def pwr = output["LaserParametersPower"]?.replace(" mW", "")?.toDouble()
-                            if (pwr >= 3.2 && pwr <= 4.8 && output["LaserParametersWavelength"]?.indexOf("405") >= 0)
+                            // if (pwr >= 3.2 && pwr <= 4.8 && output["LaserParametersWavelength"]?.indexOf("405") >= 0)
+                            if (pwr >=  0 && pwr <= 10 && output["LaserParametersWavelength"]?.indexOf("405") >= 0)
                                 suffix = "405"
                         } else if (suffix == "spl") {
                             def pwr = output["LaserParametersPower"]?.replace(" mW", "")?.toDouble()

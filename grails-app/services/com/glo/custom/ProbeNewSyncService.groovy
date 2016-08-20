@@ -259,6 +259,7 @@ class ProbeNewSyncService {
                 File f = new File(dir + code)
                 if (f.exists()) {
                     def dirloc = f.listFiles([accept: { file -> file ==~ /.*?\.jpg/ }] as FileFilter)?.toList()
+                    dirloc += f.listFiles([accept: { file -> file ==~ /.*?\.png/ }] as FileFilter)?.toList()
                     dirloc.each { img ->
                         fileArray.add([
                                 img,

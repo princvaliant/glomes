@@ -10,7 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.grails.plugins.excelimport.ExcelImportUtils
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics
 
-class  ImportService {
+class ImportService {
 
     private static final logr = LogFactory.getLog(this)
 
@@ -153,7 +153,7 @@ class  ImportService {
             if (fn.size() >= 2) {
                 stage = fn[1]
                 for (int i = 2; i < fn.size(); i++)
-                summary += fn[i] + ' '
+                    summary += fn[i] + ' '
             }
             summary.replaceAll("XLSX", "")
 
@@ -169,8 +169,8 @@ class  ImportService {
                 }
                 spots++
 
-                us.put((int)row.position, row.u)
-                vs.put((int)row.position, row.v)
+                us.put((int) row.position, row.u)
+                vs.put((int) row.position, row.v)
 
                 def bdo = new BasicDBObject()
                 bdo.put("packageId", unit.code)
@@ -216,12 +216,12 @@ class  ImportService {
                 def res = 0.0
                 for (int i = 1; i <= size; i++) {
                     if (i + 1 <= size && i.mod(cols) != 0) {
-                        def d = Math.sqrt(calc(us, i, i + 1) + calc(vs, i , i + 1))
+                        def d = Math.sqrt(calc(us, i, i + 1) + calc(vs, i, i + 1))
                         if (d > res)
                             res = d
                     }
                     if (i + cols <= size) {
-                        def d = Math.sqrt(calc(us, i, i + cols) + calc(vs, i , i + cols))
+                        def d = Math.sqrt(calc(us, i, i + cols) + calc(vs, i, i + cols))
                         if (d > res)
                             res = d
                     }
@@ -237,7 +237,7 @@ class  ImportService {
             bdo2.put("id", unit["_id"])
             bdo2.put(stage + "_summary", summary)
             bdo2.put(stage + "_colorShift2Points", colorShift2Points)
-            bdo2.put(stage + "_colorShift2AdjPoints" , colorShift2AdjPoints)
+            bdo2.put(stage + "_colorShift2AdjPoints", colorShift2AdjPoints)
             bdo2.put(stage + "_colorShift2PointsCIE1976LAB", colorShift2PointsCIE1976LAB)
             bdo2.put("spots", spots)
             bdo2.put("processCategory", "Packages")
@@ -547,5 +547,133 @@ class  ImportService {
             i++
         }
         i
+    }
+
+
+    def eBeamData(db, dir) {
+
+        if (!dir) {
+            logr.error("eBeam directory not specified.")
+            return
+        }
+
+        java.io.File f = new java.io.File(dir)
+        if (!f.exists()) {
+            logr.error("eBeam '" + dir + "' does not exist.")
+            return
+        }
+
+        def files = f.listFiles([accept: { file -> file ==~ /.*?\.TXT/ }] as FileFilter)?.toList()
+        files.each { file ->
+            def fn = file.getName().replace(".TXT", "").toUpperCase().tokenize("-")
+            def query = new BasicDBObject("code", fn[0])
+            def unit = db.dataReport.find(query, new BasicDBObject()).collect { it }[0]
+            if (!unit) {
+                FileReader fr = null
+                BufferedReader br = null
+                try {
+                    fr = new FileReader(file)
+                    br = new BufferedReader(fr)
+                    def resMap = [:]
+                    def line
+                    def depositCount = 0
+                    def previousStatus = ''
+                    while ((line = br.readLine()) != null) {
+                        if (line != "") {
+                            def row = line.split("\t")
+                            if (row.length > 10) {
+                                def ebeamrun = row[1]?.trim()
+                                def time = row[2]?.trim()
+                                def rate = row[3]?.trim()
+                                def power = row[5]?.trim()
+                                def temp = row[7]?.trim()
+                                def status = row[23]?.trim()
+                                if (status == "Deposit") {
+                                    if (previousStatus != "Deposit") {
+                                        depositCount += 1
+                                    }
+                                    if (rate.isFloat() && power.isFloat() && temp.isInteger()) {
+                                        float fRate = rate.toFloat()
+                                        float fPower = power.toFloat()
+                                        int iTemp = temp.toInteger()
+                                        if (!resMap[depositCount]) {
+                                            resMap.put(depositCount, [])
+                                        }
+                                        resMap[depositCount].add([time, fPower, iTemp])
+                                    }
+                                }
+                                previousStatus = status
+                            }
+                        }
+                    }
+
+                    // Process resMap
+                    def dr = new BasicDBObject()
+                    dr.put("parentCode", null)
+                    dr.put("code", fn[0])
+                    def obj = new BasicDBObject()
+                    obj.put("active", "true")
+                    obj.put("ebeam_run_id", fn[0])
+                    obj.put("experimentId", fn[1])
+                    obj.put("tags", [
+                            "EquipmentStatus|ebeam_rundata",
+                            fn[1],
+                            fn[0]
+                    ])
+                    obj.put("pkey", "ebeam_rundata")
+                    obj.put('actualStart', new Date())
+
+                    resMap.each { idx, values ->
+                        DescriptiveStatistics pows = new DescriptiveStatistics()
+                        DescriptiveStatistics temps = new DescriptiveStatistics()
+                        values.each { val ->
+                            pows.addValue(val[1])
+                            temps.addValue(val[2])
+                        }
+                        // Init temperature aggegations
+                        obj.put("deposit_" + idx + "_temp_begin", values[0][2])
+                        obj.put("deposit_" + idx + "_temp_end", values[values.size() - 1][2])
+                        def t = temps.getStandardDeviation()
+                        if (t && t.isNaN()) {
+                        } else {
+                            obj.put("deposit_" + idx + "_temp_stddev", t)
+                        }
+                        t = temps.getMean()
+                        if (t && t.isNaN()) {
+                        } else {
+                            obj.put("deposit_" + idx + "_temp_avg", t)
+                        }
+
+                        // Init power aggegations
+                        obj.put("deposit_" + idx + "_power_begin", values[0][1])
+                        obj.put("deposit_" + idx + "_power_end", values[values.size() - 1][1])
+                        t = pows.getStandardDeviation()
+                        if (t && t.isNaN()) {
+                        } else {
+                            obj.put("deposit_" + idx + "_power_stddev", t)
+                        }
+                        t = pows.getMean()
+                        if (t && t.isNaN()) {
+                        } else {
+                            obj.put("deposit_" + idx + "_power_avg", t)
+                        }
+
+                    }
+                    dr.put("value", obj)
+                    db.dataReport.save(dr)
+
+                } catch (Exception exc) {
+                    logr.warn(file?.getName() + ": " + exc.toString())
+                }
+                finally {
+                    if (br != null)
+                        br.close()
+                    if (fr != null)
+                        fr.close()
+                    br = null
+                    fr = null
+                }
+            }
+        }
     }
 }

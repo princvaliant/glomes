@@ -48,7 +48,6 @@ class ProbeTestController extends com.glo.run.Rest {
 		def ret = db.testData.find(queryTest, new BasicDBObject()).collect{it}
 		
 		def exp = [:]
-		
 		def path = request.getSession().getServletContext().getRealPath("/")
 		['0.2','0.4','0.6','0.8', '1', '4','5','10'].each {
 			
@@ -57,8 +56,16 @@ class ProbeTestController extends com.glo.run.Rest {
 			if (file) {
 				file.writeTo(path + params.code + "_" + params.device + "_" + it + "mA.jpg")
 				exp.put("image", params.code + "_" + params.device + "_" + it + "mA.jpg")
-			}		
-		}
+                exp.put('extens', 'jpg')
+			}
+            def fn1 = params.code + "_" + params.device + "_" + it + "mA.png"
+            def file1 = fileService.retrieveFile(fn)
+            if (file1) {
+                file1.writeTo(path + params.code + "_" + params.device + "_" + it + "mA.png")
+                exp.put("image", params.code + "_" + params.device + "_" + it + "mA.png")
+                exp.put('extens', 'png')
+            }
+        }
         exp.put("data", [:])
 
         def spectrums = [:]

@@ -502,7 +502,6 @@ class DataViewService {
 
                 temp = mongoDocument.find(query, fields).limit(100000)
 
-
                 temp.collect { obj ->
 
                     def rowObj = new Expando()
