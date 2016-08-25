@@ -1159,7 +1159,11 @@ class ProbeNewSyncService {
         SimpleRegression sreg = new SimpleRegression()
         for (def iv in voltages.data) {
             if (iv[0] >= 0.45) {
-                sreg.addData(iv[1] * 1000, iv[0])
+                def icc = iv[1]
+                if (icc > 10000) {
+                    icc = 0
+                }
+                sreg.addData(icc * 1000, iv[0])
             }
             if (iv[0] > 1.55)
                 break

@@ -28,7 +28,7 @@ class ImportEquipmentDCJob {
     private static final logr = LogFactory.getLog(this)
 
     static triggers = {
-        simple name: 'importEquipmentDCJobTrigger', group: 'importEquipmentDCJobTriggerGroup', repeatInterval: 14200000, startDelay: 10000
+        cron name: 'cronTriggerEquipmentData', cronExpression: "0 0 3 ? * MON-SUN"
     }
 
     static Map CONFIG_COLUMN_MAP = [
@@ -207,7 +207,11 @@ class ImportEquipmentDCJob {
 
     def eBeamData(db) {
         persistenceInterceptor.init()
-        importService.ebeamData(db, grailsApplication.config.glo.eBeamDirectory)
+        importService.eBeamData(db, grailsApplication.config.glo.eBeamDirectory)
+        if (persistenceInterceptor) {
+            persistenceInterceptor.flush()
+            persistenceInterceptor.destroy()
+        }
     }
 
 

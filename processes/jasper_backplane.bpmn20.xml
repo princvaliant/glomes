@@ -68,6 +68,7 @@
     <sequenceFlow id="flow85" name="to metal deposition 2" sourceRef="metal_patterning_2" targetRef="metal_deposition_2"></sequenceFlow>
     <userTask id="metal_liftoff_2" name="Metal liftoff 2" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="4552"></userTask>
     <sequenceFlow id="flow86" name="to metal liftoff 2" sourceRef="metal_deposition_2" targetRef="metal_liftoff_2"></sequenceFlow>
+    <userTask id="scrap_inventory" name="Scrap inventory" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="4589"></userTask>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_jasper_backplane">
     <bpmndi:BPMNPlane bpmnElement="jasper_backplane" id="BPMNPlane_jasper_backplane">
@@ -154,6 +155,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="metal_liftoff_2" id="BPMNShape_metal_liftoff_2">
         <omgdc:Bounds height="55.0" width="121.0" x="680.0" y="484.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scrap_inventory" id="BPMNShape_scrap_inventory">
+        <omgdc:Bounds height="55.0" width="105.0" x="950.0" y="169.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow33" id="BPMNEdge_flow33">
         <omgdi:waypoint x="340.0" y="366.0"></omgdi:waypoint>
