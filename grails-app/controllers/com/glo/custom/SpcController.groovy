@@ -527,6 +527,11 @@ class SpcController extends com.glo.run.Rest {
                     if (skip == 0) skip = 1
                     int counter = 0
 
+                    int samsize = sampleSize
+                    if (sample.samples && sample.samples.size() < sampleSize ) {
+                        samsize = sample.samples.size()
+                    }
+
                     sample.samples.each { k ->
                         data = {
                             type = 'circle'
@@ -539,7 +544,7 @@ class SpcController extends com.glo.run.Rest {
                             e = k[3]
                             t = k[4]
                             r = k[5]
-                            x = 40 + xx * ((graphWidth - 40) / sampleSize)
+                            x = 40 + xx * ((graphWidth - 40) / samsize)
                             y = yy + 1 + graphHeight - yPos(graphHeight, k[1], sample.min, sample.max)
                             radius = 3
                         }

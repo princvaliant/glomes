@@ -1,13 +1,11 @@
 
 var h = new Object;
 
-h['JB0085']='JB0085';
-h['JB0036']='JB0036';
-h['JB0084']='JB0084';
-h['JB0091']='JB0091';
+h['XB26602529']='XB26602529';
+h['XB26604303']='XB26604303';
 
-var old = 'EXPJ017';
-var exp = 'EXPJ018';
+var old = 'D230';
+var exp = 'EXPD230';
 
 
 for (k in h){
