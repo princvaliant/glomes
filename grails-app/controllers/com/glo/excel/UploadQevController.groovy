@@ -1844,7 +1844,7 @@ class UploadQevController {
         ]
         def tkey = "nil_etch"
         def db = mongo.getDB("glo")
-        dev cnt = 0
+        def cnt = 0
         unts.each { code ->
             def query = new BasicDBObject()
             query.put("code", code)
@@ -1865,8 +1865,8 @@ class UploadQevController {
             }
             syncService.execute(unitsToBeSynched, null, tkey, 'admin')
             cnt += 1
+            render (['cnt': cnt + ' ' + code] as JSON)
         }
-        render (['cnt': cnt] as JSON)
     }
 
     def ebeam = {
