@@ -148,10 +148,10 @@ class SyncService {
                                             if (row[41].isNumber()) load.addValue((double) Double.parseDouble(row[41]))
                                             if (row[45].isNumber()) dcBias.addValue((double) Double.parseDouble(row[45]))
                                         } else {
-                                            if (row[17].isNumber()) throttle.addValue((double) Double.parseDouble(row[17]))
-                                            if (row[37].isNumber()) tune.addValue((double) Double.parseDouble(row[37]))
-                                            if (row[41].isNumber()) load.addValue((double) Double.parseDouble(row[41]))
-                                            if (row[45].isNumber()) dcBias.addValue((double) Double.parseDouble(row[45]))
+                                            if (row[13].isNumber()) throttle.addValue((double) Double.parseDouble(row[13]))
+                                            if (row[35].isNumber()) tune.addValue((double) Double.parseDouble(row[35]))
+                                            if (row[37].isNumber()) load.addValue((double) Double.parseDouble(row[37]))
+                                            if (row[29].isNumber()) dcBias.addValue((double) Double.parseDouble(row[29]))
                                         }
                                     }
                                 }
