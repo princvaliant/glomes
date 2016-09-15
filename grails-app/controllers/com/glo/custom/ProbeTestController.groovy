@@ -49,7 +49,7 @@ class ProbeTestController extends com.glo.run.Rest {
 		
 		def exp = [:]
 		def path = request.getSession().getServletContext().getRealPath("/")
-		['0_2','0_4','0_6','0_8', '0.2','0.4','0.6','0.8', '1', '4','5','10'].each {
+		['0_1', '0_2','0_4','0_6','0_8', '0.2','0.4','0.6','0.8', '1', '4','5','10'].each {
 			
 			def fn = params.code + "_" + params.device + "_" + it + "mA.jpg"
 			def file = fileService.retrieveFile(fn)
@@ -69,7 +69,7 @@ class ProbeTestController extends com.glo.run.Rest {
         exp.put("data", [:])
 
         def spectrums = [:]
-        [200, 400, 600, 800, 1, 4, 5, 10].each { curr ->
+        [100, 200, 400, 600, 800, 1, 4, 5, 10].each { curr ->
             def cnt = 0
             def currStr = ''
             if (curr < 50) {
