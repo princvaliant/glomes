@@ -152,6 +152,11 @@ class ProbeNewSyncService {
                 DescriptiveStatistics avgPeak50 = new DescriptiveStatistics()
                 DescriptiveStatistics avgFwhm50 = new DescriptiveStatistics()
 
+                DescriptiveStatistics avgWpe01 = new DescriptiveStatistics()
+                DescriptiveStatistics avgEqe01 = new DescriptiveStatistics()
+                DescriptiveStatistics avgV01 = new DescriptiveStatistics()
+                DescriptiveStatistics avgPeak01 = new DescriptiveStatistics()
+                DescriptiveStatistics avgFwhm01 = new DescriptiveStatistics()
 
                 DescriptiveStatistics avgWpe02 = new DescriptiveStatistics()
                 DescriptiveStatistics avgEqe02 = new DescriptiveStatistics()
@@ -196,6 +201,9 @@ class ProbeNewSyncService {
                 DescriptiveStatistics avgCurr1All = new DescriptiveStatistics()
                 DescriptiveStatistics avgPeak1Center = new DescriptiveStatistics()
 
+                DescriptiveStatistics avgCurr01Center = new DescriptiveStatistics()
+                DescriptiveStatistics avgCurr01All = new DescriptiveStatistics()
+                DescriptiveStatistics avgPeak01Center = new DescriptiveStatistics()
 
                 DescriptiveStatistics avgCurr02Center = new DescriptiveStatistics()
                 DescriptiveStatistics avgCurr02All = new DescriptiveStatistics()
@@ -227,6 +235,8 @@ class ProbeNewSyncService {
                 def peaks50 = [:]
                 def peaksCenter50 = [:]
 
+                def peaks01 = [:]
+                def peaksCenter01 = [:]
                 def peaks02 = [:]
                 def peaksCenter02 = [:]
                 def peaks04 = [:]
@@ -247,6 +257,8 @@ class ProbeNewSyncService {
                 def corr20 = [:]
                 def corrCenter20 = [:]
 
+                def corr01 = [:]
+                def corrCenter01 = [:]
                 def corr02 = [:]
                 def corrCenter02 = [:]
                 def corr04 = [:]
@@ -416,6 +428,15 @@ class ProbeNewSyncService {
                                 peaksCenter50.put(deviceCode, peak)
                             }
                         }
+                        if (curr == 0.1) {
+                            avgPeak01.addValue(peak)
+                            avgFwhm01.addValue(fwhm)
+                            peaks01.put(deviceCode, peak)
+                            if (deviceCode.toUpperCase().substring(0, 4) in ["NE00", "SE00", "NW00", "SW00"]) {
+                                avgPeak01Center.addValue(peak)
+                                peaksCenter01.put(deviceCode, peak)
+                            }
+                        }
                         if (curr == 0.2) {
                             avgPeak02.addValue(peak)
                             avgFwhm02.addValue(fwhm)
@@ -522,6 +543,15 @@ class ProbeNewSyncService {
                             }
 
                             ddd.each { currrow ->
+
+                                if (!tValue.containsKey("wpe01") && currrow[0] > 0.08 && currrow[0] < 0.12) {
+                                    tValue.put("v01", currrow[1])
+                                    avgV01.addValue(currrow[1])
+                                    tValue.put("wpe01", currrow[6])
+                                    avgWpe01.addValue(currrow[6])
+                                    tValue.put("eqe01", currrow[8])
+                                    avgEqe01.addValue(currrow[8])
+                                }
 
                                 if (!tValue.containsKey("wpe02") && currrow[0] > 0.18 && currrow[0] < 0.22) {
                                     tValue.put("v02", currrow[1])
@@ -699,6 +729,17 @@ class ProbeNewSyncService {
                                     corr1.put(v, deviceCode)
                                 }
 
+                                if (k == 0.1) {
+
+                                    if (deviceCode.toUpperCase().substring(0, 4) in ["NE00", "SE00", "NW00", "SW00"]) {
+                                        avgCurr01Center.addValue(v)
+                                        corrCenter01.put(v, deviceCode)
+                                    }
+                                    avgCurr01All.addValue(v)
+                                    corr01.put(v, deviceCode)
+                                    k = '01'
+                                }
+
                                 if (k == 0.2) {
 
                                     if (deviceCode.toUpperCase().substring(0, 4) in ["NE00", "SE00", "NW00", "SW00"]) {
@@ -869,6 +910,24 @@ class ProbeNewSyncService {
                     bdoUnit.put("Peak-1mA-Center-Avg", avg)
                 }
 
+                avg = avgCurr01Center.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("CorrEQE-100uA-Center-Avg", avg)
+                avg = avgCurr01Center.getMax()
+                if (!avg.isNaN()) {
+                    bdoUnit.put("CorrEQE-100uA-Center-Best", avg)
+                    bdoUnit.put("Peak-100uA-Center-Best", peaksCenter01[corrCenter01[avg]])
+                }
+                avg = avgCurr01All.getMax()
+                if (!avg.isNaN()) {
+                    bdoUnit.put("CorrEQE-100uA-Best", avg)
+                    bdoUnit.put("Peak-100uA-Best", peaks01[corr01[avg]])
+                }
+                avg = avgPeak01Center.getMean()
+                if (!avg.isNaN()) {
+                    bdoUnit.put("Peak-100uA-Center-Avg", avg)
+                }
+
                 avg = avgCurr02Center.getMean()
                 if (!avg.isNaN())
                     bdoUnit.put("CorrEQE-200uA-Center-Avg", avg)
@@ -1036,6 +1095,22 @@ class ProbeNewSyncService {
                 avg = avgFwhm50.getMean()
                 if (!avg.isNaN())
                     bdoUnit.put("fwhm50", avg)
+
+                avg = avgWpe01.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("wpe01", avg)
+                avg = avgEqe01.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("eqe01", avg)
+                avg = avgV01.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("v01", avg)
+                avg = avgPeak01.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("peak01", avg)
+                avg = avgFwhm01.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("fwhm01", avg)
 
                 avg = avgWpe02.getMean()
                 if (!avg.isNaN())

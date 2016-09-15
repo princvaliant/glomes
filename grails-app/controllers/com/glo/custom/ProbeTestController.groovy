@@ -101,7 +101,7 @@ class ProbeTestController extends com.glo.run.Rest {
 		ret.value.data.Datavoltage.data[0].each {  
 			if (it[1] >= 0 && it[2] >= 0) 
 				dataVoltages.add(
-					[volt:it[0].round(2),current: Math.log10(it[1]),currCorrected: Math.log10(it[2])]
+					[volt:it[0].round(2),current: Math.log10(1000 * it[1]),currCorrected: Math.log10(it[2])]
 				)
 		}
 		exp.put("Datavoltage", dataVoltages)
