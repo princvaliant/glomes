@@ -129,6 +129,13 @@
                     <input class="btn btn-green small" type="submit" value="Upload" />
                 </g:form>
                 <hr />
+                <p>Custom upload
+                </p>
+                <g:form action="upload6" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" id="file"  width=250 />
+                    <input class="btn btn-green small" type="submit" value="Upload custom" />
+                </g:form>
+                <hr />
             </div>
         </div>
     </div>

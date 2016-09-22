@@ -626,5 +626,21 @@ class UploadWaferStartInventoryController {
 		redirect(action: "list")
 	}
 
+
+    def upload6 = {
+
+        def f = request.getFile("file")
+        try {
+            XSSFWorkbook  workbook = new XSSFWorkbook (new ByteArrayInputStream(f.bytes))
+            def cnt = uploadService.uploadCustom(workbook)
+            flash.message ="Succesfully uploaded " + cnt.toString() + " custom rows"
+        }
+        catch (Exception exc) {
+            flash.message = exc.toString()
+        }
+
+        redirect(action: "list")
+    }
+
 	
 }

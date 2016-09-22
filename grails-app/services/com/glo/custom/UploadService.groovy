@@ -4,6 +4,8 @@ import com.glo.ndo.*
 import com.glo.run.Unit
 import com.mongodb.BasicDBObject
 import org.apache.commons.logging.LogFactory
+import org.grails.plugins.excelimport.ExcelImportUtils
+import org.joda.time.format.*
 
 class UploadService {
 
@@ -984,5 +986,199 @@ class UploadService {
         move
     }
 
+    def uploadCustom(workbook) {
+        def db = mongo.getDB("glo")
+        def process = 'direct_view_baseline'
+        def category = 'nwLED'
+        Map map = [
+                sheet    : 'Sheet1',
+                startRow : 1,
+                columnMap: [
+                        'A': 'code',
+                        'D': 'ito_ebeam_deposition|actualStart',
+                        'E': 'ito_ebeam_deposition|ITOEbeamRunNumber',
+                        'F': 'ito_ebeam_deposition|ITOrecipe',
 
+                        'G': 'ito_mesa_patterning|actualStart',
+                        'H': 'ito_mesa_patterning|mask',
+                        'I': 'ito_mesa_patterning|resist_thickness',
+
+                        'J': 'mesa_etch|actualStart',
+                        'K': 'mesa_etch|EtchDuration',
+                        'L': 'mesa_etch|IcpMesaRecipe',
+                        'M': 'mesa_etch|icp_equipment',
+
+                        'N': 'ito_wet_etch|actualStart',
+                        'O': 'ito_wet_etch|hardbake_temperature_ito',
+                        'P': 'ito_wet_etch|hardbake_duration_ito',
+                        'Q': 'ito_wet_etch|solution_ito',
+                        'R': 'ito_wet_etch|concentration_ito',
+                        'S': 'ito_wet_etch|duration_ito',
+
+                        'T': 'mesa_etch_pr_strip|actualStart',
+                        'U': 'mesa_etch_pr_strip|PlasmaAsherRunNumber',
+                        'V': 'mesa_etch_pr_strip|plasmaAsherRecipe',
+                        'W': 'mesa_etch_pr_strip|mesa_height_1',
+                        'X': 'mesa_etch_pr_strip|mesa_height_3',
+                        'Y': 'mesa_etch_pr_strip|ito_pad_size_max',
+                        'Z': 'mesa_etch_pr_strip|ito_pad_size_min',
+                        'AA': 'mesa_etch_pr_strip|total_strip_time',
+
+                        'AB': 'post_anneal|actualStart',
+                        'AC': 'post_anneal|PostAnnealRunNumber',
+                        'AD': 'post_anneal|post_aneal_recipe',
+                        'AE': 'post_anneal|witness_sheet_resistance',
+                        'AF': 'post_anneal|transmission',
+
+                        'AG': 'lto_ald_deposition|actualStart',
+                        'AH': 'lto_ald_deposition|lto_recipe',
+                        'AI': 'lto_ald_deposition|lto_dep_run_number',
+                        'AJ': 'lto_ald_deposition|lto_witness_thickness',
+
+                        'AK': 'lto_ald_wet_etch|actualStart',
+                        'AL': 'lto_ald_wet_etch|hardbake_temperature_ald',
+                        'AM': 'lto_ald_wet_etch|hardbake_duration_ald',
+                        'AN': 'lto_ald_wet_etch|solution_ald',
+                        'AO': 'lto_ald_wet_etch|concentration_ald',
+                        'AP': 'lto_ald_wet_etch|duration_ald',
+
+                        'AQ': 'lto_ald_pr_strip|actualStart',
+                        'AR': 'lto_ald_pr_strip|total_pr_strip_time',
+                        'AS': 'lto_ald_pr_strip|lto_size_opening',
+                        'AT': 'lto_ald_pr_strip|lto_opening_missalignment',
+                        'AU': 'lto_ald_pr_strip|PlasmaAshRecipe',
+                        'AV': 'lto_ald_pr_strip|PlasmaAshRunNumber',
+
+                        'AW': 'metal_patterning|actualStart',
+                        'AX': 'metal_patterning|mask',
+                        'AY': 'metal_patterning|pattern_depth1',
+                        'AZ': 'metal_patterning|pattern_depth3',
+                        'BA': 'metal_patterning|pattern_depth6',
+
+                        'BD': 'metal_deposition|actualStart',
+                        'BE': 'metal_deposition|metal_stack',
+                        'BF': 'metal_deposition|metal_ebeam_run_number',
+                        'BG': 'metal_deposition|metal_ebeam_recipe_number',
+
+                        'BH': 'metal_liftoff|actualStart',
+                        'BI': 'metal_liftoff|resist_total_strip_time_liftoff',
+
+                        'BJ': 'post_bond_pad_inspection|actualStart',
+                        'BK': 'post_bond_pad_inspection|pbpdefects001',
+                        'BL': 'post_bond_pad_inspection|pbpdefects002',
+                        'BM': 'post_bond_pad_inspection|pbpdefects003',
+                        'BN': 'post_bond_pad_inspection|pbpdefects004',
+                        'BO': 'post_bond_pad_inspection|pbpdefects005',
+                        'BP': 'post_bond_pad_inspection|pbpdefects006',
+                        'BQ': 'post_bond_pad_inspection|pbpgrade001',
+                        'BR': 'post_bond_pad_inspection|pbpgrade002',
+                        'BS': 'post_bond_pad_inspection|pbpgrade003',
+                        'BT': 'post_bond_pad_inspection|pbpgrade004',
+                        'BU': 'post_bond_pad_inspection|pbpgrade005',
+                        'BV': 'post_bond_pad_inspection|pbpgrade006',
+
+                        'BW': 'isolation_patterning|actualStart',
+                        'BX': 'isolation_patterning|resist_thickness_center',
+                        'BY': 'isolation_patterning|resist_thickness_OD',
+                        'BZ': 'isolation_patterning|hardbake_temp',
+
+                        'CA': 'isolation_etch|actualStart',
+                        'CB': 'isolation_etch|ICPIsolationEtchRecipe',
+                        'CC': 'isolation_etch|ICP_equipment',
+
+                        'CD': 'backside_cleaning|actualStart',
+                        'CE': 'backside_cleaning|backside_cleaning_duration',
+                        'CF': 'backside_cleaning|backside_cleaning_recipe',
+                        'CG': 'backside_cleaning|inspection_result',
+
+                        'CH': 'isolation_pr_strip|actualStart',
+                        'CI': 'isolation_pr_strip|total_strip_time',
+
+                        'CJ': 'post_isolation_bond_pad_inspection|actualStart',
+                        'CK': 'post_isolation_bond_pad_inspection|pibpdefects001',
+                        'CL': 'post_isolation_bond_pad_inspection|pibpdefects002',
+                        'CM': 'post_isolation_bond_pad_inspection|pibpdefects003',
+                        'CN': 'post_isolation_bond_pad_inspection|pibpdefects004',
+                        'CO': 'post_isolation_bond_pad_inspection|pibpdefects005',
+                        'CP': 'post_isolation_bond_pad_inspection|pibpdefects006',
+                        'CQ': 'post_isolation_bond_pad_inspection|pibpgrade001',
+                        'CR': 'post_isolation_bond_pad_inspection|pibpgrade002',
+                        'CS': 'post_isolation_bond_pad_inspection|pibpgrade003',
+                        'CT': 'post_isolation_bond_pad_inspection|pibpgrade004',
+                        'CU': 'post_isolation_bond_pad_inspection|pibpgrade005',
+                        'CV': 'post_isolation_bond_pad_inspection|pibpgrade006'
+
+
+                ]
+        ]
+        List rows = ExcelImportUtils.convertColumnMapConfigManyRows(workbook, map)
+        def fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
+
+        def allVars = []
+        rows.each { row ->
+            def varsPerStep = [:]
+            row.each { k, v ->
+                def spl = k.tokenize('|')
+                def step = 'PROCESS';
+                def param = k;
+                if (spl.size() == 2) {
+                    step = spl[0]
+                    param = spl[1]
+                }
+                if (!varsPerStep[step]) {
+                    varsPerStep.put(step, [:])
+                }
+                if (v != null) {
+                    varsPerStep[step].put(param, v)
+                }
+            }
+            allVars.add(varsPerStep)
+        }
+
+        allVars.each{ obj ->
+            def bdoUnit = new BasicDBObject()
+            obj.each {proc, params ->
+                if (proc == 'PROCESS') {
+                    def filter = new BasicDBObject()
+                    filter.put('code', params.code.trim())
+                    def fields = new BasicDBObject("code", 1)
+                    def unit = db.unit.find(filter, fields).collect { it }[0]
+                    bdoUnit.put("id", unit["_id"])
+                } else {
+                    params.each { k, v ->
+                        bdoUnit.put(k, v)
+                    }
+                    // First move to that step
+                    def buf = new Expando()
+                    buf.isEngineering = true
+                    buf.prior = 50
+                    buf.processCategoryEng = category
+                    buf.processKeyEng = process
+                    buf.taskKeyEng = proc
+                    buf.actualStart = bdoUnit["actualStart"] ? fmt.print(bdoUnit["actualStart"]) : null
+                    buf.units = []
+                    def n = [:]
+                    n.put('transition', 'engineering')
+                    n.put('id', bdoUnit["id"])
+                    buf.units.add(n)
+
+                    System.out.println(buf);
+
+                    unitService.move("admin", buf)
+
+                    // Than update data
+                    bdoUnit.remove("actualStart")
+                    bdoUnit.put("processCategory", category)
+                    bdoUnit.put("processKey", process)
+                    bdoUnit.put("taskKey", proc)
+
+                    System.out.println(bdoUnit);
+                    unitService.update(bdoUnit, "admin", true)
+                }
+            }
+
+
+
+        }
+    }
 }
