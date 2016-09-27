@@ -528,6 +528,7 @@ class ProbeNewSyncService {
                             DescriptiveStatistics statsEqe = new DescriptiveStatistics((double[]) currents.data.collect {
                                 (double) (it[8])
                             })
+
                             def maxWpe = statsWpe.getMax()
                             def maxEqe = statsEqe.getMax()
                             def jWpe = ''
@@ -851,8 +852,6 @@ class ProbeNewSyncService {
                 if (!avg.isNaN()) {
                     bdoUnit.put("Peak-10mA-Center-Avg", avg)
                 }
-
-
                 avg = avgCurr4Center.getMean()
                 if (!avg.isNaN())
                     bdoUnit.put("CorrEQE-4mA-Center-Avg", avg)

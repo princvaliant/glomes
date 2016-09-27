@@ -14,10 +14,7 @@ class UploadService {
     def mongo
     def unitService
     def workflowService
-
-
     def transactional = false
-
 
     def uploadOemPackageTestData(def rows) {
 
@@ -1143,6 +1140,11 @@ class UploadService {
                     filter.put('code', params.code.trim())
                     def fields = new BasicDBObject("code", 1)
                     def unit = db.unit.find(filter, fields).collect { it }[0]
+                    if (!unit) {
+                        unitService.revive(params.code.trim());
+                        sleep(3000)
+                        unit = db.unit.find(filter, fields).collect { it }[0]
+                    }
                     bdoUnit.put("id", unit["_id"])
                 } else {
                     params.each { k, v ->
@@ -1176,9 +1178,6 @@ class UploadService {
                     unitService.update(bdoUnit, "admin", true)
                 }
             }
-
-
-
         }
     }
 }

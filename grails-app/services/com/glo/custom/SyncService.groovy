@@ -927,7 +927,7 @@ class SyncService {
 
             dirloc.each { file ->
 
-                def fileName = file.path.substring(file.path.lastIndexOf("\\") + 1)
+                def fileName = file.path.substring(file.path.lastIndexOf("/") + 1)
                 if (fileName.indexOf("PLREF") >= 0) {
                     if (unitFiles["PLREF"] != null) unitFiles["PLREF"].add(file)
                 } else {
@@ -942,7 +942,7 @@ class SyncService {
 
                 for (file in files) {
                     try {
-                        def fileName = file.path.substring(file.path.lastIndexOf("\\") + 1)
+                        def fileName = file.path.substring(file.path.lastIndexOf("/") + 1)
                         def suffix = ""
                         def output = [:]
                         grp = ""
@@ -951,21 +951,7 @@ class SyncService {
                             suffix = "spm"
                         if (fileName.indexOf("_01_spm") > 0)
                             suffix = "spm"
-                        else if (fileName.indexOf("_01_spl") > 0)
-                            suffix = "spl"
-                        else if (fileName.indexOf("_02_spl") > 0)
-                            suffix = "spl"
-                        else if (fileName.indexOf("_03_spl") > 0)
-                            suffix = "spl"
-                        else if (fileName.indexOf("_04_spl") > 0)
-                            suffix = "spl"
-                        else if (fileName.indexOf("_05_spl") > 0)
-                            suffix = "spl"
-                        else if (fileName.indexOf("_06_spl") > 0)
-                            suffix = "spl"
-                        else if (fileName.indexOf("_07_spl") > 0)
-                            suffix = "spl"
-                        else if (fileName.indexOf("_08_spl") > 0)
+                        else if (fileName.indexOf("_spl.txt") > 0)
                             suffix = "spl"
 
                         BufferedReader br = new BufferedReader(new FileReader(file))
@@ -989,8 +975,8 @@ class SyncService {
                         if (suffix == "spm") {
                             def pwr = output["LaserParametersPower"]?.replace(" mW", "")?.toDouble()
                             // if (pwr >= 3.2 && pwr <= 4.8 && output["LaserParametersWavelength"]?.indexOf("405") >= 0)
-                            if (pwr >=  0 && pwr <= 10 && output["LaserParametersWavelength"]?.indexOf("405") >= 0)
-                                suffix = "405"
+                            if (pwr >=  0 && pwr <= 10 && output["LaserParametersWavelength"]?.indexOf("370") >= 0)
+                                suffix = "370"
                         } else if (suffix == "spl") {
                             def pwr = output["LaserParametersPower"]?.replace(" mW", "")?.toDouble()
                             suffix = pwr.round(0).toInteger() + "mW"
@@ -1002,7 +988,7 @@ class SyncService {
 
                         System.println(suffix);
 
-                        if (suffix in ["405", "1mW", "2mW", "4mW", "25mW"]) {
+                        if (suffix in ["370", "1mW", "2mW", "4mW", "7mW"]) {
 
                             def unit = unitData[code]
                             if (unit) {
@@ -1020,7 +1006,7 @@ class SyncService {
                                 }
                                 bdo2.put("runNumber", unit.runNumber)
 
-                                if (suffix == "405") {
+                                if (suffix == "370") {
 
                                     def lineStatsHeader = br.readLine() + "                          "
                                     lineStatsHeader = lineStatsHeader.replace('+', ' P')
@@ -1108,27 +1094,27 @@ class SyncService {
                                     bdo2.put("laserName" + suffix, bdo.LaserParametersName)
                                 }
 
-                                if (suffix in ["1mW", "2mW", "4mW", "25mW"]) {
+                                if (suffix in ["1mW", "2mW", "4mW", "7mW"]) {
 
                                     br.readLine()
                                     br.readLine()
                                     def lineSpectrumData = br.readLine()
 
                                     def peak1 = lineSpectrumData.substring(31, 40)
-                                    def peak2 = lineSpectrumData.substring(41, 49)
-                                    def diff = lineSpectrumData.substring(50, 59)
-                                    def height = lineSpectrumData.substring(60, 69)
-                                    def fwhm = lineSpectrumData.substring(70, 77)
+                                    // def peak2 = lineSpectrumData.substring(41, 49)
+                                    // def diff = lineSpectrumData.substring(50, 59)
+                                    def height = lineSpectrumData.substring(41, 49)
+                                    def fwhm = lineSpectrumData.substring(50, 59)
 
                                     peak1?.isFloat() ? bdo2.put("specLine_peak1_" + suffix, peak1.toFloat()) : ''
-                                    peak2?.isFloat() ? bdo2.put("specLine_peak2_" + suffix, peak2.toFloat()) : ''
-                                    diff?.isFloat() ? bdo2.put("specLine_diff_" + suffix, diff.toFloat()) : ''
+                               //     peak2?.isFloat() ? bdo2.put("specLine_peak2_" + suffix, peak2.toFloat()) : ''
+                               //     diff?.isFloat() ? bdo2.put("specLine_diff_" + suffix, diff.toFloat()) : ''
                                     height?.isFloat() ? bdo2.put("specLine_height_" + suffix, height.toFloat()) : ''
                                     fwhm?.isFloat() ? bdo2.put("specLine_fwhm_" + suffix, fwhm.toFloat()) : ''
                                     laserPower ? bdo2.put("specLine_laserPower_" + suffix, laserPower) : ''
 
-                                    def height2 = getSecondPeakIntensity(file.path.replace(".txt", ".dat"), peak2?.trim())
-                                    height2?.isFloat() ? bdo2.put("specLine_height2_" + suffix, height2.toFloat()) : ''
+                                   // def height2 = getSecondPeakIntensity(file.path.replace(".txt", ".dat"), peak2?.trim())
+                                   // height2?.isFloat() ? bdo2.put("specLine_height2_" + suffix, height2.toFloat()) : ''
                                 }
 
                                 // For PL recalculation disable SPC wafers and also comment plRef call above
