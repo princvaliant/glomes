@@ -86,8 +86,38 @@ class BasicDataSyncService {
 		null
 	}
 
+
+    private def testData (def units) {
+
+        def db = mongo.getDB("glo")
+
+        !logr.isDebugEnabled() ?: logr.debug("test data sync job started.")
+
+        // Create list of unique files grouped by wafer id
+        units.keySet().each {
+
+            def bdo = new BasicDBObject()
+            bdo.put("value.code", it)
+            bdo.put("value.tkey", "test_data_visualization")
+
+            def testData = db.testData.find(bdo, new BasicDBObject()).addSpecial('$orderby', new BasicDBObject("value.testId", -1)).collect { it }[0]
+            if (testData) {
+                def unit = db.unit.find([code: it], new BasicDBObject()).collect{it}[0]
+                unit.put("id", unit["_id"])
+                bdo.put("testDataIndex", [])
+                if (!unit["testDataIndex"]) {
+                    bdo["testDataIndex"].add(testData.value.testId.toString().toLong())
+                } else {
+                    bdo["testDataIndex"].addAll(unit["testDataIndex"])
+                    bdo["testDataIndex"].add(testData.value.testId.toString().toLong())
+                }
+                summarizeSyncService.createSummaries(db, unit._id, unit.code, bdo, null, null, testData.value.testId.toString().toLong(), testData.value.tkey, unit.mask, null)
+            }
+        }
+    }
+
 	
-	private def testData (def units) {
+	private def testDataOld (def units) {
 
 		def db = mongo.getDB("glo")
 

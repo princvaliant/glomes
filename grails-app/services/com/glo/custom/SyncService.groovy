@@ -301,11 +301,11 @@ class SyncService {
 
             if (it["mask"] && it["experimentId"] && isSync == "SYNC") {
 
-                File f = new File(dir + "\\" + it["mask"] + "\\" + (it["experimentId"] ?: "EXPERIMENT_NOT_DEFINED") + "\\" + it.code + appendForFull)
+             //   File f = new File(dir + "\\" + it["mask"] + "\\" + (it["experimentId"] ?: "EXPERIMENT_NOT_DEFINED") + "\\" + it.code + appendForFull)
 
-                if (f.exists() && it.tkey == tkey) {
+                if (it.tkey == tkey) {
                     db.unit.update(new BasicDBObject("code", it.code), new BasicDBObject('$set', new BasicDBObject(syncVar, "---")), false, true)
-                    unitsToBeSynched.put(f, it)
+                    unitsToBeSynched.put(it.code, it)
                 }
             }
         }
