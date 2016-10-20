@@ -179,7 +179,7 @@ class SyncService {
                         bdoUnit.put("taskKey", step)
                         bdoUnit.put(unit.pkey + tkey + "Synced", "YES")
                         bdoUnit.put("ICPDate", lastUpdated)
-                        bdoUnit.put("ICP_equipment", dir == grailsApplication.config.glo.icpDataLogDirectory ? "ICP" : "ICP 2")
+                        bdoUnit.put("ICP_equipment", dir == grailsApplication.config.glo.icpDataLogDirectory ? "ICP 1" : "ICP 2")
                         def res = throttle.getMean()
                         if (!(res && res.isNaN())) bdoUnit.put("ThrottleAvg", res)
                         res = tune.getMean()
