@@ -1124,28 +1124,28 @@ class UnitService {
                 }
 
 
-                if (moved.taskKeyEng == "dicing" && moved.processKeyEng == "dvd_assembly" ) {
-                    def cpnCode = unit.code.tokenize("_")[0]
-                    def dbo = new BasicDBObject("code", cpnCode)
-                    dbo.put("tkey", "visual_inspection_inventory")
-                    def uu = db.unit.find(dbo, new BasicDBObject()).collect {
-                        it
-                    }[0]
-                    if (uu) {
-                        def buf = new Expando()
-                        buf.isEngineering = true
-                        buf.prior = 50
-                        buf.processCategoryEng = "nwLED"
-                        buf.processKeyEng = "direct_view_baseline"
-                        buf.taskKeyEng = "end"
-                        buf.units = []
-                        def n = [:]
-                        n.put('transition', 'engineering')
-                        n.put('id', uu["_id"])
-                        buf.units.add(n)
-                        move("admin", buf)
-                    }
-                }
+//                if (moved.taskKeyEng == "dicing" && moved.processKeyEng == "dvd_assembly" ) {
+//                    def cpnCode = unit.code.tokenize("_")[0]
+//                    def dbo = new BasicDBObject("code", cpnCode)
+//                    dbo.put("tkey", "visual_inspection_inventory")
+//                    def uu = db.unit.find(dbo, new BasicDBObject()).collect {
+//                        it
+//                    }[0]
+//                    if (uu) {
+//                        def buf = new Expando()
+//                        buf.isEngineering = true
+//                        buf.prior = 50
+//                        buf.processCategoryEng = "nwLED"
+//                        buf.processKeyEng = "direct_view_baseline"
+//                        buf.taskKeyEng = "end"
+//                        buf.units = []
+//                        def n = [:]
+//                        n.put('transition', 'engineering')
+//                        n.put('id', uu["_id"])
+//                        buf.units.add(n)
+//                        move("admin", buf)
+//                    }
+//                }
 
 
 

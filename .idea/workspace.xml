@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d509cb8-f139-47f4-a67f-3f63decdcb93" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/com/glo/custom/SyncService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/com/glo/custom/SyncService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/processes/direct_view_baseline.bpmn20.xml" afterPath="$PROJECT_DIR$/processes/direct_view_baseline.bpmn20.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/com/glo/run/UnitService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/com/glo/run/UnitService.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="glo.iws" />
@@ -76,18 +75,7 @@
     <favorites_list name="glo" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="SyncService.groovy" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/grails-app/services/com/glo/custom/SyncService.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.71005917" vertical-offset="930" max-vertical-offset="19170">
-              <caret line="108" column="69" selection-start-line="108" selection-start-column="69" selection-end-line="108" selection-end-column="69" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -132,7 +120,6 @@
         <option value="$PROJECT_DIR$/grails-app/services/com/glo/custom/SummarizeSyncService.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/com/glo/custom/ProbeSyncService.groovy" />
         <option value="$PROJECT_DIR$/grails-app/controllers/com/glo/run/SynchronizeController.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/services/com/glo/run/UnitService.groovy" />
         <option value="$PROJECT_DIR$/grails-app/jobs/com/glo/ImportExperimentDataJob.groovy" />
         <option value="$PROJECT_DIR$/grails-app/controllers/com/glo/excel/DataCorrectionController.groovy" />
         <option value="$PROJECT_DIR$/grails-app/domain/com/glo/ndo/Experiment.groovy" />
@@ -154,6 +141,7 @@
         <option value="$PROJECT_DIR$/grails-app/services/com/glo/custom/ProbeNewSyncService.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/com/glo/custom/BasicDataSyncService.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/com/glo/custom/SyncService.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/services/com/glo/run/UnitService.groovy" />
       </list>
     </option>
   </component>
@@ -161,9 +149,10 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
+    <option name="x" value="82" />
+    <option name="y" value="41" />
     <option name="width" value="1556" />
-    <option name="height" value="981" />
+    <option name="height" value="945" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -242,20 +231,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="glo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="glo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="glo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="processes" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2074,7 +2049,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1556" height="981" extended-state="0" />
+    <frame x="82" y="41" width="1556" height="945" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34067547" sideWeight="0.62942123" order="7" side_tool="false" content_ui="tabs" />
@@ -2082,14 +2057,17 @@
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2727754" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18580766" sideWeight="0.49717513" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5480226" sideWeight="0.5156771" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14608178" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26013196" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286385" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.620893" sideWeight="0.8659106" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22222222" sideWeight="0.1340894" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25708637" sideWeight="0.50063694" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28235295" sideWeight="0.65375304" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29276595" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2152231" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31326166" sideWeight="0.49959645" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32964224" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21048513" sideWeight="0.49970606" order="6" side_tool="false" content_ui="tabs" />
@@ -2101,7 +2079,6 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24978466" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329303" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27127212" sideWeight="0.65375304" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.13128492" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12877493" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32791096" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
@@ -2111,8 +2088,6 @@
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Properties" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.4996691" order="19" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.5482833" sideWeight="0.5156771" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31326166" sideWeight="0.49959645" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -2140,7 +2115,6 @@
     <option name="PERFORM_EDIT_IN_BACKGROUND" value="false" />
     <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="false" />
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="false" />
-    <MESSAGE value="Add westboro data sync" />
     <MESSAGE value="Added pA and fA and fix exportt in wafer visualization" />
     <MESSAGE value="Added steps for coupon and submounts" />
     <MESSAGE value="Added lower currents to NiDot tests" />
@@ -2165,7 +2139,8 @@
     <MESSAGE value="- Add data upload for fab process" />
     <MESSAGE value="- Redesign PL sync to acomodate new recipe" />
     <MESSAGE value="- Fixing summary calculation for test data" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Fixing summary calculation for test data" />
+    <MESSAGE value="- Fixing direct view baseline process flow" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Fixing direct view baseline process flow" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.8575064" />
   </component>
   <component name="XDebuggerManager">
@@ -2496,6 +2471,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6436931" vertical-offset="0" max-vertical-offset="4605">
           <caret line="41" column="78" selection-start-line="41" selection-start-column="78" selection-end-line="41" selection-end-column="78" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2532,14 +2508,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="2.0929096" vertical-offset="36884" max-vertical-offset="40770">
           <caret line="2522" column="75" selection-start-line="2522" selection-start-column="56" selection-end-line="2522" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/services/com/glo/run/UnitService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.9437653" vertical-offset="1215" max-vertical-offset="43440">
-          <caret line="144" column="122" selection-start-line="144" selection-start-column="96" selection-end-line="144" selection-end-column="122" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2594,6 +2562,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.71005917" vertical-offset="930" max-vertical-offset="19170">
           <caret line="108" column="69" selection-start-line="108" selection-start-column="69" selection-end-line="108" selection-end-column="69" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/services/com/glo/run/UnitService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0417827" vertical-offset="16321" max-vertical-offset="43440">
+          <caret line="1123" column="17" selection-start-line="1123" selection-start-column="17" selection-end-line="1123" selection-end-column="17" />
           <folding />
         </state>
       </provider>
