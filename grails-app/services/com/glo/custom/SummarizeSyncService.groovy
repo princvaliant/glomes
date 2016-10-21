@@ -109,11 +109,11 @@ class SummarizeSyncService {
         def adminFilters06 = waferFilterService.getAdminFilters("Data @ 600uA")
         def adminFilters1 = waferFilterService.getAdminFilters("Data @ 1mA")
         def adminFilters2 = waferFilterService.getAdminFilters("Data @ 2mA")
-        def adminFilters5 = waferFilterService.getAdminFilters("Data @ 5mA")
-        def adminFilters10 = waferFilterService.getAdminFilters("Data @ 10mA")
-        def adminFilters20 = waferFilterService.getAdminFilters("Data @ 20mA")
-        def adminFilters50 = waferFilterService.getAdminFilters("Data @ 50mA")
-        def adminFilters100 = waferFilterService.getAdminFilters("Data @ 100mA")
+//        def adminFilters5 = waferFilterService.getAdminFilters("Data @ 5mA")
+//        def adminFilters10 = waferFilterService.getAdminFilters("Data @ 10mA")
+//        def adminFilters20 = waferFilterService.getAdminFilters("Data @ 20mA")
+//        def adminFilters50 = waferFilterService.getAdminFilters("Data @ 50mA")
+//        def adminFilters100 = waferFilterService.getAdminFilters("Data @ 100mA")
 
         def testData = db.testData.find(query, new BasicDBObject()).collect { it }[0]
         if (testData) {
@@ -132,7 +132,7 @@ class SummarizeSyncService {
             } else {
 
                 // Extract currents for current densities
-                def currents = getCurrentsForDensity([100000, 500000, 2000000, 8000000], testData["value"]["data"], maskObj);
+                def currents = getCurrentsForDensity([100000, 500000, 1000000, 2000000, 8000000], testData["value"]["data"], maskObj);
 
                 currents.each {density, current ->
                     prepareSummary(db, bdo, current, testData["value"]["data"], unitCode, unitId, testId, [], centers, testData["value"]["data"]["Current @ 2V"], density)
@@ -142,11 +142,11 @@ class SummarizeSyncService {
                 prepareSummary(db, bdo, "0.6mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters06, centers, testData["value"]["data"]["Current @ 2V"], 0)
                 prepareSummary(db, bdo, "1mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters1, centers, testData["value"]["data"]["Current @ 2V"], 0)
                 prepareSummary(db, bdo, "2mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters2, centers, testData["value"]["data"]["Current @ 2V"], 0)
-                prepareSummary(db, bdo, "5mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters5, centers, testData["value"]["data"]["Current @ 2V"], 0)
-                prepareSummary(db, bdo, "10mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters10, centers, testData["value"]["data"]["Current @ 2V"], 0)
-                prepareSummary(db, bdo, "20mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters20, centers, testData["value"]["data"]["Current @ 2V"], 0)
-                prepareSummary(db, bdo, "50mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters50, centers, testData["value"]["data"]["Current @ 2V"], 0)
-                prepareSummary(db, bdo, "100mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters100, centers, testData["value"]["data"]["Current @ 2V"], 0)
+//                prepareSummary(db, bdo, "5mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters5, centers, testData["value"]["data"]["Current @ 2V"], 0)
+//                prepareSummary(db, bdo, "10mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters10, centers, testData["value"]["data"]["Current @ 2V"], 0)
+//                prepareSummary(db, bdo, "20mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters20, centers, testData["value"]["data"]["Current @ 2V"], 0)
+//                prepareSummary(db, bdo, "50mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters50, centers, testData["value"]["data"]["Current @ 2V"], 0)
+//                prepareSummary(db, bdo, "100mA", testData["value"]["data"], unitCode, unitId, testId, adminFilters100, centers, testData["value"]["data"]["Current @ 2V"], 0)
 
                 if (testData["value"]["data"]["Current @ 2V"]) {
                     createSummary(db, "Current @ 2V", testData["value"]["data"], bdo, unitCode, testData["value"]["data"]["Current @ 2V"]["NA"].collect {
@@ -661,7 +661,7 @@ class SummarizeSyncService {
                 }
 
                 // Calculate statistics based on best EQEs
-                [10, 15, 25, 50].each { percentile ->
+                [10, 25, 50, 75, 90].each { percentile ->
                     def statistic = [:]
                     eqesFilteredByEqe.take(topn(eqesFilteredByEqe.size(),percentile)).each { devCode, varData ->
                         varData.each { varName, value ->
@@ -703,6 +703,24 @@ class SummarizeSyncService {
 
                 // Calculate statistics based on best EQEs for center devices
                 [50].each { percentile ->
+                    def statistic = [:]
+                    eqesFilteredByEqeCenter.take(topn(eqesFilteredByEqeCenter.size(),percentile)).each { devCode, varData ->
+                        varData.each { varName, value ->
+                            if (!statistic[varName]) {
+                                statistic.put(varName, new DescriptiveStatistics())
+                            }
+                            if (value != null) {
+                                statistic[varName].addValue(value)
+                            }
+                        }
+                    }
+                    statistic.each { varName, values ->
+                        bdo.put("P" + (100 - percentile) + "-Center-" + cstr + "-" + varName, percentile50(values))
+                    }
+                }
+
+                // Calculate statistics based on best EQEs for center devices
+                [90].each { percentile ->
                     def statistic = [:]
                     eqesFilteredByEqeCenter.take(topn(eqesFilteredByEqeCenter.size(),percentile)).each { devCode, varData ->
                         varData.each { varName, value ->
