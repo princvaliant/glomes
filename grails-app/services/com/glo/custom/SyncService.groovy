@@ -71,6 +71,7 @@ class SyncService {
                 "nil_etch",
                 "nil_etch_qual",
                 "mesa_etch",
+                "backside_cleaning",
                 "isolation_etch"
         ])
             return icp_import(tkey, units, variables, username)
@@ -81,6 +82,10 @@ class SyncService {
 
         def dirs = [grailsApplication.config.glo.icpDataLogDirectory, grailsApplication.config.glo.icpDataLogDirectory2]
         def ret = 0
+
+        def db = mongo.getDB("glo")
+        units.data = db.unit.find([code:"XB26603606"]).collect{it};
+
 
         dirs.each { dir ->
 
@@ -93,12 +98,15 @@ class SyncService {
 
 
             def stepName = { fileName ->
-                if ((tkey == "nil_etch" || tkey == "nil_etch_qual") && fileName.indexOf("SiN_") == 0)
+                fileName = fileName.toUpperCase()
+                if ((tkey == "NIL_ETCH" || tkey == "NIL_ETCH_QUAL") && fileName.indexOf("SIN_") == 0)
                     tkey
-                else if (tkey == "isolation_etch" && fileName.indexOf("ISO40") == 0)
+                else if (fileName.indexOf("ISO40") == 0 || fileName.indexOf("CF4_80") == 0)
                     "isolation_etch"
-                else if (tkey == "mesa_etch" && fileName.indexOf("CpGaN") == 0 || fileName.indexOf("GaN_etch_HighPower") == 0)
+                else if (fileName.indexOf("CPGAN") == 0 || fileName.indexOf("GAN_ETCH_HIGHPOWER") == 0 || fileName.indexOf("70W") == 0)
                     "mesa_etch"
+                else if (fileName.indexOf("BACKSIDE_CLEANING") == 0)
+                    "backside_cleaning"
                 else
                     ""
             }
@@ -106,13 +114,20 @@ class SyncService {
             units.data.each { unit ->
 
                 def lastFiles = [:]
-                def prefix = """(.*)${unit.code.toUpperCase()}(.*)"""
+                def prefix = """(?i)(.*)${unit.code.toUpperCase()}(.*)"""
                 def unitFiles = new File(dir).listFiles({ directory, file ->
                     file ==~ /${prefix}/
                 } as FilenameFilter).sort { it.lastModified() }
 
-                unitFiles.each {
-                    lastFiles.put(stepName(it.name), it)
+                for (int ii = 0; ii < unitFiles.size(); ii++) {
+                    def sn = stepName(unitFiles[ii].name)
+                    if (lastFiles[sn]) {
+                        lastFiles = [:]
+                        break
+                    } else {
+                        // If more then one file per step do not sync
+                        lastFiles.put(sn, unitFiles[ii])
+                    }
                 }
                 lastFiles.each { step, file ->
 
@@ -125,7 +140,7 @@ class SyncService {
                     //Column X (RFBiasMatchNetworkC2Position)                       //This is known as the Load capacitor
                     //Column Z (RFBiasMatchNetworkDCBiasSensor)
 
-                    if (step) {
+                    if (step && step == tkey) {
                         def historicalDataPassed = false
                         def line
                         def counter = 0

@@ -81,6 +81,7 @@
     <userTask id="clean_prior_to_ito" name="Clean prior to ITO" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1054"></userTask>
     <sequenceFlow id="flow105" name="to ito ebeam deposition" sourceRef="clean_prior_to_ito" targetRef="ito_ebeam_deposition"></sequenceFlow>
     <sequenceFlow id="flow106" name="to ito mesa patterning" sourceRef="post_ito_deposition_inv" targetRef="ito_mesa_patterning"></sequenceFlow>
+    <userTask id="fab_engineering_polish_wafer" name="Fab Engineering Polish Wafer" activiti:candidateGroups="ROLE_FAB_ADMIN,ROLE_FAB_TECHNICIAN" activiti:formKey="1276"></userTask>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_direct_view_baseline">
     <bpmndi:BPMNPlane bpmnElement="direct_view_baseline" id="BPMNPlane_direct_view_baseline">
@@ -206,6 +207,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="clean_prior_to_ito" id="BPMNShape_clean_prior_to_ito">
         <omgdc:Bounds height="55.0" width="142.0" x="26.0" y="142.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="fab_engineering_polish_wafer" id="BPMNShape_fab_engineering_polish_wafer">
+        <omgdc:Bounds height="55.0" width="180.0" x="281.0" y="1012.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow33" id="BPMNEdge_flow33">
         <omgdi:waypoint x="96.0" y="84.0"></omgdi:waypoint>
