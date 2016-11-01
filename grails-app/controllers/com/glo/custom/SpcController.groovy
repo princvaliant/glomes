@@ -788,7 +788,7 @@ class SpcController extends com.glo.run.Rest {
         query.put("parentCode", null)
         query.put("value.active", "true")
         if (process && category) {
-             query.put("value.tags", category + '|' + process)
+             query.put("value.tags",  new BasicDBObject('$in', [category + '|' + process, process]))
         } else if (process) {
              query.put("value.pkey", process)
         }
