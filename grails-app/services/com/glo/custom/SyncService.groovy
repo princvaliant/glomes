@@ -84,7 +84,7 @@ class SyncService {
         def ret = 0
 
         def db = mongo.getDB("glo")
-        units.data = db.unit.find([code:"XB26603606"]).collect{it};
+   //     units.data = db.unit.find([code:"XB26603606"]).collect{it};
 
 
         dirs.each { dir ->
@@ -122,7 +122,6 @@ class SyncService {
                 for (int ii = 0; ii < unitFiles.size(); ii++) {
                     def sn = stepName(unitFiles[ii].name)
                     if (lastFiles[sn]) {
-                        lastFiles = [:]
                         break
                     } else {
                         // If more then one file per step do not sync
@@ -157,7 +156,7 @@ class SyncService {
                                 if (row.length > 70) {
                                     counter++
                                     if (counter > 5) {
-                                        if ( grailsApplication.config.glo.icpDataLogDirectory == "ICP") {
+                                        if ( grailsApplication.config.glo.icpDataLogDirectory == dir) {
                                             if (row[17].isNumber()) throttle.addValue((double) Double.parseDouble(row[17]))
                                             if (row[37].isNumber()) tune.addValue((double) Double.parseDouble(row[37]))
                                             if (row[41].isNumber()) load.addValue((double) Double.parseDouble(row[41]))

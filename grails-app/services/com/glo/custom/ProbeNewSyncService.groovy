@@ -293,6 +293,9 @@ class ProbeNewSyncService {
                     def vbp = ''
 
                     def deviceCode = listPerDevice._id.did
+                    if (deviceCode.size() < 4) {
+                        deviceCode = 'DUMMY'
+                    }
                     def values = listPerDevice.data
                     def currsweep = []
 
@@ -345,7 +348,7 @@ class ProbeNewSyncService {
                                peakPower = it.photometric,
                                intPower = it.radiometric
 
-                        currsweep.add([curr, it.volt, it.radiometric, it.eqe])
+                        currsweep.add([curr, it.volt, it.radiometric, it.eqe, it.fwhm])
 
                         def grpCurr = "Data @ " + curr.round() + "mA"
                         if (curr < 1) {
@@ -519,14 +522,15 @@ class ProbeNewSyncService {
                             List currsw = ddd.collect { (double) (it[0] ?: 0) }
                             List currse = ddd.collect { (double) (it[0] ?: 0) }
                             List volts = ddd.collect { (double) (it[1] ?: 0) }
-                            List wpes = ddd.collect { (double) (it[6] ?: 0) }
-                            List eqes = ddd.collect { (double) (it[8] ?: 0) }
+                            List fwhms = ddd.collect { (double) (it[4] ?: 0) }
+                            List wpes = ddd.collect { (double) (it[7] ?: 0) }
+                            List eqes = ddd.collect { (double) (it[9] ?: 0) }
 
                             DescriptiveStatistics statsWpe = new DescriptiveStatistics((double[]) currents.data.collect {
-                                (double) (it[6])
+                                (double) (it[7])
                             })
                             DescriptiveStatistics statsEqe = new DescriptiveStatistics((double[]) currents.data.collect {
-                                (double) (it[8])
+                                (double) (it[9])
                             })
 
                             def maxWpe = statsWpe.getMax()
@@ -535,11 +539,11 @@ class ProbeNewSyncService {
                             def jEqe = ''
 
                             for (def s in currents.data) {
-                                if (s[6] == maxWpe) {
-                                    jWpe = s[10]
+                                if (s[7] == maxWpe) {
+                                    jWpe = s[11]
                                 }
-                                if (s[8] == maxEqe) {
-                                    jEqe = s[10]
+                                if (s[9] == maxEqe) {
+                                    jEqe = s[11]
                                 }
                             }
 
@@ -548,46 +552,56 @@ class ProbeNewSyncService {
                                 if (!tValue.containsKey("wpe01") && currrow[0] > 0.08 && currrow[0] < 0.12) {
                                     tValue.put("v01", currrow[1])
                                     avgV01.addValue(currrow[1])
-                                    tValue.put("wpe01", currrow[6])
-                                    avgWpe01.addValue(currrow[6])
-                                    tValue.put("eqe01", currrow[8])
-                                    avgEqe01.addValue(currrow[8])
+                                    tValue.put("wpe01", currrow[7])
+                                    avgWpe01.addValue(currrow[7])
+                                    tValue.put("eqe01", currrow[9])
+                                    avgEqe01.addValue(currrow[9])
+                                    tValue.put("fwhm01", currrow[4])
+                                    avgFwhm01.addValue(currrow[4])
                                 }
 
                                 if (!tValue.containsKey("wpe02") && currrow[0] > 0.18 && currrow[0] < 0.22) {
                                     tValue.put("v02", currrow[1])
                                     avgV02.addValue(currrow[1])
-                                    tValue.put("wpe02", currrow[6])
-                                    avgWpe02.addValue(currrow[6])
-                                    tValue.put("eqe02", currrow[8])
-                                    avgEqe02.addValue(currrow[8])
+                                    tValue.put("wpe02", currrow[7])
+                                    avgWpe02.addValue(currrow[7])
+                                    tValue.put("eqe02", currrow[9])
+                                    avgEqe02.addValue(currrow[9])
+                                    tValue.put("fwhm02", currrow[4])
+                                    avgFwhm02.addValue(currrow[4])
                                 }
 
                                 if (!tValue.containsKey("wpe04") && currrow[0] > 0.38 && currrow[0] < 0.42) {
                                     tValue.put("v04", currrow[1])
                                     avgV04.addValue(currrow[1])
-                                    tValue.put("wpe04", currrow[6])
-                                    avgWpe04.addValue(currrow[6])
-                                    tValue.put("eqe04", currrow[8])
-                                    avgEqe04.addValue(currrow[8])
+                                    tValue.put("wpe04", currrow[7])
+                                    avgWpe04.addValue(currrow[7])
+                                    tValue.put("eqe04", currrow[9])
+                                    avgEqe04.addValue(currrow[9])
+                                    tValue.put("fwhm04", currrow[4])
+                                    avgFwhm04.addValue(currrow[4])
                                 }
 
                                 if (!tValue.containsKey("wpe06") && currrow[0] > 0.58 && currrow[0] < 0.62) {
                                     tValue.put("v06", currrow[1])
                                     avgV06.addValue(currrow[1])
-                                    tValue.put("wpe06", currrow[6])
-                                    avgWpe06.addValue(currrow[6])
-                                    tValue.put("eqe06", currrow[8])
-                                    avgEqe06.addValue(currrow[8])
+                                    tValue.put("wpe06", currrow[7])
+                                    avgWpe06.addValue(currrow[7])
+                                    tValue.put("eqe06", currrow[9])
+                                    avgEqe06.addValue(currrow[9])
+                                    tValue.put("fwhm06", currrow[4])
+                                    avgFwhm06.addValue(currrow[4])
                                 }
 
                                 if (!tValue.containsKey("wpe08") && currrow[0] > 0.78 && currrow[0] < 0.82) {
                                     tValue.put("v08", currrow[1])
                                     avgV08.addValue(currrow[1])
-                                    tValue.put("wpe08", currrow[6])
-                                    avgWpe08.addValue(currrow[6])
-                                    tValue.put("eqe08", currrow[8])
-                                    avgEqe08.addValue(currrow[8])
+                                    tValue.put("wpe08", currrow[7])
+                                    avgWpe08.addValue(currrow[7])
+                                    tValue.put("eqe08", currrow[9])
+                                    avgEqe08.addValue(currrow[9])
+                                    tValue.put("fwhm08", currrow[4])
+                                    avgFwhm08.addValue(currrow[4])
                                 }
                             }
 
@@ -604,6 +618,9 @@ class ProbeNewSyncService {
                                     def eqs = summarizeSyncService.interpolate(1.0, currse, eqes)
                                     tValue.put("eqe1", eqs)
                                     avgEqe1.addValue(eqs)
+                                    def fws = summarizeSyncService.interpolate(1.0, currs, fwhms)
+                                    tValue.put("fwhm1", fws)
+                                    avgFwhm1.addValue(fws)
                                 }
 
                                 if (!tValue.containsKey("wpe4") && (topCurr > 4 || 4 - topCurr < 0.3)) {
@@ -616,6 +633,9 @@ class ProbeNewSyncService {
                                     def eqs = summarizeSyncService.interpolate(4, currse, eqes)
                                     tValue.put("eqe4", eqs)
                                     avgEqe4.addValue(eqs)
+                                    def fws = summarizeSyncService.interpolate(4, currs, fwhms)
+                                    tValue.put("fwhm4", fws)
+                                    avgFwhm4.addValue(fws)
                                 }
 
                                 if (!tValue.containsKey("wpe5") && (topCurr > 5.0 || 5.0 - topCurr < 0.3)) {
@@ -628,6 +648,9 @@ class ProbeNewSyncService {
                                     def eqs = summarizeSyncService.interpolate(5.0, currse, eqes)
                                     tValue.put("eqe5", eqs)
                                     avgEqe5.addValue(eqs)
+                                    def fws = summarizeSyncService.interpolate(5.0, currs, fwhms)
+                                    tValue.put("fwhm5", fws)
+                                    avgFwhm5.addValue(fws)
                                 }
 
                                 if (!tValue.containsKey("wpe10") && (topCurr > 10.0 || 10.0 - topCurr < 0.9)) {
@@ -640,30 +663,9 @@ class ProbeNewSyncService {
                                     def eqs = summarizeSyncService.interpolate(10.0, currse, eqes)
                                     tValue.put("eqe10", eqs)
                                     avgEqe10.addValue(eqs)
-                                }
-
-                                if (!tValue.containsKey("wpe20") && (topCurr > 20.0 || 20.0 - topCurr < 1.9)) {
-                                    def v = summarizeSyncService.interpolate(20.0, currs, volts)
-                                    tValue.put("v20", v)
-                                    avgV20.addValue(v)
-                                    def wps = summarizeSyncService.interpolate(20.0, currsw, wpes)
-                                    tValue.put("wpe20", wps)
-                                    avgWpe20.addValue(wps)
-                                    def eqs = summarizeSyncService.interpolate(20.0, currse, eqes)
-                                    tValue.put("eqe20", eqs)
-                                    avgEqe20.addValue(eqs)
-                                }
-
-                                if (!tValue.containsKey("wpe50") && (topCurr > 50.0 || 50.0 - topCurr < 2)) {
-                                    def v = summarizeSyncService.interpolate(50.0, currs, volts)
-                                    tValue.put("v50", v)
-                                    avgV50.addValue(v)
-                                    def wps = summarizeSyncService.interpolate(50.0, currsw, wpes)
-                                    tValue.put("wpe50", wps)
-                                    avgWpe50.addValue(wps)
-                                    def eqs = summarizeSyncService.interpolate(50.0, currse, eqes)
-                                    tValue.put("eqe50", eqs)
-                                    avgEqe50.addValue(eqs)
+                                    def fws = summarizeSyncService.interpolate(10.0, currs, fwhms)
+                                    tValue.put("fwhm10", fws)
+                                    avgFwhm10.addValue(fws)
                                 }
                             }
 
