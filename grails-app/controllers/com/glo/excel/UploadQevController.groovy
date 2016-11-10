@@ -1871,7 +1871,7 @@ class UploadQevController {
 
     def ebeam = {
         persistenceInterceptor.init()
-        return (importService.eBeamData(mongo.getDB("glo"), grailsApplication.config.glo.eBeamDirectory) as JSON)
+        return (importService.eBeamItoData(mongo.getDB("glo"), grailsApplication.config.glo.eBeamItoDirectory) as JSON)
     }
 	
 }

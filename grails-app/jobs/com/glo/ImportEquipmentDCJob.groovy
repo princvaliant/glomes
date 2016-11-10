@@ -54,6 +54,12 @@ class ImportEquipmentDCJob {
                 logr.error(exc.getMessage())
             }
             try {
+                eBeamItoData(db)
+            }
+            catch (Exception exc) {
+                logr.error(exc.getMessage())
+            }
+            try {
                 tempHumidity(db)
             }
             catch (Exception exc) {
@@ -213,6 +219,16 @@ class ImportEquipmentDCJob {
             persistenceInterceptor.destroy()
         }
     }
+
+    def eBeamItoData(db) {
+        persistenceInterceptor.init()
+        importService.eBeamItoData(db, grailsApplication.config.glo.eBeamItoDirectory)
+        if (persistenceInterceptor) {
+            persistenceInterceptor.flush()
+            persistenceInterceptor.destroy()
+        }
+    }
+
 
 
 

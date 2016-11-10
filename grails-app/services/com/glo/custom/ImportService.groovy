@@ -676,4 +676,92 @@ class ImportService {
             }
         }
     }
+
+
+    def eBeamItoData(db, dir) {
+
+        if (!dir) {
+            logr.error("eBeam ito directory not specified.")
+            return
+        }
+
+        java.io.File f = new java.io.File(dir)
+        if (!f.exists()) {
+            logr.error("eBeam '" + dir + "' does not exist.")
+            return
+        }
+
+        def files = f.listFiles([accept: { file -> file ==~ /.*?\.DAT/ }] as FileFilter)?.toList()
+        files.each { file ->
+            def fn = file.getName().replace(".DAT", "").toUpperCase().tokenize("-_ ")
+            def query = new BasicDBObject("code", fn[0])
+            def unit = db.dataReport.find(query, new BasicDBObject()).collect { it }[0]
+            if (!unit) {
+                FileReader fr = null
+                BufferedReader br = null
+                try {
+                    fr = new FileReader(file)
+                    br = new BufferedReader(fr)
+                    def resMap = [:]
+                    def line
+                    def depositCount = 0
+                    def previousLine = ''
+                    def obj = new BasicDBObject()
+                    while ((line = br.readLine()) != null) {
+                        if (line != "") {
+                            if (previousLine.length() > 182 && line.length() > 182) {
+                                try {
+//                                    def num = previousLine.substring(1, 8).trim()
+//                                    if (num.isFloat()) {
+//                                        num = num.toFloat();
+//                                    }
+                                    def step = line.substring(182).trim()
+                                    if (step == "Deposit#1" && !obj.temp_before_deposition) {
+                                        obj.temp_before_deposition = previousLine.substring(51, 59).trim().toFloat()
+                                        obj.pressure_before_deposition = previousLine.substring(152, 162).trim().toFloat()
+                                    }
+                                    if (step == "Process complet" && !obj.temp_end_deposition) {
+                                        obj.temp_end_deposition = previousLine.substring(51, 59).trim().toFloat()
+                                        obj.pressure_end_deposition = previousLine.substring(152, 162).trim().toFloat()
+                                        obj.thickness_end_deposition = previousLine.substring(100, 110).trim().toFloat()
+                                    }
+                                } catch (Exception exc){
+                                    def g = 0;
+                                }
+                            }
+                            previousLine = line
+                        }
+                    }
+
+                    // Process resMap
+                    def dr = new BasicDBObject()
+                    dr.put("parentCode", null)
+                    dr.put("code", fn[0])
+                    obj.put("active", "true")
+                    obj.put("ebeam_ito_run_id", fn[0])
+                    obj.put("experimentId", fn[1])
+                    obj.put("tags", [
+                            "EquipmentStatus|ebeam_ito_rundata",
+                            fn[1],
+                            fn[0]
+                    ])
+                    obj.put("pkey", "ebeam_ito_rundata")
+                    obj.put('actualStart', new Date())
+                    dr.put("value", obj)
+                    db.dataReport.save(dr)
+
+                } catch (Exception exc) {
+                    logr.warn(file?.getName() + ": " + exc.toString())
+                }
+                finally {
+                    if (br != null)
+                        br.close()
+                    if (fr != null)
+                        fr.close()
+                    br = null
+                    fr = null
+                }
+            }
+        }
+    }
 }

@@ -1489,10 +1489,10 @@ class DataFixerController {
 
     def recurse = {
 
-        new File("/Users/aleksandarvolos/projects/meteor_packages/extjs61/resources/images").eachDirRecurse() { dir ->
+        new File("/Users/aleksandarvolos/projects/daasfabextjs/packages/bpmn/assets").eachDirRecurse() { dir ->
             def files = dir.listFiles().toList()
             files.each { file ->
-                println "api.addAssets('" + file.getPath().replace("/Users/aleksandarvolos/projects/meteor_packages/extjs61/", "") + "', 'client');"
+                println "api.addAssets('" + file.getPath().replace("/Users/aleksandarvolos/projects/daasfabextjs/packages/bpmn/", "") + "', ['client']);"
             }
         }
 

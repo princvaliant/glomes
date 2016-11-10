@@ -987,7 +987,7 @@ class UploadService {
         def db = mongo.getDB("glo")
         def process = 'direct_view_baseline'
         def category = 'nwLED'
-        Map map = [
+        Map mapAll = [
                 sheet    : 'Sheet1',
                 startRow : 1,
                 columnMap: [
@@ -1108,6 +1108,18 @@ class UploadService {
 
                 ]
         ]
+
+        Map map = [
+                sheet    : 'Sheet1',
+                startRow : 2,
+                columnMap: [
+                        'C': 'code',
+                        'D': 'mesa_etch_pr_strip|ito_pad_size_max',
+                        'E': 'mesa_etch_pr_strip|ito_pad_size_min',
+
+                ]
+        ]
+
         List rows = ExcelImportUtils.convertColumnMapConfigManyRows(workbook, map)
         def fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 
