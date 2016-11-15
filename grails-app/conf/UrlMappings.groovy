@@ -101,6 +101,9 @@ class UrlMappings {
             "/units/updateProduct" (controller:"units"){
                 action = [POST: "updateProduct"]
             }
+            "/units/mergeTestIndexes" (controller:"units"){
+                action = [GET: "mergeTests"]
+            }
 			"/units/RRRELOADDD" (controller:"units"){
 				action = [GET: "RRRELOADDD"]
 			}
@@ -474,6 +477,9 @@ class UrlMappings {
 			"/probeTest/device" (controller:"probeTest"){
 				action = [GET:"get"]
 			}
+            "/probeTest/export" (controller:"probeTest"){
+                action = [POST:"exportData"]
+            }
 			"/relTest/currents" (controller:"relTest"){
 				action = [GET:"getCurrents"]
 			}

@@ -28,7 +28,7 @@ class UtilsService {
 		}
 	}
 
-	def exportExcel (List objList, String formatting) {
+	def exportExcel (List objList, String formatting, def cols) {
 		
 		XSSFWorkbook workbook = new XSSFWorkbook()
 		XSSFSheet sheet = workbook.createSheet("mesdata")
@@ -41,13 +41,20 @@ class UtilsService {
 			//NORMAL
 			if (!formatting.contains('x')) {
 				XSSFRow rowHeader = sheet.createRow(0)
-						
 				def h = 0
-				objList[0].each { name, value ->
-					XSSFCell cellHead = rowHeader.createCell((int)h)
-					cellHead.setCellValue(new XSSFRichTextString(name))
-					h++
-				}
+                if (!cols) {
+                    objList[0].each { name, value ->
+                        XSSFCell cellHead = rowHeader.createCell((int) h)
+                        cellHead.setCellValue(new XSSFRichTextString(name))
+                        h++
+                    }
+                } else {
+                    cols.each { name ->
+                        XSSFCell cellHead = rowHeader.createCell((int) h)
+                        cellHead.setCellValue(new XSSFRichTextString(name))
+                        h++
+                    }
+                }
 				//objList[0].keySet().each {
 				//	cellHead.setCellValue(new XSSFRichTextString(it))
 		
@@ -56,14 +63,26 @@ class UtilsService {
 									
 					XSSFRow rowData = sheet.createRow(r)
 					def c = 0
-					obj.each { name, value ->
-						XSSFCell cellData = rowData.createCell((int)c)
-						if (value != null ) cellData.setCellValue(value)
-						if (formatting.contains('d') && name.toLowerCase().contains("date")) {
-							cellData.setCellStyle(style)
-						}
-						c++
-					}
+                    if (!cols) {
+                        obj.each { name, value ->
+                            XSSFCell cellData = rowData.createCell((int) c)
+                            if (value != null) cellData.setCellValue(value)
+                            if (name.toLowerCase().contains("date")) {
+                                cellData.setCellStyle(style)
+                            }
+                            c++
+                        }
+                    } else {
+                        cols.each { name ->
+                            XSSFCell cellData = rowData.createCell((int) c)
+                            def value = obj[name]
+                            if (value != null) cellData.setCellValue(value)
+                            if (name.toLowerCase().contains("date")) {
+                                cellData.setCellStyle(style)
+                            }
+                            c++
+                        }
+                    }
 					r++
 				}
 			}

@@ -1,9 +1,17 @@
 package com.glo.custom
 
+import com.glo.ndo.ProductMaskItem
 import com.mongodb.BasicDBObject
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match
 import grails.converters.JSON
 import org.apache.commons.logging.LogFactory
+import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.usermodel.XSSFRichTextString
+import org.apache.poi.xssf.usermodel.XSSFRow
+import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+
+import javax.servlet.ServletOutputStream
 
 class ProbeTestController extends com.glo.run.Rest {
 	
@@ -11,6 +19,7 @@ class ProbeTestController extends com.glo.run.Rest {
 
 	def springSecurityService
 	def fileService
+    def utilsService
 
 	def mongo
 
@@ -18,8 +27,7 @@ class ProbeTestController extends com.glo.run.Rest {
 	def yText = [:]
 	
 	def getDevices = {
-		
-		logr.debug(params)
+
 		def username =  springSecurityService.principal?.username
 		
 		def db = mongo.getDB("glo")
@@ -132,4 +140,97 @@ class ProbeTestController extends com.glo.run.Rest {
 
 		render (exp as JSON)
 	}
+
+    def exportData = {
+
+        def code = params.code
+        def codes = params.codes.tokenize(",")
+        def tkey = params.tkey
+        def arr = []
+        codes.each {
+            arr.add(getProp(code, it, tkey))
+        }
+
+        def cols = [
+                'parentCode',
+                'code',
+                'tkey',
+                'date',
+                'rpp',
+                'vbp',
+                'v02',
+                'wpe02',
+                'eqe02',
+                'v04',
+                'wpe04',
+                'eqe04',
+                'v06',
+                'wpe06',
+                'eqe06',
+                'v08',
+                'wpe08',
+                'eqe08',
+                'v1',
+                'wpe1',
+                'eqe1',
+                'v4',
+                'wpe4',
+                'eqe4',
+                'v5',
+                'wpe5',
+                'eqe5',
+                'Peak WPE (%)',
+                'Peak EQE (%)',
+                'J @ Peak WPE (A/cm2)',
+                'J @ Peak EQE (A/cm2)',
+                'EQE leak WL corr @ 1 mA',
+                'EQE leak WL corr @ 4 mA',
+                'EQE leak WL corr @ 5 mA',
+                'Peak (nm) @ 200uA',
+                'Peak (nm) @ 400uA',
+                'Peak (nm) @ 600uA',
+                'Peak (nm) @ 800uA',
+                'Peak (nm) @ 1mA',
+                'Peak (nm) @ 4mA',
+                'Peak (nm) @ 5mA']
+
+
+
+        XSSFWorkbook workbook = utilsService.exportExcel(arr, "", cols)
+        response.setHeader("Content-disposition", "attachment; filename=NiDot_" + params.code + ".xlsx")
+        response.contentType = "application/excel"
+        ServletOutputStream f = response.getOutputStream()
+        workbook.write(f)
+        f.close()
+    }
+
+    private def getProp(code, device, tkey) {
+
+        def db = mongo.getDB("glo")
+
+        def queryTest =	new BasicDBObject("value.code", code + "_" + device)
+        queryTest.put("value.tkey", tkey)
+        def ret = db.testData.find(queryTest, new BasicDBObject()).collect{it}
+
+        def data = [:]
+        ret["value"][0].each { k, v ->
+            if (k != "data" && v) {
+                if (k == "code") {
+                    v = v.tokenize("_")[1]
+                }
+                data.put(k, v)
+            }
+        }
+        [100, 200, 400, 600, 800, 1, 4, 5, 10].each { curr ->
+            def cnt = 0
+            def currStr = ''
+            if (curr < 50) {
+                currStr = curr + "mA"
+            } else {
+                currStr = curr + "uA"
+            }
+            data.put("Peak (nm) @ " + currStr, ret.value.data["Data @ " + currStr]["Peak (nm)"][0])
+        }
+        return data
+    }
 }

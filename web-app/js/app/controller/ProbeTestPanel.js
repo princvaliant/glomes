@@ -14,8 +14,8 @@ Ext.define('glo.controller.ProbeTestPanel', {
 
 		var value1;
 		var value2;
-		
-		var store = Ext.create('Ext.data.Store', {
+
+    	var store = Ext.create('Ext.data.Store', {
 					fields : [{
 								name : 'name',
 								type : 'string'
@@ -35,14 +35,12 @@ Ext.define('glo.controller.ProbeTestPanel', {
 
 		var propCombo = Ext.create('Ext.ux.form.MultiSelect', {
 					store : store,
-					maxSelections : 1,
 					border : 0,
 					displayField : 'name',
 					valueField : 'name',
 					triggerAction : 'all',
 					queryMode : 'local'
 				});
-
 
 
 		var win = Ext.create('Ext.window.Window', {
@@ -68,15 +66,6 @@ Ext.define('glo.controller.ProbeTestPanel', {
 						minWidth : 100,
 						minHeight : 140,
 						layout: 'fit',
-//						dockedItems: {
-//							xtype: 'button',
-//							scope: this,
-//							text: 'Export to excel',
-//							iconCls : 'icon-excel',
-//							handler : function() {
-//								gloApp.getController('WaferPanel').exportData(tkey, code, propertyName, propCombo.value);
-//							}
-//						},
 						items : [
 							{
 								xtype: 'panel',
@@ -86,7 +75,15 @@ Ext.define('glo.controller.ProbeTestPanel', {
 									margin : 0,
 									align: 'stretch'
 								},
-								items : [
+								items : [ {
+                                    xtype: 'button',
+                                    scope: this,
+                                    text: 'Export to excel',
+                                    iconCls : 'icon-excel',
+                                    handler : function() {
+                                        gloApp.getController('ProbeTestPanel').exportData(tkey, code, propCombo.value);
+                                    }
+                                },
 									propCombo
 								]
 							}
@@ -529,8 +526,18 @@ Ext.define('glo.controller.ProbeTestPanel', {
 		}
 	},
 	
-	exportData : function(tkey, code, expId, propertyName, level1) {
-		
-		window.open(rootFolder + 'wafer/export?tkey=' + tkey + '&code=' + code + '&expId=' + expId + '&propertyName=' + propertyName + '&level1=' + level1, 'resizable,scrollbars');
+	exportData : function(tkey, code, value) {
+
+        var sData;
+        var sDomain = rootFolder + 'probeTest/export';
+        sData = "<p><b>EXPORTING DATA . . . . . . . </b></p>";
+        sData = sData + "<form name='f12' id='f12' action='" + sDomain + "' method='post'>";
+        sData = sData + "<input type='hidden' name='tkey' value='" + tkey + "' />";
+        sData = sData + "<input type='hidden' name='code' value='" + code + "' />";
+        sData = sData + "<input type='hidden' name='codes' value='" + value + "' />";
+        sData = sData + "</form>";
+        var OpenWindow = window.open("", "newwin" + Math.random() * 16);
+        OpenWindow.document.write(sData);
+        OpenWindow.document.f12.submit();
 	}
 });

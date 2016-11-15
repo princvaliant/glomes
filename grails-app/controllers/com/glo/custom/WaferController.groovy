@@ -1350,13 +1350,15 @@ class WaferController extends com.glo.run.Rest {
 
         // Add header to excel
         XSSFRow rowHeader = sheet.createRow(0)
-        def h = 3
+        def h = 4
         XSSFCell cellHead = rowHeader.createCell((int) 0)
         cellHead.setCellValue("Current")
         cellHead = rowHeader.createCell((int) 1)
         cellHead.setCellValue("Serial#")
         cellHead = rowHeader.createCell((int) 2)
         cellHead.setCellValue("Exp#")
+        cellHead = rowHeader.createCell((int) 3)
+        cellHead.setCellValue("date")
 
         columns.each {
 
@@ -1422,6 +1424,9 @@ class WaferController extends com.glo.run.Rest {
         def pcms = new HashSet()
         def r = 1
 
+        XSSFCellStyle style = workbook.createCellStyle()
+        XSSFCreationHelper createHelper = workbook.getCreationHelper();
+        style.setDataFormat(createHelper.createDataFormat().getFormat("MM/dd/yyyy hh:mm"))
         map.each { k, v ->
             XSSFRow rowData = sheet.createRow(r)
             def c = 0
@@ -1434,11 +1439,15 @@ class WaferController extends com.glo.run.Rest {
             c++
             cellData = rowData.createCell(c)
             cellData.setCellValue(tok[3])
+            c++
+            cellData = rowData.createCell(c)
+            cellData.setCellValue(obj.date)
+            cellData.setCellStyle(style)
             v.each { k2, v2 ->
                 c++
                 cellData = rowData.createCell((int) c)
                 // keep creating cells until in appropriate column
-                while (c - 3 < columns.size() && k2 != columns[c - 3]) {
+                while (c - 4 < columns.size() && k2 != columns[c - 4]) {
                     c++
                     cellData = rowData.createCell((int) c)
                 }

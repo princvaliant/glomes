@@ -498,4 +498,33 @@ class UnitsController extends Rest {
 			render ([success:false, msg: exc.toString()] as JSON)
 		}
 	}
+
+    def mergeTests = {
+        def db = mongo.getDB("glo")
+        DateFormat dformat = new SimpleDateFormat("yyyyMMddHHmmss")
+        Date now = new Date()
+        def newTestId = (long)dformat.format(now).toLong()
+        def code = params.code
+        def indexes = params.idxs.tokenize(",")
+        def newTest
+        indexes.each {
+            def bdo = new BasicDBObject()
+            bdo.put("value.code", code)
+            bdo.put("value.tkey", "test_data_visualization")
+            bdo.put("value.testId", it.toLong())
+            def testData = db.testData.find(bdo).collect { it }[0]
+            if (testData) {
+                if (!newTest) {
+                    newTest = testData.clone()
+                    delete newTest._id
+                    newTest.value.testId = newTestId
+                } else {
+
+                }
+
+ //               summarizeSyncService.createSummaries(db, unit._id, unit.code, bdo, null, null, testData.value.testId.toString().toLong(), testData.value.tkey, unit.mask, null)
+            }
+        }
+        render ([success:true, res: newTestId] as JSON)
+    }
 }

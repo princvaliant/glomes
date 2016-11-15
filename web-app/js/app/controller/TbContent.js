@@ -1821,6 +1821,50 @@ Ext.define('glo.controller.TbContent', {
             },
             buttons: [
                 {
+                    text: 'Merge tests',
+                    handler: function () {
+                        var dc = Ext.getCmp('detailsDataDcGridId');
+                        var source = dc.getSource();
+                        var idxs = [];
+                        Ext.iterate(source, function(key, value) {
+                            if (key.indexOf('testDataIndex_') !== -1) {
+                                idxs.push(key.split('_')[1]);
+                            }
+                        });
+                        Ext.MessageBox.show({
+                            title: 'Merge tests',
+                            msg: 'Confirm list of text indexes to merge',
+                            value: idxs,
+                            width:300,
+                            buttons: Ext.MessageBox.OKCANCEL,
+                            multiline: true,  // this property is for multiline user input.
+                            fn: function(btn, text) {
+                                if (btn === 'ok') {
+                                    Ext.Ajax.request({
+                                        scope: this,
+                                        method: 'GET',
+                                        params: {
+                                            code: code,
+                                            idxs: text
+                                        },
+                                        url: rootFolder + 'units/mergeTestIndexes',
+                                        success: function (response) {
+                                            var obj = Ext.decode(response.responseText);
+                                            if (obj.success == false) {
+                                                Ext.Msg.alert('Merge failed', obj.msg);
+                                            } else {
+                                                source['testDataIndex_' + obj.res] = '<Units> Dev: -- Area: 0';
+                                                dc.setSource(source);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+                    }
+                },
+                {
                     text: 'Top devices images',
                     handler: function () {
                         window.open(rootFolder + 'topImages?id=' + code, 'resizable,scrollbars');
