@@ -506,25 +506,52 @@ class UnitsController extends Rest {
         def newTestId = (long)dformat.format(now).toLong()
         def code = params.code
         def indexes = params.idxs.tokenize(",")
-        def newTest
+        def newTest = null
+        def testData = null
         indexes.each {
             def bdo = new BasicDBObject()
             bdo.put("value.code", code)
             bdo.put("value.tkey", "test_data_visualization")
             bdo.put("value.testId", it.toLong())
-            def testData = db.testData.find(bdo).collect { it }[0]
+            testData = db.testData.find(bdo).collect { it }[0]
             if (testData) {
                 if (!newTest) {
-                    newTest = testData.clone()
-                    delete newTest._id
+                    newTest = testData
+                    newTest.remove("_id")
                     newTest.value.testId = newTestId
                 } else {
-
+                    BasicDBObject dbo = (BasicDBObject) testData?.value?.data
+                    dbo.each { ks, vs ->
+                        if (ks != "setting") {
+                            vs.each { k, v ->
+                                if (!newTest.value.data[ks]) {
+                                    newTest.value.data[ks] = new BasicDBObject()
+                                }
+                                if (!newTest.value.data[ks][k]) {
+                                    newTest.value.data[ks][k] = new BasicDBObject()
+                                }
+                                newTest.value.data[ks][k] += v
+                            }
+                        }
+                    }
                 }
-
- //               summarizeSyncService.createSummaries(db, unit._id, unit.code, bdo, null, null, testData.value.testId.toString().toLong(), testData.value.tkey, unit.mask, null)
             }
         }
-        render ([success:true, res: newTestId] as JSON)
+        db.unit.update([code: code], [$addToSet: [testDataIndex: newTestId]])
+        db.history.update([code: code, "audit.tkey": "test_data_visualization"], [$addToSet: ['audit.$.dc.testDataIndex': newTestId]])
+        db.testData.save(newTest)
+
+        indexes.each {
+            def bdo = new BasicDBObject()
+            bdo.put("value.parentCode", code)
+            bdo.put("value.tkey", "test_data_visualization")
+            bdo.put("value.testId", it.toLong())
+            db.testData.update(bdo, ['$set': ['value.testId': [it.toLong(), newTestId]]], false, true)
+        }
+
+        def unit1 = db.unit.find([code: code], new BasicDBObject()).collect{it}[0]
+        summarizeSyncService.createSummaries(db, unit1._id, code, null, null, null, newTestId, "test_data_visualization", unit1.mask, null)
+
+        render ([success:true, res: newTestId.toString()] as JSON)
     }
 }
