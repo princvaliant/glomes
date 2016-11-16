@@ -28,8 +28,9 @@ class UnitsController extends Rest {
 	def mongo
 	def dataSourceActiviti
 	def dataImportService
+    def summarizeSyncService
 
-	static activiti = true
+    static activiti = true
 
 	def list = {
 
@@ -538,7 +539,7 @@ class UnitsController extends Rest {
             }
         }
         db.unit.update([code: code], [$addToSet: [testDataIndex: newTestId]])
-        db.history.update([code: code, "audit.tkey": "test_data_visualization"], [$addToSet: ['audit.$.dc.testDataIndex': newTestId]])
+        db.history.update([code: code, "audit.tkey": "test_data_visualization", "audit.dc.testDataIndex": indexes[0].toLong()], [$addToSet: ['audit.$.dc.testDataIndex': newTestId]])
         db.testData.save(newTest)
 
         indexes.each {
