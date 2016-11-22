@@ -126,6 +126,12 @@ class ProbeNewSyncService {
                 DescriptiveStatistics avgV1 = new DescriptiveStatistics()
                 DescriptiveStatistics avgPeak1 = new DescriptiveStatistics()
                 DescriptiveStatistics avgFwhm1 = new DescriptiveStatistics()
+                DescriptiveStatistics avgWpe2 = new DescriptiveStatistics()
+                DescriptiveStatistics avgEqe2 = new DescriptiveStatistics()
+                DescriptiveStatistics avgV2 = new DescriptiveStatistics()
+                DescriptiveStatistics avgPeak2 = new DescriptiveStatistics()
+                DescriptiveStatistics avgFwhm2 = new DescriptiveStatistics()
+
                 DescriptiveStatistics avgWpe4 = new DescriptiveStatistics()
                 DescriptiveStatistics avgEqe4 = new DescriptiveStatistics()
                 DescriptiveStatistics avgV4 = new DescriptiveStatistics()
@@ -200,6 +206,9 @@ class ProbeNewSyncService {
                 DescriptiveStatistics avgCurr1Center = new DescriptiveStatistics()
                 DescriptiveStatistics avgCurr1All = new DescriptiveStatistics()
                 DescriptiveStatistics avgPeak1Center = new DescriptiveStatistics()
+                DescriptiveStatistics avgCurr2Center = new DescriptiveStatistics()
+                DescriptiveStatistics avgCurr2All = new DescriptiveStatistics()
+                DescriptiveStatistics avgPeak2Center = new DescriptiveStatistics()
 
                 DescriptiveStatistics avgCurr01Center = new DescriptiveStatistics()
                 DescriptiveStatistics avgCurr01All = new DescriptiveStatistics()
@@ -226,6 +235,8 @@ class ProbeNewSyncService {
                 def peaksCenter = [:]
                 def peaks1 = [:]
                 def peaksCenter1 = [:]
+                def peaks2 = [:]
+                def peaksCenter2 = [:]
                 def peaks4 = [:]
                 def peaksCenter4 = [:]
                 def peaks5 = [:]
@@ -250,6 +261,8 @@ class ProbeNewSyncService {
                 def corrCenter = [:]
                 def corr1 = [:]
                 def corrCenter1 = [:]
+                def corr2 = [:]
+                def corrCenter2 = [:]
                 def corr4 = [:]
                 def corrCenter4 = [:]
                 def corr5 = [:]
@@ -388,6 +401,16 @@ class ProbeNewSyncService {
                             if (deviceCode.toUpperCase().substring(0, 4) in ["NE00", "SE00", "NW00", "SW00"]) {
                                 avgPeak1Center.addValue(peak)
                                 peaksCenter1.put(deviceCode, peak)
+                            }
+                        }
+                        if (curr.round() == 2) {
+                            avgPeak2.addValue(peak)
+                            peaks2.put(deviceCode, peak)
+                            avgFwhm2.addValue(fwhm)
+
+                            if (deviceCode.toUpperCase().substring(0, 4) in ["NE00", "SE00", "NW00", "SW00"]) {
+                                avgPeak2Center.addValue(peak)
+                                peaksCenter2.put(deviceCode, peak)
                             }
                         }
                         if (curr.round() == 4) {
@@ -623,6 +646,21 @@ class ProbeNewSyncService {
                                     avgFwhm1.addValue(fws)
                                 }
 
+                                if (!tValue.containsKey("wpe2") && (topCurr > 2.0 || 2.0 - topCurr < 0.2)) {
+                                    def v = summarizeSyncService.interpolate(2.0, currs, volts)
+                                    tValue.put("v2", v)
+                                    avgV2.addValue(v)
+                                    def wps = summarizeSyncService.interpolate(2.0, currsw, wpes)
+                                    tValue.put("wpe2", wps)
+                                    avgWpe2.addValue(wps)
+                                    def eqs = summarizeSyncService.interpolate(2.0, currse, eqes)
+                                    tValue.put("eqe2", eqs)
+                                    avgEqe2.addValue(eqs)
+                                    def fws = summarizeSyncService.interpolate(2.0, currs, fwhms)
+                                    tValue.put("fwhm2", fws)
+                                    avgFwhm2.addValue(fws)
+                                }
+
                                 if (!tValue.containsKey("wpe4") && (topCurr > 4 || 4 - topCurr < 0.3)) {
                                     def v = summarizeSyncService.interpolate(4, currs, volts)
                                     tValue.put("v4", v)
@@ -719,6 +757,17 @@ class ProbeNewSyncService {
 
                                     avgCurr5All.addValue(v)
                                     corr5.put(v, deviceCode)
+                                }
+
+                                if (k == 2) {
+
+                                    if (deviceCode.toUpperCase().substring(0, 4) in ["NE00", "SE00", "NW00", "SW00"]) {
+                                        avgCurr2Center.addValue(v)
+                                        corrCenter2.put(v, deviceCode)
+                                    }
+
+                                    avgCurr2All.addValue(v)
+                                    corr2.put(v, deviceCode)
                                 }
 
                                 if (k == 1) {
@@ -911,6 +960,24 @@ class ProbeNewSyncService {
                     bdoUnit.put("Peak-1mA-Center-Avg", avg)
                 }
 
+                avg = avgCurr2Center.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("CorrEQE-2mA-Center-Avg", avg)
+                avg = avgCurr2Center.getMax()
+                if (!avg.isNaN()) {
+                    bdoUnit.put("CorrEQE-2mA-Center-Best", avg)
+                    bdoUnit.put("Peak-2mA-Center-Best", peaksCenter2[corrCenter2[avg]])
+                }
+                avg = avgCurr2All.getMax()
+                if (!avg.isNaN()) {
+                    bdoUnit.put("CorrEQE-2mA-Best", avg)
+                    bdoUnit.put("Peak-2mA-Best", peaks2[corr2[avg]])
+                }
+                avg = avgPeak2Center.getMean()
+                if (!avg.isNaN()) {
+                    bdoUnit.put("Peak-2mA-Center-Avg", avg)
+                }
+
                 avg = avgCurr01Center.getMean()
                 if (!avg.isNaN())
                     bdoUnit.put("CorrEQE-100uA-Center-Avg", avg)
@@ -1016,6 +1083,22 @@ class ProbeNewSyncService {
                 avg = avgFwhm1.getMean()
                 if (!avg.isNaN())
                     bdoUnit.put("fwhm1", avg)
+
+                avg = avgWpe2.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("wpe2", avg)
+                avg = avgEqe2.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("eqe2", avg)
+                avg = avgV2.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("v2", avg)
+                avg = avgPeak2.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("peak2", avg)
+                avg = avgFwhm2.getMean()
+                if (!avg.isNaN())
+                    bdoUnit.put("fwhm2", avg)
 
                 avg = avgWpe4.getMean()
                 if (!avg.isNaN())
