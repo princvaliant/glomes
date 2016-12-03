@@ -57,7 +57,7 @@ class ProbeTestController extends com.glo.run.Rest {
 		
 		def exp = [:]
 		def path = request.getSession().getServletContext().getRealPath("/")
-		['0_1', '0_2','0_4','0_6','0_8', '0.2','0.4','0.6','0.8', '1', '4','5','10'].each {
+		['0_1', '0_2','0_4','0_6','0_8', '0.2','0.4','0.6','0.8', '1', '2', '4','5','10'].each {
 			
 			def fn = params.code + "_" + params.device + "_" + it + "mA.jpg"
 			def file = fileService.retrieveFile(fn)
@@ -77,7 +77,7 @@ class ProbeTestController extends com.glo.run.Rest {
         exp.put("data", [:])
 
         def spectrums = [:]
-        [100, 200, 400, 600, 800, 1, 4, 5, 10].each { curr ->
+        [100, 200, 400, 600, 800, 1, 2, 4, 5, 10].each { curr ->
             def cnt = 0
             def currStr = ''
             if (curr < 50) {
@@ -173,6 +173,9 @@ class ProbeTestController extends com.glo.run.Rest {
                 'v1',
                 'wpe1',
                 'eqe1',
+                'v2',
+                'wpe2',
+                'eqe2',
                 'v4',
                 'wpe4',
                 'eqe4',
@@ -191,6 +194,7 @@ class ProbeTestController extends com.glo.run.Rest {
                 'Peak (nm) @ 600uA',
                 'Peak (nm) @ 800uA',
                 'Peak (nm) @ 1mA',
+                'Peak (nm) @ 2mA',
                 'Peak (nm) @ 4mA',
                 'Peak (nm) @ 5mA']
 
@@ -221,7 +225,7 @@ class ProbeTestController extends com.glo.run.Rest {
                 data.put(k, v)
             }
         }
-        [100, 200, 400, 600, 800, 1, 4, 5, 10].each { curr ->
+        [100, 200, 400, 600, 800, 1, 2, 4, 5, 10].each { curr ->
             def cnt = 0
             def currStr = ''
             if (curr < 50) {

@@ -302,7 +302,7 @@ Ext.define('glo.controller.ProbeTestPanel', {
 			                  				flex:3,
 								            id : 'dataspectrumchartid',
 								            store :  new Ext.data.JsonStore({
-										        	fields:['w', 'Intens_200uA', 'Intens_400uA', 'Intens_600uA', 'Intens_800uA', 'Intens_1mA', 'Intens_4mA', 'Intens_5mA','Intens_10mA']
+										        	fields:['w', 'Intens_200uA', 'Intens_400uA', 'Intens_600uA', 'Intens_800uA', 'Intens_1mA', 'Intens_2mA', 'Intens_4mA', 'Intens_5mA','Intens_10mA']
 												 }),	
 								            legend: {
 								                position: 'right'
@@ -310,7 +310,7 @@ Ext.define('glo.controller.ProbeTestPanel', {
 								            axes: [{
 								                type: 'Numeric',
 								                position: 'left',
-								                fields: ['Intens_200uA', 'Intens_400uA', 'Intens_600uA', 'Intens_800uA', 'Intens_1mA', 'Intens_4mA', 'Intens_5mA','Intens_10mA'],
+								                fields: ['Intens_200uA', 'Intens_400uA', 'Intens_600uA', 'Intens_800uA', 'Intens_1mA', 'Intens_2mA', 'Intens_4mA', 'Intens_5mA','Intens_10mA'],
 								                title: 'Intensity (a.u.)',
                                                 minimum: 0,
 								                grid: true
@@ -387,6 +387,18 @@ Ext.define('glo.controller.ProbeTestPanel', {
 								                    'stroke-width': 0
 								                }
 								           	 },{
+                                                type: 'line',
+                                                axis: 'left',
+                                                smooth: true,
+                                                xField: 'w',
+                                                yField: 'Intens_2mA',
+                                                markerConfig: {
+                                                    type: 'cross',
+                                                    size: 1,
+                                                    radius: 1,
+                                                    'stroke-width': 0
+                                                }
+                                            },{
                                                 type: 'line',
                                                 axis: 'left',
                                                 smooth: true,
