@@ -1454,20 +1454,24 @@ class UnitService {
 
             def unit = Unit.get(parm.id).dbo
             def transition = getCalculatedValue(unit, unit.code, script, shell)
-            def tkey = workflowService.getTaskForTransition(unit.pkey, unit.tkey, transition)
 
-            if (tkey) {
-
-                if (!result[tkey]) {
-                    result.put(tkey, [])
+            def transArray = transition.tokenize("|")
+            if (transArray.size() == 2) {
+                if (!result[transition]) {
+                    result.put(transition, [])
                 }
-
-                def isOk = validate(unit, null, null, null)
-
-                result[tkey].add([transition: transition, data: [id: parm.id, ok: isOk]])
+                result[transition].add([transition: transition, data: [id: parm.id, ok: true]])
+            } else {
+                def tkey = workflowService.getTaskForTransition(unit.pkey, unit.tkey, transition)
+                if (tkey) {
+                    if (!result[tkey]) {
+                        result.put(tkey, [])
+                    }
+                    def isOk = validate(unit, null, null, null)
+                    result[tkey].add([transition: transition, data: [id: parm.id, ok: isOk]])
+                }
             }
         }
-
         result
     }
 

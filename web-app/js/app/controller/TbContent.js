@@ -414,24 +414,28 @@ Ext.define('glo.controller.TbContent', {
                 units: units
             },
             success: function (response) {
-
                 var obj = Ext.decode(response.responseText);
                 if (obj.success == true) {
                     var cntrl = gloApp.getController('TbContent');
-                    var notRouted = "";
-
+                    var notRouted = '';
                     Ext.Object.each(obj.data, function (key, value, myself) {
-
-                        var res = cntrl.processTransition(transition, category, processKey,
-                            key, value, parentWindow, false);
-
-                        if (res != "") {
+                        var res = '';
+                        var pkeytkey = key.split('|');
+                        if (pkeytkey.length === 2) {
+                            cntrl.processEngineeringTransition('Engineering', category, pkeytkey[0],
+                                 value, parentWindow, pkeytkey[1]);
+                            res = '';
+                        } else {
+                            res = cntrl.processTransition(transition, category, processKey,
+                                key, value, parentWindow, false);
+                        }
+                        if (res != '') {
                             notRouted += value.length + ' unit(s) to ' + key + ': ' + res + '<br>';
                         }
                     });
 
                     // succesfully routed units display 'move form'... therefore only not-routed units need pop-up below
-                    if (notRouted != "") {
+                    if (notRouted != '') {
                         Ext.Msg.alert('Failed', notRouted);
                     }
 
@@ -443,7 +447,7 @@ Ext.define('glo.controller.TbContent', {
     },
 
 
-    processEngineeringTransition: function (transition, category, processKey, rows, parentWindow) {
+    processEngineeringTransition: function (transition, category, processKey, rows, parentWindow, taskKey) {
 
         var read_only = false;
         if (transition == 'Engineering-T') read_only = true;
@@ -579,7 +583,14 @@ Ext.define('glo.controller.TbContent', {
                 procCombo.setValue(processKey);
                 taskCombo.getPicker().setLoading(false);
                 taskCombo.store.getProxy().extraParams.processKey = processKey;
-                taskCombo.store.load();
+                taskCombo.store.load({
+                    scope: this,
+                    callback: function (records, operation, success) {
+                        if (taskKey) {
+                            taskCombo.setValue(taskKey);
+                        }
+                    }
+                })
             }
         });
 
