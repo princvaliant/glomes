@@ -4,7 +4,7 @@ Ext.define('glo.controller.TbContent', {
 
     views: ['glo.view.tb.Content', 'glo.view.tb.NoteList', 'glo.view.tb.PickList',
         'glo.view.tb.FileList'],
-    requires: ['Ext.ux.grid.FiltersFeature'],
+    requires: ['Ext.ux.grid.FiltersFeature', 'Ext.ux.grid.RowExpander'],
 
     init: function () {
 
@@ -1278,6 +1278,10 @@ Ext.define('glo.controller.TbContent', {
                                         beforeitemdblclick: function (obj, record, item, index, e, eOpts) {
 
                                             if (record.data.name.indexOf('testDataIndex') >= 0) {
+
+                                                console.log(code);
+
+
                                                 testId = record.data.name.split('_')[1];
                                                 gloApp.getController('WaferPanel').show(code, obj.panel.pctg, obj.panel.pkey, obj.panel.tkey, record.data.name, testId);
                                             } else if (record.data.name.indexOf('testTopIndex') >= 0) {
@@ -2439,10 +2443,18 @@ Ext.define('glo.controller.TbContent', {
                             return '';
                         }
                     },
-                    plugins: [Ext.create('Ext.grid.plugin.CellEditing',
+                    plugins: [
+                        Ext.create('Ext.grid.plugin.CellEditing',
                         {
                             clicksToEdit: 1
-                        })],
+                        })
+//                        ,
+//                        Ext.create('Ext.ux.grid.RowExpander', {
+//                            rowBodyTpl: new Ext.XTemplate(
+//                                '<p><b>Company:</b> sss</p>'
+//                            )
+//                        })
+                    ],
                     features: [filters],
                     columns: obj.columns,
                     loadMask: true,

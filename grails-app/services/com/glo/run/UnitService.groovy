@@ -1044,7 +1044,7 @@ class UnitService {
                     readPickPlaceFile(moved.user, unit)
                 }
 
-                if (moved.taskKeyEng == "visual_inspection_inventory" && moved.processKeyEng == "direct_view_baseline") {
+                if (moved.taskKeyEng == "test_data_visualization" && moved.processKeyEng == "nwLED") {
                     // Split wafer to coupons according to mask definition and start coupon in new process flow
                     if (!unit.mask) {
                         throw new RuntimeException("Mask for this wafer is not defined.")
@@ -1392,7 +1392,11 @@ class UnitService {
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         def newUnit = new Unit()
-        unit.dbo.each { k, v ->
+        def dbo = unit.dbo;
+        if (!unit.dbo) {
+            dbo = unit;
+        }
+        dbo.each { k, v ->
             if ((v.getClass() != com.mongodb.BasicDBObject && k != "_id") ||
                     (v.getClass() == com.mongodb.BasicDBObject && v.get("setting")?.get("propagate") == "true")) {
                 try {
@@ -1428,7 +1432,7 @@ class UnitService {
         newUnit.indexing()
         def unit3 = Unit.get(newUnit.id)
 
-        historyService.initHistory("startDerived", unit.dbo, unit3.dbo, ["parentDelete", false])
+        historyService.initHistory("startDerived", dbo, unit3.dbo, ["parentDelete", false])
     }
 
 

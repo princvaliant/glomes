@@ -36,7 +36,11 @@ class WaferController extends com.glo.run.Rest {
 
         def s = code?.tokenize("_")
         if (s.size() == 2)
-            s[0]
+            if (s[1].size() > 4) {
+                short[0]
+            } else {
+                code
+            }
         else
             code
     }

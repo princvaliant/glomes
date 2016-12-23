@@ -32,7 +32,7 @@ SELECT
     list_values,
     name,
     null,
-    1206,
+    1573,
     title,
     width,
     0,
@@ -42,4 +42,4 @@ SELECT
 FROM
     `glo`.`variable`
 WHERE
-process_step_id = 1128 ;
+process_step_id = 99 ;

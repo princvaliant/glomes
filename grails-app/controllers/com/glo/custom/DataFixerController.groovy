@@ -14,8 +14,10 @@ class DataFixerController {
     def summarizeSyncService
     def testDataImagesService
     def sequenceGeneratorService
+    def springSecurityService
     def unitService
     def syncService
+    def couponService
     def mongo
 
     private static final logr = LogFactory.getLog(this)
@@ -902,14 +904,12 @@ class DataFixerController {
         render i.toString()
     }
 
-    def pcm = {
+    def coupons = {
 
         def db = mongo.getDB("glo")
-        summarizeSyncService.createSummaries(db, 600582, "CAH88382", null, null, null, 130930143500, "top_test_visualization", "MASK6", null)
-
-        //	toAdd.put("testDataIndex_130524120005", "<Units>")
-
-        render "S"
+        def username =  springSecurityService.principal?.username
+        couponService.splitTestDataToCoupons(db, username, "test_data_visualization", "AO956162",  161202091948)
+        render "OK"
     }
 
 

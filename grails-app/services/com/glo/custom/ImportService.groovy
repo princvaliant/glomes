@@ -568,6 +568,7 @@ class ImportService {
             def fn = file.getName().replace(".TXT", "").toUpperCase().tokenize("-")
             def query = new BasicDBObject("code", fn[0])
             def unit = db.dataReport.find(query, new BasicDBObject()).collect { it }[0]
+            def dateModified = new Date(file.lastModified());
             if (!unit) {
                 FileReader fr = null
                 BufferedReader br = null
@@ -622,6 +623,7 @@ class ImportService {
                     ])
                     obj.put("pkey", "ebeam_rundata")
                     obj.put('actualStart', new Date())
+                    obj.put('dateStart', dateModified)
 
                     resMap.each { idx, values ->
                         DescriptiveStatistics pows = new DescriptiveStatistics()
@@ -696,6 +698,7 @@ class ImportService {
             def fn = file.getName().replace(".DAT", "").toUpperCase().tokenize("-_ ")
             def query = new BasicDBObject("code", fn[0])
             def unit = db.dataReport.find(query, new BasicDBObject()).collect { it }[0]
+            def dateModified = new Date(file.lastModified());
             if (!unit) {
                 FileReader fr = null
                 BufferedReader br = null
@@ -747,6 +750,7 @@ class ImportService {
                     ])
                     obj.put("pkey", "ebeam_ito_rundata")
                     obj.put('actualStart', new Date())
+                    obj.put('dateStart', dateModified)
                     dr.put("value", obj)
                     db.dataReport.save(dr)
 

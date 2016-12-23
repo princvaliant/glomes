@@ -258,6 +258,7 @@ class ImportEquipmentDCJob {
                 bdo.put("parentCode", null)
                 bdo.put("value.tags", [
                         "EquipmentStatus",
+                        "EquipmentStatus|omega_sensor",
                         "omega_sensor",
                         room
                 ])
@@ -327,6 +328,7 @@ class ImportEquipmentDCJob {
                                                 obj.put("temperature_max", fT)
                                                 obj.put("humidity", fH)
                                                 obj.put("humidity_max", fH)
+                                                obj.put('dateStart', new Date().parse("yyyy-MM-dd HH:mm", actualStart + " " + dth + ":" + dtm))
                                                 obj.put('actualStart', new Date().parse("yyyy-MM-dd HH:mm", actualStart + " " + dth + ":" + dtm))
                                                 obj.put('hourOfDay', dth)
                                                 obj.put('valuePerMinute', dtm)
