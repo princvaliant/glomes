@@ -25,12 +25,15 @@ class ProcessStep implements Comparable {
 	SortedSet reworkReasons
 	String routingScript
 	String splitProductCodes
+    String barcodePrinter
 	String barcodePrinting
 	String barcodeScanning
 	Boolean disableEngineeringMove
 	Boolean disableOperationMove
 	Boolean allowMoveDespiteSpecFail
-	String barcodePrinter
+    Boolean moveChildren
+    Boolean preventRegularMove
+
     String instructions
 
 	static belongsTo = [
@@ -54,6 +57,8 @@ class ProcessStep implements Comparable {
 		estimateDuration nullable: true
 		process blank:false
 		operation nullable:true
+        moveChildren nullable:true
+        preventRegularMove nullable:true
 		companies  nullable:true
 		equipments nullable:true
 		variables nullable:true

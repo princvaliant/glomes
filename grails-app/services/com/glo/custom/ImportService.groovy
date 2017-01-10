@@ -333,7 +333,6 @@ class ImportService {
         XSSFWorkbook workbook = new XSSFWorkbook(new ByteArrayInputStream(f.bytes))
         List rows = ExcelImportUtils.columns(workbook, PATTERNING_MAP)
         for (row in rows) {
-
             if (row["waferId"] == null || row["waferId"].toString().trim() == "")
                 continue
 
@@ -347,15 +346,12 @@ class ImportService {
             def temp = db.unit.find(query, new BasicDBObject())
             def unit = temp.collect { it }[0]
             if (unit) {
-
                 bdo.put("id", unit["_id"])
-                bdo.put("processCategory", "nwLED")
-                bdo.put("processKey", "patterning")
+                bdo.put("processCategory", unit["pctg"])
+                bdo.put("processKey", unit["pkey"])
                 bdo.put("taskKey", "nil")
                 unitService.update(bdo, username, true)
-
                 unitService.addNote(username, unit["_id"], row["comment"])
-
                 ret++
             }
         }

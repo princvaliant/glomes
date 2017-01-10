@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics
 import org.apache.commons.validator.GenericValidator
 
+import javax.jms.Message
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -31,8 +32,8 @@ class UnitService {
     def utilsService
     def productsService
     def fileService
-    def mongo
 
+    def mongo
 
     def inStep(def db, def code, def pkey, def tkey) {
 
@@ -57,6 +58,7 @@ class UnitService {
         def usr = User.findByUsername(user)
         def grps = usr?.getAuthorities()?.collect { it.id }
 
+        def processStep = workflowService.getProcessStep(category, procKey, taskKey)
         def variables = contentService.getVariables(category, procKey, taskKey, '')
 
         def query = new BasicDBObject()
@@ -152,6 +154,14 @@ class UnitService {
             }
 
             getCalculatedValues(it, calcVars, outVars)
+
+            if (processStep.moveChildren == true) {
+                it.put('nJumps', 1)
+            } else if (processStep.preventRegularMove == true) {
+                it.put('nJumps', 2)
+            } else {
+                it.put('nJumps', 0)
+            }
 
             def limitSpecs = []
 
@@ -895,6 +905,24 @@ class UnitService {
 
         def options = [:]
         options.put("isSame", isSame)
+        options.put("processCategory", updated.processCategory ?: unitLoc['pctg'])
+        options.put("processKey", updated.processKey ?: unitLoc['pkey'])
+        options.put("taskKey", updated.taskKey ?: unitLoc['tkey'])
+
+        // Check if we need to propagate update to children
+        def processStep = workflowService.getProcessStep(updated.processCategory ?: updated.pctg, updated.processKey ?: updated.pkey, updated.taskKey ?: updated.tkey)
+        if (processStep.moveChildren == true) {
+            Thread.start {
+                def units = db.unit.find(new BasicDBObject("parentUnit", updated.code ?: unitLoc.code)).collect {
+                    updated.id = it._id
+                    updated.pctg = it.pctg
+                    updated.pkey = it.pkey
+                    updated.tkey = it.tkey
+                    update(updated, userName, isMulti)
+                }
+            }
+        }
+
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
         if (updated["actualStart"] && updated["actualStart"].getClass() != java.util.Date) {
             isSame ? unitLoc["actualStart"] = df.parse(updated["actualStart"]) : options.put("actualStart", df.parse(updated["actualStart"]))
@@ -976,11 +1004,6 @@ class UnitService {
 
         db.unit.save(unitLoc)
 
-
-        options.put("processCategory", updated.processCategory ?: unitLoc['pctg'])
-        options.put("processKey", updated.processKey ?: unitLoc['pkey'])
-        options.put("taskKey", updated.taskKey ?: unitLoc['tkey'])
-
         historyService.initHistory("update", oldUnit, unitLoc, options)
         def limitSpecs = []
         def specs = ""
@@ -1020,8 +1043,6 @@ class UnitService {
             checkReactorMove(moved.processCategoryEng, moved.processKeyEng, moved.taskKeyEng, moved.equipment, moved.units)
         }
 
-        // checkGroupMove(moved.processCategoryEng, moved.processKeyEng, moved.taskKeyEng, "cassetteId", moved.units, "check")
-
         if (moved.printLabel && moved.printLabel == "yes") {
             ret = [showMove: "2", pctg: moved.processCategoryEng, pkey: moved.processKeyEng, tkey: moved.taskKeyEng]
         }
@@ -1033,57 +1054,26 @@ class UnitService {
                 // First get unit
                 def unit = Unit.get(parm.id)
 
-                if (moved.taskKeyEng == "pp_progress") {
-                    generatePickPlaceFile(unit, [])
-                }
-                if (moved.taskKeyEng == "oem_pp_files") {
-                    generatePickPlaceFileSae(user, unit, [])
-                }
-
-                if (moved.taskKeyEng == "pp_inventory") {
-                    readPickPlaceFile(moved.user, unit)
+                // Check if current process step allows doing regular move
+                def processStep = workflowService.getProcessStep(unit.pctg, unit.pkey, unit.tkey)
+                if (moved.overrideMove != true && processStep.preventRegularMove == true) {
+                    throw new RuntimeException("These units are contained within parent unit and can only move with the parent.")
                 }
 
-                if (moved.taskKeyEng == "test_data_visualization" && moved.processKeyEng == "nwLED") {
-                    // Split wafer to coupons according to mask definition and start coupon in new process flow
-                    if (!unit.mask) {
-                        throw new RuntimeException("Mask for this wafer is not defined.")
+                // Check if moving from current process step needs to move child items
+                if (processStep.moveChildren == true) {
+                    def childrenMoves = validateChildren(db, unit, moved);
+                    if (childrenMoves.units.size() > 0) {
+                        move(user, childrenMoves)
                     }
-                    if (unit.mask?.toUpperCase() == "MASK39") {
-                        ["0001", "0002", "0003", "0004", "0005", "0006"].each {
-                            def cpnCode = unit.code + "_" + it
-                            def subUnit = db.unit.find(new BasicDBObject("code", cpnCode), new BasicDBObject()).collect {
-                                it
-                            }[0]
-                            if (!subUnit) {
-                                createCoupon(db, unit, cpnCode, user, "DVD", "dvd_assembly", "xy_inspection_on_wafer", "XY inspection on wafer", "CPN1000")
-                            }
-                        }
-                    } else {
-                        def productMask = ProductMask.findByName(unit.mask)
-                        if (productMask?.product?.code != "CPN1000") {
-                            throw new RuntimeException("This mask is not valid.")
-                        }
+                }
 
-                        // Retieve unique coupon codes for mask
-                        def productMaskItems = ProductMaskItemCtlm.executeQuery("""
-							select distinct ps.pm from ProductMaskItem as ps where ps.productMask.id = ?
-						""", [productMask.id])
-                        if (!productMaskItems) {
-                            throw new RuntimeException("This mask has no valid definition.")
-                        }
+                if (moved.taskKeyEng == "test_data_visualization" && moved.processKeyEng == "test") {
+                    createCoupons(db, user, unit, "DVD", "dvd_assembly", "xy_inspection_on_wafer", "XY inspection on wafer", "CPN1000")
+                }
 
-                        // Create coupon unit for each subunit
-                        productMaskItems.each {
-                            def cpnCode = unit.code + "_" + it.trim().replace("\r", "")
-                            def subUnit = db.unit.find(new BasicDBObject("code", cpnCode), new BasicDBObject()).collect {
-                                it
-                            }[0]
-                            if (!subUnit) {
-                                createCoupon(db, unit, cpnCode, user, "DVD", "dvd_assembly", "xy_inspection_on_wafer", "XY inspection on wafer", "CPN1000")
-                            }
-                        }
-                    }
+                if (moved.taskKeyEng == "pl_visual_inspection" && moved.processKeyEng == "epifab") {
+                    createCoupons(db, user, unit, "C", "fabassembly", "pl_visual_inspection", "PL visual inspection", "100C")
                 }
 
                 if (moved.taskKeyEng == "dicing_inventory" && moved.processKeyEng == "wafer_submount") {
@@ -1100,7 +1090,7 @@ class UnitService {
                 }
 
                 // End parent unit wheen moving child to dicing
-                if (moved.taskKeyEng == "dicing" && moved.processKeyEng == "wafer_submount_diced" ) {
+                if (moved.taskKeyEng == "dicing" && moved.processKeyEng == "wafer_submount_diced") {
                     def cpnCode = unit.code.tokenize("_")[0]
                     def dbo = new BasicDBObject("code", cpnCode)
                     dbo.put("tkey", "dicing_inventory")
@@ -1123,253 +1113,184 @@ class UnitService {
                     }
                 }
 
+                def oldUnit = deepClone(unit)
+                def isContinue = false
 
-//                if (moved.taskKeyEng == "dicing" && moved.processKeyEng == "dvd_assembly" ) {
-//                    def cpnCode = unit.code.tokenize("_")[0]
-//                    def dbo = new BasicDBObject("code", cpnCode)
-//                    dbo.put("tkey", "visual_inspection_inventory")
-//                    def uu = db.unit.find(dbo, new BasicDBObject()).collect {
-//                        it
-//                    }[0]
-//                    if (uu) {
-//                        def buf = new Expando()
-//                        buf.isEngineering = true
-//                        buf.prior = 50
-//                        buf.processCategoryEng = "nwLED"
-//                        buf.processKeyEng = "direct_view_baseline"
-//                        buf.taskKeyEng = "end"
-//                        buf.units = []
-//                        def n = [:]
-//                        n.put('transition', 'engineering')
-//                        n.put('id', uu["_id"])
-//                        buf.units.add(n)
-//                        move("admin", buf)
-//                    }
-//                }
+                if (unit.isBulk == "true") {
 
+                    //  Check existence of new unit
+                    def newUnit = Unit.withCriteria {
+                        eq('pctg', moved.processCategoryEng)
+                        eq('pkey', moved.processKeyEng)
+                        eq('tkey', moved.taskKeyEng)
+                        eq('productCode', unit.productCode)
+                        eq('supplierId', unit.supplierId)
+                    }[0]
 
+                    if (newUnit) {
 
-//                if (moved.taskKeyEng == "coupon_dicing") {
-//                    def r = new BasicDBObject('$regex', '^' + unit.code + '_');
-//                    def subUnits = db.unit.find(new BasicDBObject("code", r), new BasicDBObject()).collect { it }
-//                    subUnits.each {
-//                        def buf = new Expando()
-//                        buf.isEngineering = true
-//                        buf.prior = 50
-//                        buf.processCategoryEng = "DVD"
-//                        buf.processKeyEng = "dvd_assembly"
-//                        buf.taskKeyEng = "coupon_on_tape"
-//                        buf.units = []
-//                        def n = [:]
-//                        n.put('transition', 'engineering')
-//                        n.put('id', it._id)
-//                        buf.units.add(n)
-//                        move("admin", buf)
-//                    }
-//                }
+                        def oldNewUnit = deepClone(newUnit)
+                        newUnit.qtyIn = newUnit.qtyIn + moved.qtyIn.toLong()
+                        newUnit.qtyOut = newUnit.qtyOut + moved.qtyIn.toLong()
 
+                        if (moved.note) {
+                            newUnit.addToNotes(new Note(stepName: newUnit.tname, comment: moved.note, userName: user))
+                            newUnit.nNotes = newUnit.notes?.size()
+                        }
 
-                if (moved.taskKeyEng == "forward_to_packaging") {
-                    // Don't move, but rather perform split
+                        newUnit.save()
 
-                    def dyes = []
-                    def dyesAsString = moved["splitDyes"]
-                    if (dyesAsString) {
-                        dyes = dyesAsString.tokenize(",").collect { unit.code + "_" + it.trim() }
+                        def options = [:]
+                        options.put("processCategory", newUnit['pctg'])
+                        options.put("processKey", newUnit['pkey'])
+                        options.put("taskKey", newUnit['tkey'])
+
+                        historyService.initHistory("update", oldNewUnit, newUnit.dbo, options)
                     }
 
-                    dyes.each { dye ->
-                        def subUnit = db.unit.find(new BasicDBObject("code", dye), new BasicDBObject()).collect {
-                            it
-                        }[0]
-                        if (!subUnit) {
-                            createSubUnit(db, unit.dbo, dye, moved.user, "Die", "packaging", "packaging_queue", [:], false)
+                    if (moved.qtyIn && moved.qtyIn.toLong() < unit.qtyOut) {
+
+                        // Update quantity to remaining
+                        unit.qtyOut = unit.qtyOut - moved.qtyIn.toLong()
+
+                        if (!newUnit) {
+
+                            // Create new unit
+                            def recv = new Expando()
+
+                            recv.uid = user
+                            recv.cid = unit.supplierId
+                            recv.pid = Product.findByCode(unit.productCode).id
+                            recv.units = []
+                            recv.override = "true"
+                            def m = [:]
+                            m.put('code', "")
+                            m.put('qtyOut', moved.qtyIn.toLong())
+                            recv.units.add(m)
+                            def newCode = start(recv, unit.pctg, unit.pkey, false)
+                            def unitCreated = Unit.findByCode(newCode)
+
+                            if (moved.processCategoryEng + moved.processKeyEng + moved.taskKeyEng != unitCreated.pctg + unitCreated.pkey + unitCreated.tkey) {
+
+                                def buf = new Expando()
+                                buf.isEngineering = true
+                                buf.prior = 50
+                                buf.processCategoryEng = moved.processCategoryEng
+                                buf.processKeyEng = moved.processKeyEng
+                                buf.taskKeyEng = moved.taskKeyEng
+                                buf.note = moved.note
+                                buf.qtyIn = moved.qtyIn.toLong()
+                                buf.units = []
+                                def n = [:]
+                                n.put('transition', 'engineering')
+                                n.put('id', unitCreated.id)
+                                buf.units.add(n)
+                                move(user, buf)
+                            }
                         } else {
-                            updateSubUnit(db, moved.user, subUnit, "Die", "packaging_queue", [:])
+
+                            def moves = db.moves.find([code: newUnit.code, pctg: newUnit.pctg, pkey: newUnit.pkey, tkey: newUnit.tkey]).collect {
+                                it
+                            }[0]
+                            if (moves) {
+                                moves.start = moved.start ? df.parse(moved.start) : new Date()
+                                moves.actualStart = moved.actualStart ? df.parse(moved.actualStart) : new Date()
+                                moves["qtyIn"] = moved.qtyIn.toLong()
+                                moves.remove("_id")
+                                db.moves.insert(moves)
+                            }
+                        }
+                        isContinue = true
+
+                    } else if (moved.qtyIn && moved.qtyIn.toLong() == unit.qtyOut) {
+
+                        if (newUnit) {
+
+                            db.unit.remove([code: unit.code])
+                            db.history.remove([code: unit.code])
+                            db.dataReport.remove([code: unit.code])
+                            isContinue = false
+                        } else {
+
+                            unit.qtyIn = unit.qtyOut
+                            unit.pctg = moved.processCategoryEng
+                            unit.pkey = moved.processKeyEng
+                            unit.tkey = moved.taskKeyEng
+                            isContinue = true
                         }
                     }
 
                 } else {
 
-                    def oldUnit = deepClone(unit)
-                    def isContinue = false
+                    unit.qtyIn = unit.qtyOut
+                    unit.pctg = moved.processCategoryEng
+                    unit.pkey = moved.processKeyEng
+                    unit.tkey = moved.taskKeyEng
+                    isContinue = true
+                }
 
-                    if (unit.isBulk == "true") {
+                if (isContinue == true) {
 
-                        //  Check existence of new unit
-                        def newUnit = Unit.withCriteria {
-                            eq('pctg', moved.processCategoryEng)
-                            eq('pkey', moved.processKeyEng)
-                            eq('tkey', moved.taskKeyEng)
-                            eq('productCode', unit.productCode)
-                            eq('supplierId', unit.supplierId)
-                        }[0]
+                    unit.tname = workflowService.getTaskName(moved.processKeyEng, unit.tkey)
 
-                        if (newUnit) {
+                    unit.start = moved.start ? df.parse(moved.start) : new Date()
+                    unit.actualStart = moved.actualStart ? df.parse(moved.actualStart) : new Date()
 
-                            def oldNewUnit = deepClone(newUnit)
-                            newUnit.qtyIn = newUnit.qtyIn + moved.qtyIn.toLong()
-                            newUnit.qtyOut = newUnit.qtyOut + moved.qtyIn.toLong()
-
-                            if (moved.note) {
-                                newUnit.addToNotes(new Note(stepName: newUnit.tname, comment: moved.note, userName: user))
-                                newUnit.nNotes = newUnit.notes?.size()
-                            }
-
-                            newUnit.save()
-
-                            def options = [:]
-                            options.put("processCategory", newUnit['pctg'])
-                            options.put("processKey", newUnit['pkey'])
-                            options.put("taskKey", newUnit['tkey'])
-
-                            historyService.initHistory("update", oldNewUnit, newUnit.dbo, options)
-                        }
-
-                        if (moved.qtyIn && moved.qtyIn.toLong() < unit.qtyOut) {
-
-                            // Update quantity to remaining
-                            unit.qtyOut = unit.qtyOut - moved.qtyIn.toLong()
-
-                            if (!newUnit) {
-
-                                // Create new unit
-                                def recv = new Expando()
-
-                                recv.uid = user
-                                recv.cid = unit.supplierId
-                                recv.pid = Product.findByCode(unit.productCode).id
-                                recv.units = []
-                                recv.override = "true"
-                                def m = [:]
-                                m.put('code', "")
-                                m.put('qtyOut', moved.qtyIn.toLong())
-                                recv.units.add(m)
-                                def newCode = start(recv, unit.pctg, unit.pkey, false)
-                                def unitCreated = Unit.findByCode(newCode)
-
-                                if (moved.processCategoryEng + moved.processKeyEng + moved.taskKeyEng != unitCreated.pctg + unitCreated.pkey + unitCreated.tkey) {
-
-                                    def buf = new Expando()
-                                    buf.isEngineering = true
-                                    buf.prior = 50
-                                    buf.processCategoryEng = moved.processCategoryEng
-                                    buf.processKeyEng = moved.processKeyEng
-                                    buf.taskKeyEng = moved.taskKeyEng
-                                    buf.note = moved.note
-                                    buf.qtyIn = moved.qtyIn.toLong()
-                                    buf.units = []
-                                    def n = [:]
-                                    n.put('transition', 'engineering')
-                                    n.put('id', unitCreated.id)
-                                    buf.units.add(n)
-                                    move(user, buf)
-                                }
-                            } else {
-
-                                def moves = db.moves.find([code: newUnit.code, pctg: newUnit.pctg, pkey: newUnit.pkey, tkey: newUnit.tkey]).collect {
-                                    it
-                                }[0]
-                                if (moves) {
-                                    moves.start = moved.start ? df.parse(moved.start) : new Date()
-                                    moves.actualStart = moved.actualStart ? df.parse(moved.actualStart) : new Date()
-                                    moves["qtyIn"] = moved.qtyIn.toLong()
-                                    moves.remove("_id")
-                                    db.moves.insert(moves)
-                                }
-                            }
-                            isContinue = true
-
-                        } else if (moved.qtyIn && moved.qtyIn.toLong() == unit.qtyOut) {
-
-                            if (newUnit) {
-
-                                db.unit.remove([code: unit.code])
-                                db.history.remove([code: unit.code])
-                                db.dataReport.remove([code: unit.code])
-                                isContinue = false
-                            } else {
-
-                                unit.qtyIn = unit.qtyOut
-                                unit.pctg = moved.processCategoryEng
-                                unit.pkey = moved.processKeyEng
-                                unit.tkey = moved.taskKeyEng
-                                isContinue = true
-                            }
-                        }
-
-                    } else {
-
-                        unit.qtyIn = unit.qtyOut
-                        unit.pctg = moved.processCategoryEng
-                        unit.pkey = moved.processKeyEng
-                        unit.tkey = moved.taskKeyEng
-                        isContinue = true
+                    if (moved.note) {
+                        unit.addToNotes(new Note(stepName: unit.tname, comment: moved.note, userName: user))
+                        unit.nNotes = unit.notes?.size()
                     }
 
-                    if (isContinue == true) {
+                    if (moved.prior) {
+                        unit.prior = moved.prior.toInteger()
+                    }
 
-                        unit.tname = workflowService.getTaskName(moved.processKeyEng, unit.tkey)
+                    // Assign resources, locations and operations
+                    contentService.removeResources(unit)
+                    contentService.assignResources(unit.pctg, unit.pkey, unit.tkey, moved, unit)
 
-                        unit.start = moved.start ? df.parse(moved.start) : new Date()
-                        unit.actualStart = moved.actualStart ? df.parse(moved.actualStart) : new Date()
-
-                        if (moved.note) {
-                            unit.addToNotes(new Note(stepName: unit.tname, comment: moved.note, userName: user))
-                            unit.nNotes = unit.notes?.size()
-                        }
-
-                        if (moved.prior) {
-                            unit.prior = moved.prior.toInteger()
-                        }
-
-                        // Assign resources, locations and operations
-                        contentService.removeResources(unit)
-                        contentService.assignResources(unit.pctg, unit.pkey, unit.tkey, moved, unit)
-
-                        def afterProcKey = ""
-                        def afterProcCategory = unit.pctg
-                        vars.each {
-                            if (it.dataType == "date") {
-                                unit[it.name] = df.parse(moved[it.name])
-                            } else if (it.dataType == "Process") {
-                                def proc2 = Process.findByPkey(moved[it.name])
-                                afterProcKey = proc2.pkey
-                                afterProcCategory = proc2.category
-                                unit[it.name] = proc2.pkey
-                                db.unit.update(new BasicDBObject('code', unit.code), new BasicDBObject('$set', new BasicDBObject(it.name, afterProcKey)), false, false)
-                            } else {
-                                unit[it.name] = moved[it.name]
-                            }
-                        }
-
-                        if (unit.tkey.toUpperCase() == "END") {
-                            def proc = Process.findByPkey(unit.pkey)
-                            if (proc.pkeyAfter && proc.pctgAfter) {
-                                afterProcKey = proc.pkeyAfter
-                                afterProcCategory = proc.pctgAfter
-                            }
-                            if (afterProcKey && afterProcCategory) {
-                                def taskdef = workflowService.findFirstTaskDefinition(afterProcCategory, afterProcKey.toLowerCase())
-                                if (!taskdef) {
-                                    throw new RuntimeException("Following process " + afterProcKey + " is not defined.")
-                                }
-
-                                ret = [showMove: "1", pctg: taskdef.pctg, pkey: taskdef.pkey, tkey: taskdef.tkey]
-                                return
-                            }
+                    def afterProcKey = ""
+                    def afterProcCategory = unit.pctg
+                    vars.each {
+                        if (it.dataType == "date") {
+                            unit[it.name] = df.parse(moved[it.name])
+                        } else if (it.dataType == "Process") {
+                            def proc2 = Process.findByPkey(moved[it.name])
+                            afterProcKey = proc2.pkey
+                            afterProcCategory = proc2.category
+                            unit[it.name] = proc2.pkey
+                            db.unit.update(new BasicDBObject('code', unit.code), new BasicDBObject('$set', new BasicDBObject(it.name, afterProcKey)), false, false)
                         } else {
-                            assignSecurity(unit, workflowService.getTaskDef(unit.pkey, unit.tkey), user, moved.user)
+                            unit[it.name] = moved[it.name]
                         }
-                        unit["movedBy"] = user
-                        unit["equipmentParts"] = null
-
-                        saveCalculateValues(unit, vars)
-
-                        unit.save()
-
-                        retUnits.add([oldUnit, unit])
                     }
+
+                    if (unit.tkey.toUpperCase() == "END") {
+                        def proc = Process.findByPkey(unit.pkey)
+                        if (proc.pkeyAfter && proc.pctgAfter) {
+                            afterProcKey = proc.pkeyAfter
+                            afterProcCategory = proc.pctgAfter
+                        }
+                        if (afterProcKey && afterProcCategory) {
+                            def taskdef = workflowService.findFirstTaskDefinition(afterProcCategory, afterProcKey.toLowerCase())
+                            if (!taskdef) {
+                                throw new RuntimeException("Following process " + afterProcKey + " is not defined.")
+                            }
+
+                            ret = [showMove: "1", pctg: taskdef.pctg, pkey: taskdef.pkey, tkey: taskdef.tkey]
+                            return
+                        }
+                    } else {
+                        assignSecurity(unit, workflowService.getTaskDef(unit.pkey, unit.tkey), user, moved.user)
+                    }
+                    unit["movedBy"] = user
+                    unit["equipmentParts"] = null
+
+                    saveCalculateValues(unit, vars)
+
+                    unit.save()
+
+                    retUnits.add([oldUnit, unit])
                 }
             }
         }
@@ -1388,7 +1309,73 @@ class UnitService {
         return ret
     }
 
-    def createCoupon(def db, def unit, def subCode, def user, def pctg, def pkey, def tkey, def tname, def productCode) {
+
+    def validateChildren(db, unit, moved) {
+
+        def buf = new Expando()
+        def vars = []
+        def specVars = []
+        def isVars = false
+        def units = db.unit.find(new BasicDBObject("parentUnit", unit.code)).collect{
+            if (isVars == false) {
+                vars = contentService.getVariables(it.pctg, it.pkey, it.tkey, ['dc', 'din'])
+                specVars = contentService.getVariables(it.pctg, it.pkey, it.tkey, ['spec'])
+                moved.properties.each {k, v ->
+                    if (k != 'units') {
+                        buf[k] = v;
+                    }
+                }
+                buf.isEngineering = true
+                buf.prior = 50
+                buf.processCategoryEng = it.pctg
+                buf.processKeyEng = it.pkey
+                buf.taskKeyEng = moved.taskKeyEng
+                buf.overrideMove = true
+                buf.units = []
+                isVars = true
+            }
+            def isOk = validate(it, vars, specVars, [])
+            if (isOk != "0") {
+                throw new RuntimeException("Validation of children units failed. Click down arrow on the unit to jump to children.")
+            } else {
+                def n = [:]
+                n.put('transition', 'engineering')
+                n.put('id', it["_id"])
+                buf.units.add(n)
+            }
+        }
+        buf
+    }
+
+    def createCoupons(def db, def user, def unit, def pctg, def pkey, def tkey, def tname, def productCode) {
+        // Split wafer to coupons according to mask definition and start coupon in new process flow
+        if (!unit.mask) {
+            throw new RuntimeException("Mask for this wafer is not defined.")
+        }
+
+        def productMask = ProductMask.findByName(unit.mask)
+        def productMaskItems = ProductMaskItem.executeQuery("""
+                        select distinct ps.cpn from ProductMaskItem as ps where ps.productMask.id = ?
+                    """, [productMask.id])
+        if (!productMaskItems) {
+            throw new RuntimeException("This mask has no valid definition.")
+        }
+        // Create coupon unit for each subunit
+        productMaskItems.each {
+            if (it != null && it.trim() != '') {
+                def cpnCode = unit.code + "_" + it.trim()
+                def subUnit = db.unit.find(new BasicDBObject("code", cpnCode), new BasicDBObject()).collect {
+                    it
+                }[0]
+                if (!subUnit) {
+                    createCoupon(db, unit, cpnCode, user, pctg, pkey, tkey, tname, productCode)
+                }
+            }
+        }
+    }
+
+    def createCoupon(
+            def db, def unit, def subCode, def user, def pctg, def pkey, def tkey, def tname, def productCode) {
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         def newUnit = new Unit()
@@ -1413,6 +1400,7 @@ class UnitService {
         newUnit.productCode = product.code
         newUnit.product = product.name
         newUnit.productRevision = product.revision
+        newUnit.parentUnit = [unit.code]
 
         newUnit.pctg = pctg
         newUnit.pkey = pkey

@@ -153,7 +153,6 @@ Ext.define('glo.controller.MainPanel', {
 			});	
 
 		} else {
-
 			if (unit.pctg != '' &&  Ext.getCmp(unit.pctg) !== undefined) {
 				if (Ext.getCmp("mainpanel_" + unit.pctg) == undefined) {
 					

@@ -99,6 +99,9 @@ class ContentsController extends Rest {
 				col3 = {
 					
 				}
+                col4 = {
+
+                }
 				variables.each { p ->
 
 					// Add security check for showing fields

@@ -999,9 +999,6 @@ class SyncService {
                             suffix = ""
                         }
 
-
-                        System.println(suffix);
-
                         if (suffix in ["370", "1mW", "2mW", "4mW", "7mW"]) {
 
                             def unit = unitData[code]
@@ -1009,9 +1006,9 @@ class SyncService {
 
                                 def bdo2 = new BasicDBObject()
                                 bdo2.put("id", unit["_id"])
-                                if (unit.productCode == "100") {
-                                    bdo2.put("processCategory", "nwLED")
-                                    bdo2.put("processKey", "epi")
+                                if (unit.productCode == "100" || unit.productCode == "100W") {
+                                    bdo2.put("processCategory", unit.pctg)
+                                    bdo2.put("processKey", unit.pkey)
                                     bdo2.put("taskKey", "pl")
                                 } else {
                                     bdo2.put("processCategory", "Rel")

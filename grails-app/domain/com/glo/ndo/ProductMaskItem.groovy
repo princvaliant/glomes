@@ -11,6 +11,7 @@ class ProductMaskItem implements Comparable {
 	Float sizeY 
 	Boolean isActive
 	String pm
+    String cpn
 	
 	
 	static belongsTo = [
@@ -26,6 +27,7 @@ class ProductMaskItem implements Comparable {
 		sizeY nullable:true
 		isActive nullable:true
 		pm nullable:true
+        cpn nullable: true
 	}
 
 	String toString() {

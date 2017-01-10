@@ -340,8 +340,8 @@ class ReadFileService {
 
             def bdoUnit = new BasicDBObject()
             bdoUnit.put("id", unit1._id)
-            bdoUnit.put("processCategory", "nwLED")
-            bdoUnit.put("processKey", "patterning")
+            bdoUnit.put("processCategory", unit1["pctg"])
+            bdoUnit.put("processKey",unit1["pkey"])
             bdoUnit.put("taskKey", fileData.taskKey)
 
             switch (fileData.taskKey) {

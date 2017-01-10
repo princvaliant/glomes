@@ -30,6 +30,9 @@ Ext.define('glo.controller.TbContent', {
             'actioncolumn[name=showDetailsId]': {
                 click: this.onShowDetailsWindow
             },
+            'actioncolumn[name=jumpToChildrenId]': {
+                click: this.onJumpToChildren
+            },
             'actioncolumn[name=showPartsDetailsId]': {
                 click: this.onShowPartsDetailsWindow
             },
@@ -1197,6 +1200,30 @@ Ext.define('glo.controller.TbContent', {
 
         var rec = grid.getStore().getAt(row);
         this.showDetailsWindow(rec.get('code'), null);
+    },
+
+    onJumpToChildren: function (grid, cell, row, col, e) {
+
+        var rec = grid.getStore().getAt(row);
+        var main = gloApp.getController('MainPanel');
+        var o = {lastQuery: rec.get('code')};
+        var u = {
+            pctg: 'C' ,
+            pkey: 'fabassembly',
+            tname: rec.get('tname')
+        }
+        if (rec.get('nJumps') == 1) {
+            if (Ext.getCmp('mainpanel_C') == undefined) {
+                main.createTbPanel('C');
+                main.delayedSearch.delay(700, null, null, [o,  u]);
+            } else {
+                main.delayedSearch.delay(30, null, null, [o, u]);
+            }
+        }
+        if (rec.get('nJumps') == 2) {
+            main.createTbPanel('W');
+            Ext.getCmp('W').toggle();
+        }
     },
 
     onShowPartsDetailsWindow: function (grid, cell, row, col, e) {
@@ -2369,6 +2396,37 @@ Ext.define('glo.controller.TbContent', {
                     ]
                 };
 
+                var jumpColumn = {
+                    name: 'jumpToChildrenId',
+                    xtype: 'actioncolumn',
+                    stateId: 'grd7jump',
+                    dataIndex: 'nJumps',
+                    text: 'J',
+                    width: 28,
+                    items: [
+                        {
+                            getTip: function (v, meta, rec) {
+                                if (rec.get('nJumps') == 1) {
+                                    return 'Jump to coupons';
+                                } else if (rec.get('nJumps') == 2) {
+                                    return 'Jump to wafer';
+                                } else {
+                                    return '';
+                                }
+                            },
+                            getClass: function (v, meta, rec) {
+                                if (rec.get('nJumps') == 1) {
+                                    return 'column_jumps_down';
+                                } else if (rec.get('nJumps') == 2) {
+                                    return 'column_jumps_up';
+                                } else {
+                                    return 'column_nofiles';
+                                }
+                            }
+                        }
+                    ]
+                };
+
 
                 Ext.Object.each(obj.columns, function (record) {
                     if (obj.columns[record].field != undefined && obj.columns[record].field.metaName != undefined) {
@@ -2411,9 +2469,10 @@ Ext.define('glo.controller.TbContent', {
                     local: false  // defaults to false (remote filtering)
                 };
 
-                obj.columns[0] = detailColumn
-                obj.columns[1] = noteColumn
-                obj.columns[2] = fileColumn
+                obj.columns[0] = detailColumn;
+                obj.columns[1] = noteColumn;
+                obj.columns[2] = fileColumn;
+                obj.columns[3] = jumpColumn;
 
                 var grid = Ext.create('Ext.grid.Panel', {
                     id: 'contentGrid_' + pctg,

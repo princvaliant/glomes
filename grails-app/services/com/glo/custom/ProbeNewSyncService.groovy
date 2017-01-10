@@ -1269,18 +1269,14 @@ class ProbeNewSyncService {
                     bdoUnit.put("rpp", rppMean)
 
                 // Update unit if new variable initialized
-                def pkey = "epi"
-                if (tkey == "fa_test")
-                    pkey = "test"
-
                 if (bdoUnit.size() > 0) {
                     bdoUnit.put("id", unit["_id"])
                     bdoUnit.put("probeTestSynced", "YES")
                     bdoUnit.put("probeTestExperiment", [code])
                     def ddd = dt
                     if (!dt) {
-                        bdoUnit.put("processCategory", "nwLED")
-                        bdoUnit.put("processKey", pkey)
+                        bdoUnit.put("processCategory", unit.pctg)
+                        bdoUnit.put("processKey", unit.pkey)
                         bdoUnit.put("taskKey", tkey)
                     } else {
                         bdoUnit.put("processCategory", "rel")

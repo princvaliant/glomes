@@ -80,6 +80,16 @@
 	width: 16px; 
 	height: 16px;
 }
+.column_jumps_down {
+    background: url(../icons/arrow_down.png ) !important;
+    width: 16px;
+    height: 16px;
+}
+.column_jumps_up {
+    background: url(../icons/arrow_up.png ) !important;
+    width: 16px;
+    height: 16px;
+}
 .column_download { 
 	background: url(../icons/download_file.png ) !important;
 	width: 16px; 
