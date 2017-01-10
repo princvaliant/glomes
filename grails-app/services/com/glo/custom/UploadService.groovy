@@ -418,41 +418,41 @@ class UploadService {
                     m.put('code', code)
                     m.put('qty', 1)
                     recv.units.add(m)
-                    unitService.start(recv, "nwLED", "patterning")
+                    unitService.start(recv, "W", "epifab")
 
                     unit = Unit.findByCode(code)
 
-                    def buf = new Expando()
-                    buf.isEngineering = true
-                    buf.prior = 50
-                    buf.processCategoryEng = "nwLED"
-                    buf.processKeyEng = "patterning"
-                    buf.taskKeyEng = "inventory_incoming_ngan"
-                    buf.units = []
-                    def n = [:]
-                    n.put('transition', 'engineering')
-                    n.put('id', unit.id)
-                    buf.units.add(n)
-                    unitService.move("admin", buf)
+//                    def buf = new Expando()
+//                    buf.isEngineering = true
+//                    buf.prior = 50
+//                    buf.processCategoryEng = "nwLED"
+//                    buf.processKeyEng = "patterning"
+//                    buf.taskKeyEng = "inventory_incoming_ngan"
+//                    buf.units = []
+//                    def n = [:]
+//                    n.put('transition', 'engineering')
+//                    n.put('id', unit.id)
+//                    buf.units.add(n)
+//                    unitService.move("admin", buf)
 
-                    def bufu = new Expando()
-                    bufu.tsmStatisticsAverage = it.tsmStatisticsAverage
-                    bufu.tsmStatisticsUniformity = it.tsmStatisticsUniformity
-                    bufu.thickness = it.thickness
-
-                    bufu.polish = it.polish
-                    bufu.bow = it.bow
-
-                    if (it.XRD_002FWHM) {
-                        bufu.XRD_002FWHM = it.XRD_002FWHM
-                        bufu.XRD_102FWHM = it.XRD_102FWHM
-                    }
-
-                    bufu.stemBatchNumber = it.lot
-                    bufu.cassetteId = it.cassetteId
-                    bufu.cassetteSlot = it.cassetteSlot
-                    bufu.id = unit.id
-                    unitService.update(bufu, "admin", false)
+//                    def bufu = new Expando()
+//                    bufu.tsmStatisticsAverage = it.tsmStatisticsAverage
+//                    bufu.tsmStatisticsUniformity = it.tsmStatisticsUniformity
+//                    bufu.thickness = it.thickness
+//
+//                    bufu.polish = it.polish
+//                    bufu.bow = it.bow
+//
+//                    if (it.XRD_002FWHM) {
+//                        bufu.XRD_002FWHM = it.XRD_002FWHM
+//                        bufu.XRD_102FWHM = it.XRD_102FWHM
+//                    }
+//
+//                    bufu.stemBatchNumber = it.lot
+//                    bufu.cassetteId = it.cassetteId
+//                    bufu.cassetteSlot = it.cassetteSlot
+//                    bufu.id = unit.id
+//                    unitService.update(bufu, "admin", false)
 
                 }
                 i++

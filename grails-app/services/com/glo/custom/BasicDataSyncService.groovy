@@ -22,6 +22,7 @@ class BasicDataSyncService {
 	def relSyncService
 	def probeNewSyncService
     def probeSyncService
+    def couponService
 	def fileService
 	def jmsService
 	def mongo
@@ -112,6 +113,10 @@ class BasicDataSyncService {
                     bdo["testDataIndex"].add(testData.value.testId.toString().toLong())
                 }
                 summarizeSyncService.createSummaries(db, unit._id, unit.code, bdo, null, null, testData.value.testId.toString().toLong(), testData.value.tkey, unit.mask, null)
+
+                if (unit.pkey == 'epifab') {
+                    couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', unit.code, testData.value.testId.toString().toLong())
+                }
             }
         }
     }

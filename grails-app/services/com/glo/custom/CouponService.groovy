@@ -45,12 +45,9 @@ class CouponService {
         }
         // Retrieve mask for this unit
         def productMask = ProductMask.findByName(unit.mask)
-        if (productMask?.product?.code != "CPN1000") {
-            throw new RuntimeException("This mask is not valid.")
-        }
-        // Retrieve unique coupon codes for this mask
+       // Retrieve unique coupon codes for this mask
         def productMaskItems = ProductMaskItem.executeQuery("""
-							select distinct ps.pm from ProductMaskItem as ps where ps.productMask.id = ? and ps.isActive = 1 order by ps.pm
+							select distinct ps.cpn from ProductMaskItem as ps where ps.productMask.id = ? and ps.isActive = 1 order by ps.pm
 						""", [productMask.id])
         if (!productMaskItems) {
             throw new RuntimeException("This mask has no valid definition.")
@@ -58,19 +55,19 @@ class CouponService {
         def moveBack = []
         def coupons = []
         productMaskItems.each {
-            coupons.add(it.trim().replace("\r", ""))
-            def cpnCode = unit.code + "_" + it.trim().replace("\r", "")
+            coupons.add(it.trim())
+            def cpnCode = unit.code + "_" + it.trim()
             def subUnit = db.unit.find(new BasicDBObject("code", cpnCode), new BasicDBObject()).collect {
                 it
             }[0]
-            if (subUnit &&  subUnit.tkey != "test_data_visualization") {
-                // Move coupon to test_data_visualization step and record previous step where it needs to be moved back
-                moveBack.add([_id: subUnit._id, pctg: subUnit.pctg, pkey: subUnit.pkey, tkey: subUnit.tkey ])
-                moveCoupon(subUnit._id , "DVD" , "dvd_assembly" , "test_data_visualization")
-            } else {
-                // Create new coupon and put it in test_data_visualization step
-                unitService.createCoupon(db, unit, cpnCode, user, "DVD", "dvd_assembly", "test_data_visualization", "Test data visualization", "CPN1000")
-            }
+//            if (subUnit &&  subUnit.tkey != "test_data_visualization") {
+//                // Move coupon to test_data_visualization step and record previous step where it needs to be moved back
+//                moveBack.add([_id: subUnit._id, pctg: subUnit.pctg, pkey: subUnit.pkey, tkey: subUnit.tkey ])
+//                moveCoupon(subUnit._id , "DVD" , "dvd_assembly" , "test_data_visualization")
+//            } else {
+//                // Create new coupon and put it in test_data_visualization step
+//                unitService.createCoupon(db, unit, cpnCode, user, "DVD", "dvd_assembly", "test_data_visualization", "Test data visualization", "CPN1000")
+//            }
         }
 
         // Split test data from the wafers to coupons
@@ -139,9 +136,9 @@ class CouponService {
         }
 
         // If necessary move coupons back
-        moveBack.each {
-            moveCoupon(it._id , it.pctg , it.pkey , it.tkey)
-        }
+//        moveBack.each {
+//            moveCoupon(it._id , it.pctg , it.pkey , it.tkey)
+//        }
     }
 
     def moveCoupon(_id, pctg, pkey, tkey) {

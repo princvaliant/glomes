@@ -1064,7 +1064,9 @@ class UnitService {
                 if (processStep.moveChildren == true) {
                     def childrenMoves = validateChildren(db, unit, moved);
                     if (childrenMoves.units.size() > 0) {
-                        move(user, childrenMoves)
+                        Thread.start {
+                            move(user, childrenMoves)
+                        }
                     }
                 }
 
