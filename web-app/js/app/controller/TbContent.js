@@ -2486,7 +2486,7 @@ Ext.define('glo.controller.TbContent', {
                     stateful: true,
                     selModel: sm,
                     padding: 0,
-                    stateId: 'contentUnitGrid6_' + tkey,
+                    stateId: 'contentUnitGrid7_' + tkey,
                     viewConfig: {
                         emptyText: 'No units to display (Check filter above)',
                         getRowClass: function (record, rowIndex, p, store) {

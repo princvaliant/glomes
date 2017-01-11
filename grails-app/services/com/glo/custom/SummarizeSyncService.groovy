@@ -586,6 +586,18 @@ class SummarizeSyncService {
                         }
                     }
                 }
+                if (currData["Photometric Power"]) {
+                    def nTested = 0
+                    def nLighted = 0
+                    currData["Photometric Power"].each { devCode, devValue ->
+                        nTested += 1
+                        if (devValue > 0) {
+                           nLighted += 1
+                        }
+                    }
+                    bdo.put("nTested", nTested)
+                    bdo.put("nLighted", nLighted)
+                }
                 def rawsize = eqesRaw.size()
                 def pp = "N/A"
                 if (rawsize > 0) {

@@ -572,10 +572,10 @@ class UploadQevController {
 		def retList = [:]
 		try {
 
-    //        bdo.put('value.code','UN0015525');
+            bdo.put('value.code','PUJ6801PS');
 			bdo.put("value.parentCode", null)
 			bdo.put("value.tkey", "test_data_visualization")
-            bdo.put("value.testId", ['$gt': 160329061409, '$lte': 161801000000])
+            bdo.put("value.testId", 161215181405)
 	
 			def temp = db.testData.find(bdo, new BasicDBObject('value.data', 0)).collect{
 			
