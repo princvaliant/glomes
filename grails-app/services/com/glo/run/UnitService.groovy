@@ -1056,13 +1056,17 @@ class UnitService {
 
                 // Check if current process step allows doing regular move
                 def processStep = workflowService.getProcessStep(unit.pctg, unit.pkey, unit.tkey)
+                def processStepTo = workflowService.getProcessStep(moved.processCategoryEng, moved.processKeyEng, moved.taskKeyEng)
                 if (moved.overrideMove != true && processStep.preventRegularMove == true) {
                     throw new RuntimeException("These units are contained within parent unit and can only move with the parent.")
+                }
+                if (processStepTo.moveChildren != true && processStep.moveChildren == true) {
+                    throw new RuntimeException("Can not move unit to " +  moved.taskKeyEng + " because it has children assigned.")
                 }
 
                 // Check if moving from current process step needs to move child items
                 if (processStep.moveChildren == true) {
-                    def childrenMoves = validateChildren(db, unit, moved);
+                    def childrenMoves = validateChildren(db, unit, moved, moved.isEngineering)
                     if (childrenMoves.units.size() > 0) {
                         Thread.start {
                             move(user, childrenMoves)
@@ -1312,7 +1316,7 @@ class UnitService {
     }
 
 
-    def validateChildren(db, unit, moved) {
+    def validateChildren(db, unit, moved, isEng) {
 
         def buf = new Expando()
         def vars = []
@@ -1337,7 +1341,7 @@ class UnitService {
                 isVars = true
             }
             def isOk = validate(it, vars, specVars, [])
-            if (isOk != "0") {
+            if (isOk != "0" && isEng == "false") {
                 throw new RuntimeException("Validation of children units failed. Click down arrow on the unit to jump to children.")
             } else {
                 def n = [:]
@@ -1612,7 +1616,7 @@ class UnitService {
     }
 
     def loss(String user, def lost) {
-
+        def db = mongo.getDB("glo")
         def retUnits = []
         Unit.withTransaction { status ->
             lost.units.each { parm ->
@@ -1622,9 +1626,9 @@ class UnitService {
                 def oldUnit = deepClone(unit)
                 // Check if loss qty bigger then unit qtyIn
                 int qty = lost.qty.toInteger()
-                if (unit.qtyIn < qty)
+                if (unit.qtyIn < qty) {
                     throw new RuntimeException("Loss qty can not be larger than unit qty.")
-
+                }
                 int out = unit.qtyOut
                 unit.qtyOut = out - qty
                 unit["yieldLossId"] = lost.lossReason
@@ -1642,12 +1646,26 @@ class UnitService {
                 unit.save()
 
                 assignSecurity(unit, null, user, null)
-
                 retUnits.add([oldUnit, unit.dbo])
             }
         }
+
         retUnits.each {
             historyService.initHistory("loss", it[0], it[1], it[1].tkey == "end" ? "true" : "")
+
+            // Process loss on all children
+            def processStep = workflowService.getProcessStep(it[0].pctg, it[0].pkey, it[0].tkey)
+            if (processStep.moveChildren == true) {
+                def lossChidren =  db.unit.find(new BasicDBObject("parentUnit", it[0].code)).collect{
+                    return ['id': it._id]
+                }
+                if (lossChidren.size() > 0) {
+                    Thread.start {
+                        lost.units = lossChidren
+                        loss(user, lost)
+                    }
+                }
+            }
         }
     }
 

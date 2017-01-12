@@ -141,7 +141,6 @@ Ext.define('glo.controller.MainPanel', {
 	onSearchListSelect : function(o, selections, opts) {
 
 		var unit = selections[0].data;
-		
 		if (unit.id == -1) {
 			Ext.getCmp('searchAllUnitsId').store.getProxy().extraParams.hist = 'true';
 			Ext.getCmp('searchAllUnitsId').store.load({
@@ -151,15 +150,11 @@ Ext.define('glo.controller.MainPanel', {
 					this.select(null);
 				}
 			});	
-
 		} else {
 			if (unit.pctg != '' &&  Ext.getCmp(unit.pctg) !== undefined) {
 				if (Ext.getCmp("mainpanel_" + unit.pctg) == undefined) {
-					
 					this.createTbPanel(unit.pctg, unit.pkey);
-					
 					this.delayedSearch.delay(700, null, null, [o, unit]);
-
 				} else {
 					this.delayedSearch.delay(30, null, null, [o, unit]);
 				}
@@ -171,34 +166,37 @@ Ext.define('glo.controller.MainPanel', {
 	},
 	
 	onSearchListSelect2 : function(o, unit) {
-
-        var isFound = false;
+        var self = this;
         var pctgPanel = Ext.getCmp(unit.pctg);
         if (pctgPanel !== undefined) {
-
 		    this.getMainPanel().layout.setActiveItem("mainpanel_" + unit.pctg);
 		    Ext.getCmp(unit.pctg).toggle();
-		
-            var grd = Ext.ComponentQuery.query('#mainpanel_' + unit.pctg
+		    var grd = Ext.ComponentQuery.query('#mainpanel_' + unit.pctg
                     + ' > taskbooklist > panel[xtype=grid]')[0]
-
-            grd.store.each(function(record) {
-                    if (record.data.taskName == unit.tname && record.data.procKey == unit.pkey) {
-                         grd.getSelectionModel().select(record.index);
-                         isFound = true;
+            var lastOptions = grd.store.lastOptions;
+            Ext.apply(lastOptions, {
+                callback: function(records) {
+                    var isFound = false;
+                    records.forEach(function(record) {
+                        if (record.data.taskName == unit.tname && record.data.procKey == unit.pkey) {
+                            grd.getSelectionModel().select(record.index);
+                            isFound = true;
+                        }
+                    });
+                    if (!isFound) {
+                        gloApp.getController('TbContent').showDetailsWindow(unit.code);
+                    } else {
+                        var panel = self.getMainPanel().layout.getActiveItem();
+                        var cmp = Ext.ComponentQuery.query('#' + panel.id
+                            + ' > taskbookcontent textfield[name=searchPerStepId]')[0];
+                        cmp.setValue(o.lastQuery.replace("=", ""));
+                        Ext.getCmp('searchAllUnitsId').clearValue( );
                     }
-            }, this);
+                }
+            });
+            //store.on('load', myCallback); //Don't need this when using the callback. NICE.
+            grd.store.reload(lastOptions);
         }
-		
-		if (!isFound) {
-			gloApp.getController('TbContent').showDetailsWindow(unit.code);
-		} else {
-			var panel = this.getMainPanel().layout.getActiveItem();
-			var cmp = Ext.ComponentQuery.query('#' + panel.id
-					+ ' > taskbookcontent textfield[name=searchPerStepId]')[0];
-			cmp.setValue(o.lastQuery.replace("=", ""));
-			Ext.getCmp('searchAllUnitsId').clearValue( );
-		}
 	},
 	
 	onPropertyChanged : function(source, recordId, value, oldValue, eOpts ) {

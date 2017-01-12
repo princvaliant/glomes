@@ -200,7 +200,7 @@ class WorkflowService {
 		def bonus
 		bonus = [name: "Bonus", pctg: pde.category, processKey: processKey, taskKey: taskKey, icon:"icon-shape_square_add"]
 			
-		ret + yieldLoss + bonus + fileUpload + multi 
+		ret + yieldLoss  + fileUpload + multi
 	}
 
 	def findFirstTaskDefinition(def pctg, def pkey) {
