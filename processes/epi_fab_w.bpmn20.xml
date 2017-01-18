@@ -4,7 +4,6 @@
     <startEvent id="s1" name="Start"></startEvent>
     <endEvent id="End" name="End"></endEvent>
     <userTask id="inventory_ngan" name="nGaN inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="120"></userTask>
-    <sequenceFlow id="flow5" sourceRef="visual_inspection_inventory" targetRef="End"></sequenceFlow>
     <userTask id="ngan_inspection" name="nGaN inspection" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="110"></userTask>
     <sequenceFlow id="flow7" name="to nGaN inventory" sourceRef="ngan_inspection" targetRef="inventory_ngan"></sequenceFlow>
     <userTask id="inventory_incoming_ngan" name="nGaN incoming inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="100"></userTask>
@@ -28,7 +27,7 @@
     <sequenceFlow id="flow18" name="to ficd" sourceRef="pre_ficd_clean" targetRef="ficd_meas"></sequenceFlow>
     <userTask id="final_clean" name="Final clean" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="230"></userTask>
     <sequenceFlow id="flow19" name="to final clean" sourceRef="ficd_meas" targetRef="final_clean"></sequenceFlow>
-    <userTask id="nil_mrb" name="NIL MRB" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="520"></userTask>
+    <userTask id="mrb" name="MRB" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="520"></userTask>
     <userTask id="pl" name="PL" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="250"></userTask>
     <sequenceFlow id="flow21" name="to pl" sourceRef="epi_growth" targetRef="pl"></sequenceFlow>
     <userTask id="epi_growth" name="EPI growth" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="240"></userTask>
@@ -61,7 +60,7 @@
     <sequenceFlow id="flow35" name="to mesa etch pr strip" sourceRef="ito_wet_etch" targetRef="mesa_etch_pr_strip"></sequenceFlow>
     <userTask id="post_anneal" name="Post Anneal" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="390"></userTask>
     <sequenceFlow id="flow36" name="to post aneal" sourceRef="mesa_etch_pr_strip" targetRef="post_anneal"></sequenceFlow>
-    <sequenceFlow id="flow37" name="to lto ald deposition" sourceRef="post_anneal" targetRef="isolation_patterning"></sequenceFlow>
+    <sequenceFlow id="flow37" name="to isolation patterning" sourceRef="post_anneal" targetRef="isolation_patterning"></sequenceFlow>
     <userTask id="metal_patterning" name="Metal patterning" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="450"></userTask>
     <userTask id="metal_deposition" name="Metal deposition" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="460"></userTask>
     <sequenceFlow id="flow42" name="to metal deposition" sourceRef="metal_patterning" targetRef="metal_deposition"></sequenceFlow>
@@ -71,7 +70,7 @@
     <sequenceFlow id="flow44" name="to post bond pad inspection" sourceRef="metal_liftoff" targetRef="post_bond_pad_inspection"></sequenceFlow>
     <userTask id="test_queue" name="Test queue" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="490"></userTask>
     <sequenceFlow id="flow45" name="to test queue" sourceRef="post_bond_pad_inspection" targetRef="test_queue"></sequenceFlow>
-    <sequenceFlow id="flow46" name="to post test inspection" sourceRef="test_data_visualization" targetRef="visual_inspection_inventory"></sequenceFlow>
+    <sequenceFlow id="flow46" name="to visual inspection inventory" sourceRef="test_inventory" targetRef="visual_inspection_inventory"></sequenceFlow>
     <userTask id="isolation_patterning" name="Isolation patterning" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="400"></userTask>
     <userTask id="isolation_etch" name="Isolation etch" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="410"></userTask>
     <sequenceFlow id="flow48" name="to isolation etch" sourceRef="isolation_patterning" targetRef="isolation_etch"></sequenceFlow>
@@ -117,6 +116,17 @@
     <userTask id="post_polish_clean" name="Post polish clean" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_TECHNICIAN,ROLE_OPERATOR"></userTask>
     <sequenceFlow id="flow74" name="to post polish clean" sourceRef="polish" targetRef="post_polish_clean"></sequenceFlow>
     <sequenceFlow id="flow75" name="to post polish inspection" sourceRef="post_polish_clean" targetRef="post_polish_inspection"></sequenceFlow>
+    <userTask id="inv_bare_wafers" name="Inv bare wafers" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="610"></userTask>
+    <userTask id="eng_epi_inv" name="Eng EPI inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="620"></userTask>
+    <userTask id="fab_engineering_polish_wfers" name="FAB engineering polish wafers" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="630"></userTask>
+    <userTask id="sims_fib_tem" name="SIMS FIB TEM" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="640"></userTask>
+    <userTask id="sem" name="SEM" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="650"></userTask>
+    <userTask id="library_queue" name="Library queue" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="660"></userTask>
+    <userTask id="library_wafers" name="Library wafers" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="670"></userTask>
+    <userTask id="cleaved_inventory" name="Cleaved inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="680"></userTask>
+    <userTask id="office" name="Office" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="690"></userTask>
+    <userTask id="test_inventory" name="Test inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="493"></userTask>
+    <sequenceFlow id="flow76" name="to test inventory" sourceRef="test_data_visualization" targetRef="test_inventory"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_epifab">
     <bpmndi:BPMNPlane bpmnElement="epifab" id="BPMNPlane_epifab">
@@ -162,7 +172,7 @@
       <bpmndi:BPMNShape bpmnElement="final_clean" id="BPMNShape_final_clean">
         <omgdc:Bounds height="55.0" width="161.0" x="260.0" y="243.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="nil_mrb" id="BPMNShape_nil_mrb">
+      <bpmndi:BPMNShape bpmnElement="mrb" id="BPMNShape_mrb">
         <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="84.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="pl" id="BPMNShape_pl">
@@ -244,7 +254,7 @@
         <omgdc:Bounds height="55.0" width="141.0" x="890.0" y="494.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="visual_inspection_inventory" id="BPMNShape_visual_inspection_inventory">
-        <omgdc:Bounds height="55.0" width="131.0" x="1091.0" y="243.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="131.0" x="1091.0" y="355.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="polish" id="BPMNShape_polish">
         <omgdc:Bounds height="55.0" width="150.0" x="483.0" y="313.0"></omgdc:Bounds>
@@ -262,7 +272,7 @@
         <omgdc:Bounds height="55.0" width="161.0" x="30.0" y="325.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="test_data_visualization" id="BPMNShape_test_data_visualization">
-        <omgdc:Bounds height="55.0" width="131.0" x="1091.0" y="164.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="131.0" x="1091.0" y="166.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="fab_planar_rd" id="BPMNShape_fab_planar_rd">
         <omgdc:Bounds height="55.0" width="105.0" x="500.0" y="606.0"></omgdc:Bounds>
@@ -288,11 +298,36 @@
       <bpmndi:BPMNShape bpmnElement="post_polish_clean" id="BPMNShape_post_polish_clean">
         <omgdc:Bounds height="55.0" width="150.0" x="483.0" y="388.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
-        <omgdi:waypoint x="1156.0" y="298.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1156.0" y="872.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1231.0" y="873.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="inv_bare_wafers" id="BPMNShape_inv_bare_wafers">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="152.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="eng_epi_inv" id="BPMNShape_eng_epi_inv">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="fab_engineering_polish_wfers" id="BPMNShape_fab_engineering_polish_wfers">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="287.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sims_fib_tem" id="BPMNShape_sims_fib_tem">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="355.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sem" id="BPMNShape_sem">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="419.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="library_queue" id="BPMNShape_library_queue">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="489.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="library_wafers" id="BPMNShape_library_wafers">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="554.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cleaved_inventory" id="BPMNShape_cleaved_inventory">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="619.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="office" id="BPMNShape_office">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="689.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="test_inventory" id="BPMNShape_test_inventory">
+        <omgdc:Bounds height="55.0" width="131.0" x="1091.0" y="256.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
         <omgdi:waypoint x="110.0" y="217.0"></omgdi:waypoint>
         <omgdi:waypoint x="110.0" y="239.0"></omgdi:waypoint>
@@ -510,7 +545,7 @@
         <omgdi:waypoint x="961.0" y="139.0"></omgdi:waypoint>
         <omgdi:waypoint x="960.0" y="162.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="13.0" width="92.0" x="971.0" y="139.0"></omgdc:Bounds>
+          <omgdc:Bounds height="39.0" width="100.0" x="971.0" y="139.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow42" id="BPMNEdge_flow42">
@@ -545,10 +580,10 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow46" id="BPMNEdge_flow46">
-        <omgdi:waypoint x="1156.0" y="219.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1156.0" y="243.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1156.0" y="311.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1156.0" y="355.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="39.0" width="100.0" x="1166.0" y="219.0"></omgdc:Bounds>
+          <omgdc:Bounds height="39.0" width="100.0" x="1166.0" y="311.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow48" id="BPMNEdge_flow48">
@@ -623,7 +658,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow61" id="BPMNEdge_flow61">
         <omgdi:waypoint x="1156.0" y="139.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1156.0" y="164.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1156.0" y="166.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="39.0" width="100.0" x="1166.0" y="139.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
@@ -722,6 +757,13 @@
         <omgdi:waypoint x="557.0" y="468.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="39.0" width="100.0" x="568.0" y="443.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow76" id="BPMNEdge_flow76">
+        <omgdi:waypoint x="1156.0" y="221.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1156.0" y="256.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="100.0" x="1166.0" y="221.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

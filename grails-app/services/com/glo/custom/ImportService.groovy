@@ -562,6 +562,15 @@ class ImportService {
         def files = f.listFiles([accept: { file -> file ==~ /.*?\.TXT/ }] as FileFilter)?.toList()
         files.each { file ->
             def fn = file.getName().replace(".TXT", "").toUpperCase().tokenize("-")
+            def exp = ''
+            for (def i = 1; i < fn.size(); i++) {
+                if (i == 1) {
+                    exp = fn[i]
+                } else {
+                    exp += '-' + fn[i]
+                }
+            }
+
             def query = new BasicDBObject("code", fn[0])
             def unit = db.dataReport.find(query, new BasicDBObject()).collect { it }[0]
             def dateModified = new Date(file.lastModified());
@@ -611,10 +620,10 @@ class ImportService {
                     def obj = new BasicDBObject()
                     obj.put("active", "true")
                     obj.put("ebeam_run_id", fn[0])
-                    obj.put("experimentId", fn[1])
+                    obj.put("experimentId", exp)
                     obj.put("tags", [
                             "EquipmentStatus|ebeam_rundata",
-                            fn[1],
+                            exp,
                             fn[0]
                     ])
                     obj.put("pkey", "ebeam_rundata")
@@ -692,6 +701,14 @@ class ImportService {
         def files = f.listFiles([accept: { file -> file ==~ /.*?\.DAT/ }] as FileFilter)?.toList()
         files.each { file ->
             def fn = file.getName().replace(".DAT", "").toUpperCase().tokenize("-_ ")
+            def exp = ''
+            for (def i = 1; i < fn.size(); i++) {
+                if (i == 1) {
+                    exp = fn[i]
+                } else {
+                    exp += '-' + fn[i]
+                }
+            }
             def query = new BasicDBObject("code", fn[0])
             def unit = db.dataReport.find(query, new BasicDBObject()).collect { it }[0]
             def dateModified = new Date(file.lastModified());
@@ -738,10 +755,10 @@ class ImportService {
                     dr.put("code", fn[0])
                     obj.put("active", "true")
                     obj.put("ebeam_ito_run_id", fn[0])
-                    obj.put("experimentId", fn[1])
+                    obj.put("experimentId", exp)
                     obj.put("tags", [
                             "EquipmentStatus|ebeam_ito_rundata",
-                            fn[1],
+                            exp,
                             fn[0]
                     ])
                     obj.put("pkey", "ebeam_ito_rundata")

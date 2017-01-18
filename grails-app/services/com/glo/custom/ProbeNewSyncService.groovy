@@ -393,7 +393,7 @@ class ProbeNewSyncService {
                                 peaksCenter5.put(deviceCode, peak)
                             }
                         }
-                        if (curr.round() == 1) {
+                        if (curr > 0.9 && curr.round() == 1) {
                             avgPeak1.addValue(peak)
                             peaks1.put(deviceCode, peak)
                             avgFwhm1.addValue(fwhm)
@@ -403,7 +403,7 @@ class ProbeNewSyncService {
                                 peaksCenter1.put(deviceCode, peak)
                             }
                         }
-                        if (curr.round() == 2) {
+                        if (curr > 1.4 && curr.round() == 2) {
                             avgPeak2.addValue(peak)
                             peaks2.put(deviceCode, peak)
                             avgFwhm2.addValue(fwhm)

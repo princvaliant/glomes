@@ -21,84 +21,74 @@
 
 	<div id="pageBody">
 		<div class="wrapper">
-
-
-
-        <div class="column width4 first">
-            <g:if test="${flash.message}">
-                <div class="message">
-                    ${flash.message}
-                </div>
-            </g:if>
-            <hr />
-            <h4>Supplier specific wafer imports</h4>
-            <p>Excel file with NGan import wafers from UNID
-            </p>
-            <g:form action="uploadNganUnid" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file"  width=250 />
-                <input class="btn btn-green small" type="submit" value="Upload" />
-            </g:form>
-            <p>
-                Excel file with NGan import wafers from Sanan
-            </p>
-            <g:form action="uploadNganSanan" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file"  width=250 />
-                <input class="btn btn-green small" type="submit" value="Upload" />
-            </g:form>
-            <p>
-                Excel file with completed EPI from SANAN
-            </p>
-            <g:form action="uploadEpiSanan" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file"  width=250 />
-                <input class="btn btn-green small" type="submit" value="Upload" />
-            </g:form>
-            <hr />
-            <h4>Generic wafer imports</h4>
-            <p>Excel file with wafers for NGaN import
-            </p>
-            <g:form action="uploadNgan" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
-                 <input type="file" name="file" id="file"  width=250 />
-                <input class="btn btn-green small" type="submit" value="Upload" />
-            </g:form>
-            <p>
-                Excel file with bare wafers
-            </p>
-            <g:form action="uploadBare" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file" width=250 />
-                <input class="btn btn-green small" type="submit" value="Upload" />
-            </g:form>
-            <hr />
-            <h4>iBLU package imports</h4>
-            <p>OEM (SAE) test data imports
-            </p>
-            <g:form action="uploadOemPackageTestData" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file"  width=250 />
-                <input class="btn btn-blue small" type="submit" value="Upload" />
-            </g:form>
-            <p>OEM (SAE) imports without test data
-            </p>
-            <g:form action="uploadOemPackage" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file"  width=250 />
-                <input class="btn btn-blue small" type="submit" value="Upload" />
-            </g:form>
-            <p>Upload iLGP data
-            </p>
-            <g:form action="uploadLightBar" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file"  width=250 />
-                <input class="btn btn-blue small" type="submit" value="Upload" />
-            </g:form>
-            <p>Upload Package data
-            </p>
-            <g:form action="uploadPackageData" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file"  width=250 />
-                <input class="btn btn-blue small" type="submit" value="Upload" />
-            </g:form>
-
-
-            <hr />
+            <div class="column width8">
+                <g:if test="${flash.message}">
+                    <div class="message">
+                        ${flash.message}
+                    </div>
+                </g:if>
+                <hr />
+                <h4>Wafer imports to new flow</h4>
+                <p>Excel file should contain only one sheet named <b>Sheet1</b></p>
+                <p>Data should start from row 1 in excel</p>
+                <p>Columns should be defined as follows</p>
+                <table border="1">
+                    <tr>
+                        <td style="border: 1px dotted #999999;">
+                            A - code
+                        </td>
+                        <td style="border: 1px dotted #999999;">
+                            B - supplier
+                        </td>
+                        <td style="border: 1px dotted #999999;">
+                            C - product
+                        </td>
+                        <td style="border: 1px dotted #999999;">
+                            D - polish
+                        </td>
+                        <td style="border: 1px dotted #999999;">
+                            E - thickness
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px dotted #999999;">
+                            Any code (only uppercase characters and numbers)
+                        </td>
+                        <td style="border: 1px dotted #999999;">
+                            Any of the following<br/>
+                            <br/>
+                            Sanan<br/>
+                            University Wafers<br/>
+                            EPISTAR<br/>
+                            PWA Wafers<br/>
+                        </td>
+                        <td style="border: 1px dotted #999999;">
+                            Any of the following<br/>
+                            <br/>
+                            4 inch SI wafer<br/>
+                            2 inch Si Wafer<br/>
+                            2 inch Al2O3 wafer<br/>
+                            4 inch Al2O3 wafer<br/>
+                            6 inch Al2O3 wafer<br/>
+                        </td>
+                        <td style="border: 1px dotted #999999;">
+                            polish - any string value (PSS)
+                        </td>
+                        <td style="border: 1px dotted #999999;">
+                            thickness - any string value
+                        </td>
+                    </tr>
+                </table>
+                <g:form action="uploadNewInventory" controller="uploadWaferStartInventory" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" id="file"  width=250 />
+                    <input class="btn btn-green small" type="submit" value="Upload" />
+                </g:form>
             </div>
-
-            <div class="column width4">
+        </div>
+    </div>
+    <div id="pageBody2">
+        <div class="wrapper">
+            <div class="column width8">
                 <hr />
                 <h4>Other data imports</h4>
                 <p>Excel file containing inventory</p>
@@ -139,5 +129,6 @@
             </div>
         </div>
     </div>
+
 </body>
 </html>
