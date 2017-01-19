@@ -101,7 +101,7 @@ class SyncService {
                 fileName = fileName.toUpperCase()
                 if ((tkey == "NIL_ETCH" || tkey == "NIL_ETCH_QUAL") && fileName.indexOf("SIN_") == 0)
                     tkey
-                else if (fileName.indexOf("ISO40") == 0 || fileName.indexOf("CF4_80") == 0)
+                else if (fileName.indexOf("ISO40") == 0 || fileName.indexOf("CF4_80") == 0  || fileName.indexOf("ISO80") == 0)
                     "isolation_etch"
                 else if (fileName.indexOf("CPGAN") == 0 || fileName.indexOf("GAN_ETCH_HIGHPOWER") == 0 || fileName.indexOf("70W") == 0)
                     "mesa_etch"
