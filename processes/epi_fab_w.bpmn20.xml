@@ -127,6 +127,9 @@
     <userTask id="office" name="Office" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="690"></userTask>
     <userTask id="test_inventory" name="Test inventory" activiti:candidateGroups="ROLE_ADMIN,ROLE_FAB_TECHNICIAN,ROLE_OPERATOR" activiti:formKey="493"></userTask>
     <sequenceFlow id="flow76" name="to test inventory" sourceRef="test_data_visualization" targetRef="test_inventory"></sequenceFlow>
+    <userTask id="lost_found" name="Lost and found" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="695"></userTask>
+    <userTask id="lab_ready_sanan_g" name="Lab ready Sanan G" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="700"></userTask>
+    <userTask id="lab_ready_sanan_b" name="Lab ready Sanan B" activiti:candidateGroups="ROLE_ADMIN,ROLE_EPI_ADMIN,ROLE_FAB_ADMIN,ROLE_ENGINEERING_MOVE,ROLE_PROCESS_ADMIN" activiti:formKey="710"></userTask>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_epifab">
     <bpmndi:BPMNPlane bpmnElement="epifab" id="BPMNPlane_epifab">
@@ -134,7 +137,7 @@
         <omgdc:Bounds height="35.0" width="35.0" x="93.0" y="14.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="End" id="BPMNShape_End">
-        <omgdc:Bounds height="35.0" width="35.0" x="1231.0" y="856.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="1150.0" y="845.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="inventory_ngan" id="BPMNShape_inventory_ngan">
         <omgdc:Bounds height="55.0" width="161.0" x="30.0" y="239.0"></omgdc:Bounds>
@@ -327,6 +330,15 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="test_inventory" id="BPMNShape_test_inventory">
         <omgdc:Bounds height="55.0" width="131.0" x="1091.0" y="256.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="lost_found" id="BPMNShape_lost_found">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="752.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="lab_ready_sanan_g" id="BPMNShape_lab_ready_sanan_g">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="817.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="lab_ready_sanan_b" id="BPMNShape_lab_ready_sanan_b">
+        <omgdc:Bounds height="55.0" width="161.0" x="1280.0" y="880.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
         <omgdi:waypoint x="110.0" y="217.0"></omgdi:waypoint>
@@ -763,7 +775,7 @@
         <omgdi:waypoint x="1156.0" y="221.0"></omgdi:waypoint>
         <omgdi:waypoint x="1156.0" y="256.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="13.0" width="100.0" x="1166.0" y="221.0"></omgdc:Bounds>
+          <omgdc:Bounds height="13.0" width="78.0" x="1166.0" y="221.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

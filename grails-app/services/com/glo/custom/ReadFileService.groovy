@@ -331,7 +331,7 @@ class ReadFileService {
                 if (unit1?.stampID?.trim() != fileData.Stamp) {
                     throw new RuntimeException("XLS file: Stamp ID for wafer " + fileData.WaferId + " does not match Stamp ID in MES")
                 }
-                if (!unitService.inStep(db, fileData.WaferId, "patterning", fileData.taskKey)) {
+                if (!unitService.inStep(db, fileData.WaferId, unit1.pkey, fileData.taskKey)) {
                     throw new RuntimeException("Wafer " + fileData.WaferId + " not in " + fileData.taskKey + " process step in MES")
                 }
             } else {
