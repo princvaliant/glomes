@@ -1,1 +1,1 @@
-load data local infile '~/Documents/mask41.csv' into table product_mask_item fields terminated by ',' LINES TERMINATED BY '\r'
+load data local infile '~/Downloads/Mask393(1).csv' into table product_mask_item fields terminated by ',' LINES TERMINATED BY '\r'
