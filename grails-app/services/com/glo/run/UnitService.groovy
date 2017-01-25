@@ -1067,7 +1067,7 @@ class UnitService {
                 // Check if moving from current process step needs to move child items
                 if (processStep.moveChildren == true) {
                     def childrenMoves = validateChildren(db, unit, moved, moved.isEngineering)
-                    if (childrenMoves.units.size() > 0) {
+                    if (childrenMoves.units && childrenMoves.units.size() > 0) {
                         Thread.start {
                             move(user, childrenMoves)
                         }
@@ -1361,7 +1361,7 @@ class UnitService {
 
         def productMask = ProductMask.findByName(unit.mask)
         def productMaskItems = ProductMaskItem.executeQuery("""
-                        select distinct ps.cpn from ProductMaskItem as ps where ps.productMask.id = ?
+                        select distinct ps.cpn from ProductMaskItem as ps where ps.productMask.id = ? and ps.isActive = 1
                     """, [productMask.id])
         if (!productMaskItems) {
             throw new RuntimeException("This mask has no valid definition.")
