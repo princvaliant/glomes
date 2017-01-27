@@ -1060,14 +1060,16 @@ class UnitService {
                 if (moved.overrideMove != true && processStep.preventRegularMove == true) {
                     throw new RuntimeException("These units are contained within parent unit and can only move with the parent.")
                 }
-                if (processStepTo.moveChildren != true && processStep.moveChildren == true) {
-                    throw new RuntimeException("Can not move unit to " +  moved.taskKeyEng + " because it has children assigned.")
-                }
 
                 // Check if moving from current process step needs to move child items
                 if (processStep.moveChildren == true) {
                     def childrenMoves = validateChildren(db, unit, moved, moved.isEngineering)
-                    if (childrenMoves.units && childrenMoves.units.size() > 0) {
+
+                    if (processStepTo.moveChildren != true && childrenMoves.units.size() > 0) {
+                        throw new RuntimeException("Can not move unit to " + moved.taskKeyEng + " because it has children assigned.")
+                    }
+
+                    if (childrenMoves.units.size() > 0) {
                         Thread.start {
                             move(user, childrenMoves)
                         }
@@ -1319,6 +1321,7 @@ class UnitService {
     def validateChildren(db, unit, moved, isEng) {
 
         def buf = new Expando()
+        buf.units = []
         def vars = []
         def specVars = []
         def isVars = false
@@ -1337,7 +1340,6 @@ class UnitService {
                 buf.processKeyEng = it.pkey
                 buf.taskKeyEng = moved.taskKeyEng
                 buf.overrideMove = true
-                buf.units = []
                 isVars = true
             }
             def isOk = validate(it, vars, specVars, [])
