@@ -153,7 +153,7 @@ class SyncService {
                         while ((line = br.readLine()) != null) {
                             if (historicalDataPassed) {
                                 def row = line.split('\t')
-                                if (row.length > 70) {
+                                if (row.length > 49) {
                                     counter++
                                     if (counter > 5) {
                                         if ( grailsApplication.config.glo.icpDataLogDirectory == dir) {
