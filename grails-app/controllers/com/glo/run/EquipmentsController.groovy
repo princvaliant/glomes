@@ -133,7 +133,7 @@ class EquipmentsController extends Rest {
 
 		def data = equipmentService.getHistory(params)
 		
-		XSSFWorkbook workbook = utilsService.exportExcel(data, "")
+		XSSFWorkbook workbook = utilsService.exportExcel(data, "", null)
 
 		response.setHeader("Content-disposition", "attachment; filename=data.xlsx")
 		response.contentType = "application/excel"

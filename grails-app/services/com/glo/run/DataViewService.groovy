@@ -368,7 +368,7 @@ class DataViewService {
             }
 
             if (!mongoDocument) {
-                throw new RuntimeException("Sorry, cannot determine source collection for your report.")
+                throw new RuntimeException("Sorry, cannot determine source collection for your report " + dataView.id + ")")
             }
 
             // Determine if formulas exist so they can be evaluated
@@ -644,6 +644,9 @@ class DataViewService {
 
         def returnObj = [:]
         def storeObj = []
+
+
+        logr.warn('Draw chart for' + dataView.id)
 
         try {
 
