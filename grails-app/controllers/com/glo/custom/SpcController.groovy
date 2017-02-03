@@ -289,6 +289,8 @@ class SpcController extends com.glo.run.Rest {
 
         def spc = Spc.get(params.spcId.toLong())
 
+        logr.warn('Start Draw SPC chart for ' + spc.id)
+
         def db = mongo.getDB("glo")
 
         // Load chart data from cache if not refresh and exists
@@ -588,6 +590,8 @@ class SpcController extends com.glo.run.Rest {
         }
 
         saveChart(spc.id, results.toString())
+
+        logr.warn('End Draw SPC chart for ' + spc.id)
 
         render results
     }
