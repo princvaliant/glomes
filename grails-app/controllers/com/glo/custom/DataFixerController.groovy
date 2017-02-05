@@ -908,7 +908,27 @@ class DataFixerController {
 
         def db = mongo.getDB("glo")
         def username =  springSecurityService.principal?.username
-        couponService.splitTestDataToCoupons(db, username, "test_data_visualization", "AO956162",  161202091948)
+
+        def codes = ['HM6EJK120075PS',
+        'HM6EJK110147PS',
+        'HM6JI0310096PS',
+        'HM6JIK170103PS',
+        'PTR4101PS',
+        'PUJ6899PS',
+        'PUJ7412PS',
+        'HM6HC0020185PS',
+        'HM6DJ0280100PS',
+        'HM6JIK170121PS',
+        'HM6DJ0280086PS',
+        'HM6HIK020021PS']
+
+        def temp = db.testData.find(['value.code': ['$in': codes ]], new BasicDBObject()).collect{it}
+
+        temp.each {
+            couponService.splitTestDataToCoupons(db, username, "test_data_visualization", it.value.code,  it.value.testId)
+        }
+
+
         render "OK"
     }
 

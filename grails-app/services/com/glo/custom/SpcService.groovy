@@ -103,7 +103,6 @@ class SpcService {
 				)
 			)
 		}
-
 	}
 	
 	def recalculateCharts() {
