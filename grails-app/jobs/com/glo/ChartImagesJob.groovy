@@ -20,7 +20,7 @@ class ChartImagesJob {
 
 		if (grailsApplication.config.glo.tomcatServer == "calserver04") {
             try {
-                reportPdfProcessorService.processAll()
+       //         reportPdfProcessorService.processAll()
             } catch (Exception exc) {
                 logr.warn (exc.message)
             }

@@ -20,7 +20,7 @@ class KonikaDataJob {
 
         if (grailsApplication.config.glo.tomcatServer == "calserver04") {
             try {
-                dataImportService.importKonikaFromMeasures()
+           //     dataImportService.importKonikaFromMeasures()
             } catch (Exception exc) {
                 logr.warn (exc.message)
             }

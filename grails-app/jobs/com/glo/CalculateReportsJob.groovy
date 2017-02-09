@@ -32,8 +32,8 @@ class CalculateReportsJob {
 
 		if (grailsApplication.config.glo.tomcatServer == "calserver04") {
 
-			dataViewService.recalculateCharts()
-			spcService.recalculateCharts()
+		//	dataViewService.recalculateCharts()
+		//	spcService.recalculateCharts()
 		}
 	}
 }
