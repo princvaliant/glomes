@@ -256,11 +256,10 @@ class ImportEquipmentDCJob {
 
                 def bdo = new BasicDBObject()
                 bdo.put("parentCode", null)
-                bdo.put("value.tags", [
+                bdo.put("value.tags", ['$in:'[
                         "EquipmentStatus",
-                        "EquipmentStatus|omega_sensor",
                         "omega_sensor",
-                        room
+                        room]
                 ])
                 bdo.put("value.pkey", "omega_sensor")
                 def lastEntry = db.dataReport.find(bdo, new BasicDBObject()).addSpecial('$orderby', new BasicDBObject("code", -1)).limit(1).collect {
@@ -312,10 +311,12 @@ class ImportEquipmentDCJob {
 
                                                 def dr = new BasicDBObject()
                                                 dr.put("parentCode", null)
+                                                def id = 'OSS' + room + actst[0] + actst[1] + actst[2] + dth + dtm;
                                                 def code = "OSS" + sequenceGeneratorService.next("omega_sensor").toString().padLeft(6, '0')
                                                 dr.put("code", code)
 
                                                 def obj = new BasicDBObject()
+                                                obj.put("_id", id)
                                                 obj.put("active", "true")
                                                 obj.put("tags", [
                                                         "EquipmentStatus",
@@ -332,7 +333,6 @@ class ImportEquipmentDCJob {
                                                 obj.put('actualStart', new Date().parse("yyyy-MM-dd HH:mm", actualStart + " " + dth + ":" + dtm))
                                                 obj.put('hourOfDay', dth)
                                                 obj.put('valuePerMinute', dtm)
-
                                                 dr.put("value", obj)
                                                 db.dataReport.save(dr)
                                             }
