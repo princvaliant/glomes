@@ -314,9 +314,9 @@ class ImportEquipmentDCJob {
                                                 def id = 'OSS' + room + actst[0] + actst[1] + actst[2] + dth + dtm;
                                                 def code = "OSS" + sequenceGeneratorService.next("omega_sensor").toString().padLeft(6, '0')
                                                 dr.put("code", code)
+                                                dr.put("_id", id)
 
                                                 def obj = new BasicDBObject()
-                                                obj.put("_id", id)
                                                 obj.put("active", "true")
                                                 obj.put("tags", [
                                                         "EquipmentStatus",
