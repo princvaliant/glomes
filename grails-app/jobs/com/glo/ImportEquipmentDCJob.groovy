@@ -48,6 +48,12 @@ class ImportEquipmentDCJob {
             def db = mongo.getDB("glo")
 
             try {
+                omegaSensor(db)
+            }
+            catch (Exception exc) {
+                logr.error(exc.getMessage())
+            }
+            try {
                 eBeamData(db)
             }
             catch (Exception exc) {
@@ -73,12 +79,7 @@ class ImportEquipmentDCJob {
                 logr.error(exc.getMessage())
             }
 
-            try {
-                omegaSensor(db)
-            }
-            catch (Exception exc) {
-                logr.error(exc.getMessage())
-            }
+
         }
     }
 
