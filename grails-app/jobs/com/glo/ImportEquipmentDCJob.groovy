@@ -257,11 +257,11 @@ class ImportEquipmentDCJob {
 
                 def bdo = new BasicDBObject()
                 bdo.put("parentCode", null)
-                bdo.put("value.tags", ['$in:'[
+                bdo.put("value.tags", new BasicDBObject('$in',[
                         "EquipmentStatus",
                         "omega_sensor",
                         room]
-                ])
+                ))
                 bdo.put("value.pkey", "omega_sensor")
                 def lastEntry = db.dataReport.find(bdo, new BasicDBObject()).addSpecial('$orderby', new BasicDBObject("code", -1)).limit(1).collect {
                     it
