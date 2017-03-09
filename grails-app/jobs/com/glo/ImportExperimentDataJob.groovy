@@ -19,7 +19,7 @@ class ImportExperimentDataJob {
 	def execute() {
 		if (grailsApplication.config.glo.tomcatServer == "calserver04") {
             try {
-                experimentDataService.importFiles()
+         //       experimentDataService.importFiles()
             } catch (Exception exc) {
                 logr.warn (exc.message)
             }

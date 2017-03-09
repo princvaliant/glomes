@@ -909,18 +909,7 @@ class DataFixerController {
         def db = mongo.getDB("glo")
         def username =  springSecurityService.principal?.username
 
-        def codes = ['HM6EJK120075PS',
-        'HM6EJK110147PS',
-        'HM6JI0310096PS',
-        'HM6JIK170103PS',
-        'PTR4101PS',
-        'PUJ6899PS',
-        'PUJ7412PS',
-        'HM6HC0020185PS',
-        'HM6DJ0280100PS',
-        'HM6JIK170121PS',
-        'HM6DJ0280086PS',
-        'HM6HIK020021PS']
+        def codes = ['HM6DJK020031PS']
 
         def temp = db.testData.find(['value.code': ['$in': codes ]], new BasicDBObject()).collect{it}
 
@@ -1509,10 +1498,10 @@ class DataFixerController {
 
     def recurse = {
 
-        new File("/Users/aleksandarvolos/projects/daasfabextjs/packages/bpmn/assets").eachDirRecurse() { dir ->
+        new File("/Users/aleksandarvolos/Downloads/theme-crisp/resources/images").eachDirRecurse() { dir ->
             def files = dir.listFiles().toList()
             files.each { file ->
-                println "api.addAssets('" + file.getPath().replace("/Users/aleksandarvolos/projects/daasfabextjs/packages/bpmn/", "") + "', ['client']);"
+                 println("api.addAssets('" + file.getPath().replace("/Users/aleksandarvolos/Downloads/theme-crisp/", "") + "', ['client']);")
             }
         }
 
