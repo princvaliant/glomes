@@ -14,6 +14,7 @@ class SynchronizeController {
 	def unitService
 	def syncService
 	def summarizeSyncService
+    def couponService
 	def basicDataSyncService
 	def grailsApplication
 	def mongo
@@ -71,11 +72,12 @@ class SynchronizeController {
 		}
 	}
 
+    // TODO Matija to add recaulculate code
 	def RRRELOADDD = {
 		try {
 			def db = mongo.getDB("glo")
 
-			def tkey = params.tkey
+			def tkey = 'test_data_visualization'
 			def ret = []
 			def query =	new BasicDBObject()
 
@@ -85,28 +87,25 @@ class SynchronizeController {
                 } else {
 
                     def tq = new BasicDBObject()
+
+                    // For testing
+                    tq.put("value.code", 'HM6JJ0020101PS')
+
                     tq.put("value.parentCode", null)
-                    tq.put("value.tkey", tkey)
-                    tq.put("value.data.Data @ 600uA", new BasicDBObject('$exists',1))
+                    tq.put("value.tkey", 'test_data_visualization')
+                    tq.put("value.testId", ['$gt': 160601000000])
                     def codes = db.testData.find(tq, ['value.code':1]).collect {it.value.code}
+                    codes = codes as Set
                     query.put("code", ['$in': codes])
                 }
-                query.put("parentCode", null)
-                query.put("pctg", "nwLED")
-                query.put("productCode", "100")
-                if (tkey in ["test_data_visualization", "nbp_test_data_visualization", "nbp_full_test_visualization", "intermediate_coupon_test"]) {
+                query.put("productCode", ['$in': ['100','100W']])
+                if (tkey in ["test_data_visualization"]) {
                     query.put("testDataIndex", new BasicDBObject('$exists',1))
                     db.unit.find(query).each {
-                        if (it.testDataIndex && it.testDataIndex.size() > 0) {
-                            ret.add(["id": it["_id"], "code":it.code, "tid" : it.testDataIndex[it.testDataIndex.size()-1], mask: it.mask])
-                        }
-                    }
-                }
-                if (tkey == "full_test_visualization") {
-                    query.put("testFullIndex", new BasicDBObject('$exists',1))
-                    db.unit.find(query).each {
-                        if (it.testFullIndex && it.testFullIndex.size() > 0) {
-                            ret.add(["id": it["_id"], "code":it.code, "tid" : it.testFullIndex[it.testFullIndex.size()-1], mask: it.mask])
+                        def tdi = it.testDataIndex
+                        if (tdi && tdi.size() > 0) {
+                            tdi = tdi as Set
+                            ret.add(["id": it["_id"], "code":it.code, "tid" : tdi[tdi.size()-1], mask: it.mask, tdi: tdi])
                         }
                     }
                 }
@@ -114,7 +113,14 @@ class SynchronizeController {
                 def cnt = 1
                 ret.each {
                     cnt++
-                    summarizeSyncService.createSummaries(db, it.id, it.code, null, null, null, it.tid, tkey, it.mask, null)
+          //          summarizeSyncService.createSummaries(db, it.id, it.code, null, null, null, it.tid, tkey, it.mask, null)
+
+                    //TODO Retrieve all coupons for this wafer
+                    // TODO Loop through coupons i call this function
+                    // Za svaki coupon loop kroz tdi it.tdi
+          //          couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', code, tid) {
+
+
                 }
 
             }

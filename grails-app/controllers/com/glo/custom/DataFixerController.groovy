@@ -917,7 +917,6 @@ class DataFixerController {
             couponService.splitTestDataToCoupons(db, username, "test_data_visualization", it.value.code,  it.value.testId)
         }
 
-
         render "OK"
     }
 
