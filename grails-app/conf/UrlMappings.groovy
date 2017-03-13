@@ -65,6 +65,9 @@ class UrlMappings {
             "/units/children" (controller:"units"){
                 action = [GET: "children"]
             }
+            "/units/parent" (controller:"units"){
+                action = [GET: "parent"]
+            }
 			"/units/merge" (controller:"units"){
 				action = [POST: "merge"]
 			}

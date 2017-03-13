@@ -1207,22 +1207,64 @@ Ext.define('glo.controller.TbContent', {
         var rec = grid.getStore().getAt(row);
         var main = gloApp.getController('MainPanel');
         var o = {lastQuery: rec.get('code')};
-        var u = {
-            pctg: 'C' ,
-            pkey: 'fabassembly',
-            tname: rec.get('tname')
-        }
         if (rec.get('nJumps') == 1) {
-            if (Ext.getCmp('mainpanel_C') == undefined) {
-                main.createTbPanel('C');
-                main.delayedSearch.delay(700, null, null, [o,  u]);
-            } else {
-                main.delayedSearch.delay(30, null, null, [o, u]);
-            }
+            Ext.Ajax.request({
+                scope: this,
+                method: 'GET',
+                url: rootFolder + 'units/children?code=' + rec.get('code'),
+                success: function (response) {
+                    var obj = Ext.decode(response.responseText);
+                    setTimeout(function () {
+                        if (obj && obj.length > 0) {
+                            var u = {
+                                pctg: 'C',
+                                pkey: 'fabassembly',
+                                tname: obj[0].tname  //rec.get('tname')
+                            }
+                            if (Ext.getCmp('mainpanel_C') == undefined) {
+                                main.createTbPanel('C');
+                                main.delayedSearch.delay(10, null, null, [o, u]);
+                            } else {
+                                main.delayedSearch.delay(30, null, null, [o, u]);
+                            }
+                        } else {
+                            Ext.Msg.alert('COUPONS', 'This wafer has no coupons assigned. Make sure to run it through regular epifab flow.');
+                        }
+                    }, 30);
+                }
+            });
         }
         if (rec.get('nJumps') == 2) {
-            main.createTbPanel('W');
-            Ext.getCmp('W').toggle();
+            var code = rec.get('code').split('_');
+            Ext.Ajax.request({
+                scope: this,
+                method: 'GET',
+                url: rootFolder + 'units/parent?code=' + code[0],
+                success: function (response) {
+                    var obj = Ext.decode(response.responseText);
+                    setTimeout(function(){
+                        if (obj && obj.length > 0) {
+                            var u = {
+                                pctg: 'W',
+                                pkey: 'epifab',
+                                tname: obj[0].tname
+                            }
+                            var o = {lastQuery: code[0]};
+                            if (Ext.getCmp('mainpanel_W') == undefined) {
+                                main.createTbPanel('W');
+                                main.delayedSearch.delay(50, null, null, [o, u]);
+                            } else {
+                                main.delayedSearch.delay(30, null, null, [o, u]);
+                            }
+                        }
+                    }, 30);
+                }
+            });
+
+
+
+        //    main.createTbPanel('W');
+        //    Ext.getCmp('W').toggle();
         }
     },
 

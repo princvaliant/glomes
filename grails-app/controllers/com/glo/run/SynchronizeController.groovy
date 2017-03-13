@@ -111,17 +111,25 @@ class SynchronizeController {
                 }
 
                 def cnt = 1
-                ret.each {
+                def each = ret.each {
+
                     cnt++
-          //          summarizeSyncService.createSummaries(db, it.id, it.code, null, null, null, it.tid, tkey, it.mask, null)
+          // summarizeSyncService.createSummaries(db, it.id, it.code, null, null, null, it.tid, tkey, it.mask, null)
 
                     //TODO Retrieve all coupons for this wafer
-                    // TODO Loop through coupons i call this function
+                    // TODO Loop through coupons and call this function
                     // Za svaki coupon loop kroz tdi it.tdi
-          //          couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', code, tid) {
+          //           {
+                    //def coupon = db.unit.find('testDataIndex').each
 
+                   // if (coupon > 0) {
+                   //     couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', code, tid)
+                  //      it.ret.each
+                 //   }}
 
+                 //   }
                 }
+
 
             }
 

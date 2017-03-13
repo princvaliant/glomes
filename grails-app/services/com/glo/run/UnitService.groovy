@@ -157,7 +157,7 @@ class UnitService {
 
             if (processStep && processStep.moveChildren == true) {
                 it.put('nJumps', 1)
-            } else if (processStep && processStep.preventRegularMove == true) {
+            } else if (processStep && procKey != 'W') {
                 it.put('nJumps', 2)
             } else {
                 it.put('nJumps', 0)

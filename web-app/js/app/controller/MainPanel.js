@@ -399,8 +399,8 @@ Ext.define('glo.controller.MainPanel', {
 							contrl.loadContentGrid(o.category, 'NO_DATA','NO_DATA','NO_DATA', 'A');
 						} else {
 							if (!this.getSelectionModel().hasSelection()) {
-                                if (Ext.getCmp('searchAllUnitsId') === undefined || !Ext.getCmp('searchAllUnitsId').lastQuery)
-								    this.getSelectionModel().select(0);
+                                if (Ext.getCmp('searchAllUnitsId') === undefined || !Ext.getCmp('searchAllUnitsId').lastQuery) {}
+								 //   this.getSelectionModel().select(0);
 							}
 						}
 					}

@@ -73,7 +73,7 @@ class UnitsController extends Rest {
 		}
 	}
 
-	def update = {
+    def update = {
 
 	   try {
   			   def username =  springSecurityService.principal?.username
@@ -266,10 +266,9 @@ class UnitsController extends Rest {
 
         try {
             def username =  springSecurityService.principal?.username
-
             def db = mongo.getDB("glo")
-            def query = new BasicDBObject('parentCode', params.code)
-            def units = db.unit.find(query, ['code':1,'productCode':1,'product':1]).collect{it}
+            def query = new BasicDBObject('parentUnit', params.code)
+            def units = db.unit.find(query, ['code':1,'productCode':1,'product':1, tname: 1]).collect{it}
             render ( units as JSON)
 
         } catch (Exception exc) {
@@ -277,6 +276,21 @@ class UnitsController extends Rest {
             render ([success:false, msg: exc.getMessage()] as JSON)
         }
     }
+
+    def parent = {
+
+        try {
+            def username =  springSecurityService.principal?.username
+            def db = mongo.getDB("glo")
+            def query = new BasicDBObject('code', params.code)
+            def units = db.unit.find(query, ['code':1,'productCode':1,'product':1, tname: 1]).collect{it}
+            render ( units as JSON)
+        } catch (Exception exc) {
+            logr.error(exc)
+            render ([success:false, msg: exc.getMessage()] as JSON)
+        }
+    }
+
 
     def updateProduct = {
 
