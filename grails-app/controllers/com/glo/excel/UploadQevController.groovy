@@ -13,6 +13,7 @@ class UploadQevController {
 	def historyDataService
 	def unitService
 	def summarizeSyncService
+    def summarizeSyncCurrService
     def syncService
     def importService
 	def spcService
@@ -572,10 +573,10 @@ class UploadQevController {
 		def retList = [:]
 		try {
 
-            bdo.put('value.code','HM6HJK020005PS');
+            bdo.put('value.code','HM6DJK020031PS');
 			bdo.put("value.parentCode", null)
 			bdo.put("value.tkey", "test_data_visualization")
-            bdo.put("value.testId", [$gt: 170214000000])
+            bdo.put("value.testId", [$eq: 170306160029])
 	
 			def temp = db.testData.find(bdo, new BasicDBObject('value.data', 0)).addSpecial('$orderby', new BasicDBObject("value.testId", 1)).collect{
 				def unit = db.unit.find(["code": it.value.code], ['code':1,'testDataIndex':1, mask: 1]).collect {it}[0]
@@ -625,7 +626,7 @@ class UploadQevController {
 //					Thread.sleep(10)
 					
 
-					summarizeSyncService.createSummaries(db, it.unitId, it.code, null, null, null, it.testId, "test_data_visualization", it.mask, null)
+					summarizeSyncCurrService.createSummaries(db, it.unitId, it.code, null, null, null, it.testId, "test_data_visualization", it.mask, null)
 				}
 			}
 		} catch (Exception exc) {

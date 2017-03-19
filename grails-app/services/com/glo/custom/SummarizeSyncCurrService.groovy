@@ -12,7 +12,7 @@ import org.apache.commons.math3.stat.regression.SimpleRegression
 import org.apache.commons.math3.optimization.fitting.PolynomialFitter
 import org.apache.commons.math3.optimization.general.LevenbergMarquardtOptimizer
 
-class SummarizeSyncServiceCurr {
+class SummarizeSyncCurrService {
 
     private static final logr = LogFactory.getLog(this)
 
@@ -105,15 +105,14 @@ class SummarizeSyncServiceCurr {
             centers = this.calculateCenter(db, bdo, unitCode, unitId, tkey, testId, mask)
         }
 
-        def adminFilters02 = waferFilterService.getAdminFilters("Data @ 200uA")
-        def adminFilters06 = waferFilterService.getAdminFilters("Data @ 600uA")
-        def adminFilters1 = waferFilterService.getAdminFilters("Data @ 1mA")
-        def adminFilters2 = waferFilterService.getAdminFilters("Data @ 2mA")
-        def adminFilters5 = waferFilterService.getAdminFilters("Data @ 5mA")
-        def adminFilters10 = waferFilterService.getAdminFilters("Data @ 10mA")
-        def adminFilters20 = waferFilterService.getAdminFilters("Data @ 20mA")
-        def adminFilters50 = waferFilterService.getAdminFilters("Data @ 50mA")
-        def adminFilters100 = waferFilterService.getAdminFilters("Data @ 100mA")
+        def adminFilters02 = waferFilterService.getAdminFilters("Data @ 2uA")
+        def adminFilters06 = waferFilterService.getAdminFilters("Data @ 4uA")
+        def adminFilters1 = waferFilterService.getAdminFilters("Data @ 8uA")
+        def adminFilters2 = waferFilterService.getAdminFilters("Data @ 10uA")
+        def adminFilters5 = waferFilterService.getAdminFilters("Data @ 20uA")
+        def adminFilters10 = waferFilterService.getAdminFilters("Data @ 60uA")
+        def adminFilters20 = waferFilterService.getAdminFilters("Data @ 400nA")
+        def adminFilters50 = waferFilterService.getAdminFilters("Data @ 1000nA")
 
         def testData = db.testData.find(query, new BasicDBObject()).collect { it }[0]
         if (testData) {
@@ -131,15 +130,14 @@ class SummarizeSyncServiceCurr {
                 this.calculateTopSummary(db, bdo, testData["value"]["data"], unitCode, unitId, testId)
             } else {
 
-                prepareSummary(db, bdo, "0.2", testData["value"]["data"], unitCode, unitId, testId, adminFilters02, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "0.6", testData["value"]["data"], unitCode, unitId, testId, adminFilters06, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "1", testData["value"]["data"], unitCode, unitId, testId, adminFilters1, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "2", testData["value"]["data"], unitCode, unitId, testId, adminFilters2, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "5", testData["value"]["data"], unitCode, unitId, testId, adminFilters5, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "10", testData["value"]["data"], unitCode, unitId, testId, adminFilters10, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "20", testData["value"]["data"], unitCode, unitId, testId, adminFilters20, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "50", testData["value"]["data"], unitCode, unitId, testId, adminFilters50, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "100", testData["value"]["data"], unitCode, unitId, testId, adminFilters100, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.002", "Data @ 2uA", testData["value"]["data"], unitCode, unitId, testId, adminFilters02, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.004", "Data @ 4uA", testData["value"]["data"], unitCode, unitId, testId, adminFilters06, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.008", "Data @ 8uA", testData["value"]["data"], unitCode, unitId, testId, adminFilters1, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.01",  "Data @ 10uA", testData["value"]["data"], unitCode, unitId, testId, adminFilters2, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.02",  "Data @ 20uA",  testData["value"]["data"], unitCode, unitId, testId, adminFilters5, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.06",  "Data @ 60uA", testData["value"]["data"], unitCode, unitId, testId, adminFilters10, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.0004",  "Data @ 400nA",  testData["value"]["data"], unitCode, unitId, testId, adminFilters20, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.001",  "Data @ 1000nA", testData["value"]["data"], unitCode, unitId, testId, adminFilters50, centers, testData["value"]["data"]["Current @ 2V"])
 
                 if (testData["value"]["data"]["Current @ 2V"]) {
                     createSummary(db, "Current @ 2V", testData["value"]["data"], bdo, unitCode, testData["value"]["data"]["Current @ 2V"]["NA"].collect {
@@ -459,15 +457,8 @@ class SummarizeSyncServiceCurr {
             def db,
             def bdo,
             def current,
+            def currKey,
             def data, def unitCode, def unitId, def testId, def adminFilters, def centers, def currentsAt2) {
-
-        def currKey = "Data @ " + current + "mA"
-        if (current == "0.2") {
-            currKey = "Data @ 200uA"
-        }
-        if (current == "0.6") {
-            currKey = "Data @ 600uA"
-        }
 
         Set filtered = new HashSet()
         adminFilters.eachWithIndex { waferFilter, i ->
@@ -487,12 +478,10 @@ class SummarizeSyncServiceCurr {
             }
         }
 
-        if (current in ["0.2", "0.6", "1", "2", "5", "20"]) {
-            try {
-                createSummary2(db, currKey, data, bdo, unitCode, filtered, testId, centers, currentsAt2)
-            } catch (Exception exc) {
+        try {
+            createSummary2(db, currKey, data, bdo, unitCode, filtered, testId, centers, currentsAt2)
+        } catch (Exception exc) {
 
-            }
         }
 
         createSummary(db, currKey, data, bdo, unitCode, filtered, testId, centers, currentsAt2)
@@ -627,7 +616,7 @@ class SummarizeSyncServiceCurr {
                 }
 
                 // Calculate statistics based on best EQEs
-                [10, 15, 25, 50].each { percentile ->
+                [10, 15, 25, 50, 75, 90].each { percentile ->
                     def statistic = [:]
                     eqesFilteredByEqe.take(topn(eqesFilteredByEqe.size(),percentile)).each { devCode, varData ->
                         varData.each { varName, value ->
