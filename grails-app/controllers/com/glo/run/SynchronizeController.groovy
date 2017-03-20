@@ -13,7 +13,6 @@ class SynchronizeController {
 	def contentService
 	def unitService
 	def syncService
-	def summarizeSyncService
     def couponService
 	def basicDataSyncService
 	def grailsApplication

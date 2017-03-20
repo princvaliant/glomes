@@ -20,7 +20,7 @@ class CouponService {
     def historyService
     def workflowService
     def contentService
-    def summarizeSyncService
+    def summarizeSyncCurrService
 
     def splitTestDataToCoupons(db, user, tkey, code, testId) {
 
@@ -138,7 +138,7 @@ class CouponService {
                     bdo2["testDataIndex"].addAll(subUnit["testDataIndex"])
                     bdo2["testDataIndex"].add(td.testId.toString().toLong())
                 }
-                summarizeSyncService.createSummaries(db, subUnit._id, subUnit.code, bdo2, null, null, td.testId.toString().toLong(), td.tkey, unit.mask, null)
+                summarizeSyncCurrService.createSummaries(db, subUnit._id, subUnit.code, bdo2, null, null, td.testId.toString().toLong(), td.tkey, unit.mask, null)
             }
         }
 

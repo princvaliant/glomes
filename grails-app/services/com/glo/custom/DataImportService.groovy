@@ -17,7 +17,7 @@ class DataImportService {
     def unitService
     def relSyncService
     def jmsService
-    def summarizeSyncService
+    def summarizeSyncCurrService
     def sequenceGeneratorService
     def grailsApplication
     def readFileService
@@ -793,7 +793,7 @@ class DataImportService {
             unitService.move("admin", buf)
         }
 
-        summarizeSyncService.createSummaries(db, unit._id, unit.code, udbo, null, null, var.value.testId.toString().toLong(), var.value.tkey, unit.mask, null)
+        summarizeSyncCurrService.createSummaries(db, unit._id, unit.code, udbo, null, null, var.value.testId.toString().toLong(), var.value.tkey, unit.mask, null)
     }
 
 
@@ -855,7 +855,7 @@ class DataImportService {
 
         def unit = db.unit.find(new BasicDBObject("code", code), [:]).collect { it }[0]
 
-        summarizeSyncService.createSummaries(db, unit._id, unit.code, unit, unit.pctg, unit.pkey, var.value.testId.toString().toLong(), unit.tkey, unitWafer.mask, null)
+        summarizeSyncCurrService.createSummaries(db, unit._id, unit.code, unit, unit.pctg, unit.pkey, var.value.testId.toString().toLong(), unit.tkey, unitWafer.mask, null)
 
         this.testDataToMeasures("", "")
     }

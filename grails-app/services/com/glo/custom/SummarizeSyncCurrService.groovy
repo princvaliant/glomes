@@ -157,8 +157,8 @@ class SummarizeSyncCurrService {
             }
 
             bdo.put(getSyncVar(tkey), "YES")
-            bdo.put("processCategory", (pctg ?: "nwLED"))
-            bdo.put("processKey", (pkey ?: "test"))
+            bdo.put("processCategory", (pctg ?: "W"))
+            bdo.put("processKey", (pkey ?: "epifab"))
             bdo.put("taskKey", tkey)
             bdo.put("id", unitId)
 
@@ -536,9 +536,9 @@ class SummarizeSyncCurrService {
                 if (currData["EQE"]) {
                     currData["EQE"].each { devCode, devValue ->
                         eqesRaw.put(devCode, [:])
-                        if (filtered.contains(devCode)) {
+                     //   if (filtered.contains(devCode)) {
                             eqesFiltered.put(devCode, [:])
-                        }
+                     //   }
                     }
                 }
                 def rawsize = eqesRaw.size()
@@ -723,7 +723,7 @@ class SummarizeSyncCurrService {
 
                     v1.each { k2, v2 ->
 
-                        if (filtered.contains(k2)) {
+                   //     if (filtered.contains(k2)) {
 
                             retMap1.put(k2, v2)
 
@@ -735,7 +735,7 @@ class SummarizeSyncCurrService {
                             if (curr2Vs[k2] < 0.05) {
                                 retMap3.put(k2, v2)
                             }
-                        }
+                    //    }
                     }
 
                     DescriptiveStatistics stats2 = new DescriptiveStatistics((double[]) retMap1.collect {
@@ -815,20 +815,20 @@ class SummarizeSyncCurrService {
 
                     if (k1 == "WPE") {
                         v1.each { k2, v2 ->
-                            if (filtered.contains(k2)) {
+                   //         if (filtered.contains(k2)) {
                                 retMapWpe.add([v2, k2])
-                            }
+                   //         }
                         }
                     }
 
                     if (k1 == "EQE") {
                         v1.each { k2, v2 ->
-                            if (filtered.contains(k2)) {
+                     //       if (filtered.contains(k2)) {
                                 retMapEqe.add([v2, k2])
-                            }
-                            if (retMap3.containsKey(k2)) {
+                     //       }
+                     //       if (retMap3.containsKey(k2)) {
                                 retMapEqeLL.add([v2, k2])
-                            }
+                     //       }
                         }
                     }
                 }
@@ -878,7 +878,7 @@ class SummarizeSyncCurrService {
 
                 def cc = currKey.tokenize(" ")[2]
 
-                if (cc in ["5mA", "10mA", "20mA"]) {
+           //     if (cc in ["5mA", "10mA", "20mA"]) {
 
                     TreeSet tops = new TreeSet()
                     if (bdo["topDevsForTest"]) {
@@ -893,7 +893,7 @@ class SummarizeSyncCurrService {
                         tops.add(topId)
                     }
                     bdo.put("topDevsForTest", tops)
-                }
+            //    }
 
                 def top5Mean = stats05.getMean()
                 if (top5Mean.isNaN()) {
@@ -920,7 +920,7 @@ class SummarizeSyncCurrService {
 
         def cc = currKey.tokenize(" ")[2]
 
-        if (arr && (cc == "10mA" || cc == "20mA" || cc == "5mA")) {
+        if (arr) {
 
             DescriptiveStatistics statsEqe = new DescriptiveStatistics()
             DescriptiveStatistics statsPeak = new DescriptiveStatistics()

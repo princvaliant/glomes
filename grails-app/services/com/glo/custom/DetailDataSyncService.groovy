@@ -11,7 +11,7 @@ class DetailDataSyncService {
 	def mongo
 	def readFileService
 	def unitService
-	def summarizeSyncService
+	def summarizeSyncCurrService
 
 	def init(def unitId, def unitCode,  def testId, def value, def childrenUnits, def tkey, def bdo) {
 		
@@ -67,8 +67,8 @@ class DetailDataSyncService {
 		try {
 			
 			importData(db, unitCode, testId, value, tkey, childrenUnits)
-			
-			summarizeSyncService.init(unitId, unitCode, bdo, testId, tkey, childrenUnits)
+
+            summarizeSyncCurrService.init(unitId, unitCode, bdo, testId, tkey, childrenUnits)
 		} 
 		catch(Exception exc) {
 			db.unit.update(new BasicDBObject("code", unitCode), new BasicDBObject('$set', new BasicDBObject(syncVar, "FAIL")), false, true)
