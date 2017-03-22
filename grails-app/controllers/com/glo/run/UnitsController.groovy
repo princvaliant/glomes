@@ -28,7 +28,7 @@ class UnitsController extends Rest {
 	def mongo
 	def dataSourceActiviti
 	def dataImportService
-    def summarizeSyncService
+    def summarizeSyncCurrService
 
     static activiti = true
 
@@ -565,7 +565,7 @@ class UnitsController extends Rest {
         }
 
         def unit1 = db.unit.find([code: code], new BasicDBObject()).collect{it}[0]
-        summarizeSyncService.createSummaries(db, unit1._id, code, null, null, null, newTestId, "test_data_visualization", unit1.mask, null)
+        summarizeSyncCurrService.createSummaries(db, unit1._id, code, null, null, null, newTestId, "test_data_visualization", unit1.mask, null)
 
         render ([success:true, res: newTestId.toString()] as JSON)
     }

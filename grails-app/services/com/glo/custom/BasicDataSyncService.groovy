@@ -16,7 +16,7 @@ class BasicDataSyncService {
 
 	def messageSource
 	def detailDataSyncService
-	def summarizeSyncService
+	def summarizeSyncCurrService
 	def readFileService
 	def unitService
 	def relSyncService
@@ -112,7 +112,7 @@ class BasicDataSyncService {
                     bdo["testDataIndex"].addAll(unit["testDataIndex"])
                     bdo["testDataIndex"].add(testData.value.testId.toString().toLong())
                 }
-                summarizeSyncService.createSummaries(db, unit._id, unit.code, bdo, null, null, testData.value.testId.toString().toLong(), testData.value.tkey, unit.mask, null)
+                summarizeSyncCurrService.createSummaries(db, unit._id, unit.code, bdo, null, null, testData.value.testId.toString().toLong(), testData.value.tkey, unit.mask, null)
 
                 if (unit.pkey == 'epifab') {
                     couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', unit.code, testData.value.testId.toString().toLong())
