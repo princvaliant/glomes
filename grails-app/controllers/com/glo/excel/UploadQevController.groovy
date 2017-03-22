@@ -565,59 +565,61 @@ class UploadQevController {
 	
 	
 	def addToTestData = {
-		
-		def bdo = new BasicDBObject()
-		def db = mongo.getDB("glo")
-		
-		
-		def retList = [:]
-		try {
+
+        def bdo = new BasicDBObject()
+        def db = mongo.getDB("glo")
+
+
+        def retList = [:]
+        try {
 
             //bdo.put('value.code','HM6JIK170104PS');
             //bdo.put('value.code','HM6JKK190007PS');
             //'HM6JK0020038PS'
             bdo.put("value.testId", [$gt: 170101000000])
-                bdo.put("value.parentCode", null)
-                bdo.put("value.tkey", "test_data_visualization")
+            bdo.put("value.parentCode", null)
+            bdo.put("value.tkey", "test_data_visualization")
 
-                def temp = db.testData.find(bdo, new BasicDBObject('value.data', 0)).addSpecial('$orderby', new BasicDBObject("value.testId", 1)).collect{
-                    ["code": it.value.code, "testId": it.value.testId]
-                }
+            def temp = db.testData.find(bdo, new BasicDBObject('value.data', 0)).addSpecial('$orderby', new BasicDBObject("value.testId", 1)).collect {
+                ["code": it.value.code, "testId": it.value.testId]
+            }
 
-                def s = []
-                temp.each {
+            def s = []
+            temp.each {
                 render(it.code + " " + it.testId + "<br/>")
-                def unit = db.unit.find(["code": it.code], ['code':1,'testDataIndex':1, mask: 1]).collect {it}[0]
+                def unit = db.unit.find(["code": it.code], ['code': 1, 'testDataIndex': 1, mask: 1]).collect { it }[0]
                 if (unit && unit.testDataIndex) {
-                    unit.testDataIndex.each { testId ->
-                        s.add([tid: it._id, unitId: unit._id, code: it.code, testId: testId, mask: unit.mask])
-                    }
-
+                    s.add([tid: it._id, unitId: unit._id, code: it.code, testId: unit.testDataIndex[unit.testDataIndex.size() - 1], mask: unit.mask])
                 }
             }
-			s.each {
-			//	summarizeSyncCurrService.createSummaries(db, it.unitId, it.code, null, null, null, it.testId, "test_data_visualization", it.mask, null)
 
-                couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', it.code, it.testId)
-			}
-//            def c = []
-//            temp.each { unit ->
-//                ['0001','0002','0003','0004', '0005', '0006'].each {
-//                    def cpn = db.unit.find(["code": unit.code + "_" + it], ['code':1,'testDataIndex':1, mask: 1]).collect {it}[0]
-//                    if (cpn && cpn.testDataIndex) {
-//                        c.add([tid: cpn._id, unitId: cpn._id, code: cpn.code, testId: cpn.testDataIndex[cpn.testDataIndex.size() - 1], mask: cpn.mask])
-//                    }
-//                }
-//            }
-//            c.each {
-//                summarizeSyncCurrService.createSummaries(db, it.unitId, it.code, null, null, null, it.testId, "test_data_visualization", it.mask, null)
-//            }
+        s.each {
+            summarizeSyncCurrService.createSummaries(db, it.unitId, it.code, null, null, null, it.testId, "test_data_visualization", it.mask, null)
 
+            // couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', it.code, it.testId)
+        }
+        def c = []
+        temp.each {
+            render(it.code + " " + it.testId + "<br/>")
+            def unit = db.unit.find(["code": it.code], ['code': 1, 'testDataIndex': 1, mask: 1]).collect { it }[0]
+            if (unit && unit.testDataIndex) {
+                unit.testDataIndex.each { testId ->
+                    s.add([tid: it._id, unitId: unit._id, code: it.code, testId: testId, mask: unit.mask])
+                }
 
-		} catch (Exception exc) {
-			logr.error(exc.getMessage())
-			render (exc.getMessage())
-		}
+            }
+        }
+        c.each {
+            couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', it.code, it.testId)
+            //summarizeSyncCurrService.createSummaries(db, it.unitId, it.code, null, null, null, it.testId, "test_data_visualization", it.mask, null)
+        }
+
+    }
+        catch (Exception exc ) {
+            logr.error(exc.getMessage())
+            render(exc.getMessage())
+        }
+
 	}
 
 
