@@ -526,7 +526,7 @@ Ext.define('glo.controller.ProbeTestPanel', {
 					Ext.getCmp('datavoltagechartid').store.loadData(obj.Datavoltage);
 
                     var sef = Ext.getCmp('datacurrentchartid').axes.items[0];
-                    sef.maximum = obj.DatacurrentMax ;
+                   // sef.maximum = obj.DatacurrentMax ;
                     Ext.getCmp('datacurrentchartid').store.loadData(obj.Datacurrent);
 
 					Ext.getCmp('dataspectrumchartid').store.loadData(obj.Dataspectrum);
