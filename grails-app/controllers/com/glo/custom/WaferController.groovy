@@ -963,7 +963,7 @@ class WaferController extends com.glo.run.Rest {
         def specs = [
                 "waferVoltageSweepChart": [min1: 0.09, max1: 6.09],
                 "waferCurrentSweepChart": [min1: 444444.0, max1: 0],
-                "waferSpectrumChart"    : [min1: 350.01, max1: 650.01]
+                "waferSpectrumChart"    : [min1: 350.01, max1: 800.01]
         ]
         def min2 = 1E12, max2 = 0, shift = 0
 

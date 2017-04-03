@@ -574,7 +574,7 @@ class UploadQevController {
         def retList = [:]
         try {
 
-            //bdo.put('value.code','HM6JIK170104PS');
+            bdo.put('value.code','HM6HIK020024PS');
             //bdo.put('value.code', 'HM6JKK190007PS');
             //'HM6JK0020038PS'
             bdo.put("value.testId", [$gt: 170101000000])
@@ -586,7 +586,7 @@ class UploadQevController {
             }
 
 //            def s = []
-//            temp.each {
+//            temp.each {db.products.find({"limits.voice":{"$exists": true}).count()
 //                render(it.code + " " + it.testId + "<br/>")
 //                def unit = db.unit.find(["code": it.code], ['code': 1, 'testDataIndex': 1, mask: 1]).collect { it }[0]
 //                if (unit && unit.testDataIndex) {

@@ -1,11 +1,7 @@
 var h = new Object;
 //=CONCATENATE("h['",A1, "']='", A1, "-SR';")
 
-h['HLUJl110526PS']='HLUJL110526PS';
-h['HLUJl110536PS']='HLUJL110536PS';
-
-
-
+h['JT030-TEST']='EXPT683';
 
 
 for (k in h){
