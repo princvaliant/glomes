@@ -105,14 +105,14 @@ class SummarizeSyncCurrService {
             centers = this.calculateCenter(db, bdo, unitCode, unitId, tkey, testId, mask)
         }
 
-        def adminFilters02 = waferFilterService.getAdminFilters("Data @ 2uA")
-        def adminFilters06 = waferFilterService.getAdminFilters("Data @ 4uA")
-        def adminFilters1 = waferFilterService.getAdminFilters("Data @ 8uA")
-        def adminFilters2 = waferFilterService.getAdminFilters("Data @ 10uA")
-        def adminFilters5 = waferFilterService.getAdminFilters("Data @ 20uA")
-        def adminFilters10 = waferFilterService.getAdminFilters("Data @ 60uA")
-        def adminFilters20 = waferFilterService.getAdminFilters("Data @ 400nA")
-        def adminFilters50 = waferFilterService.getAdminFilters("Data @ 1000nA")
+//        def adminFilters02 = waferFilterService.getAdminFilters("Data @ 2uA")
+//        def adminFilters06 = waferFilterService.getAdminFilters("Data @ 4uA")
+//        def adminFilters1 = waferFilterService.getAdminFilters("Data @ 8uA")
+//        def adminFilters2 = waferFilterService.getAdminFilters("Data @ 10uA")
+//        def adminFilters5 = waferFilterService.getAdminFilters("Data @ 20uA")
+//        def adminFilters10 = waferFilterService.getAdminFilters("Data @ 60uA")
+//        def adminFilters20 = waferFilterService.getAdminFilters("Data @ 400nA")
+//        def adminFilters50 = waferFilterService.getAdminFilters("Data @ 1000nA")
 
         def testData = db.testData.find(query, new BasicDBObject()).collect { it }[0]
         if (testData) {
@@ -130,14 +130,14 @@ class SummarizeSyncCurrService {
                 this.calculateTopSummary(db, bdo, testData["value"]["data"], unitCode, unitId, testId)
             } else {
 
-                prepareSummary(db, bdo, "0.002", "Data @ 2uA", testData["value"]["data"], unitCode, unitId, testId, adminFilters02, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "0.004", "Data @ 4uA", testData["value"]["data"], unitCode, unitId, testId, adminFilters06, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "0.008", "Data @ 8uA", testData["value"]["data"], unitCode, unitId, testId, adminFilters1, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "0.01",  "Data @ 10uA", testData["value"]["data"], unitCode, unitId, testId, adminFilters2, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "0.02",  "Data @ 20uA",  testData["value"]["data"], unitCode, unitId, testId, adminFilters5, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "0.06",  "Data @ 60uA", testData["value"]["data"], unitCode, unitId, testId, adminFilters10, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "0.0004",  "Data @ 400nA",  testData["value"]["data"], unitCode, unitId, testId, adminFilters20, centers, testData["value"]["data"]["Current @ 2V"])
-                prepareSummary(db, bdo, "0.001",  "Data @ 1000nA", testData["value"]["data"], unitCode, unitId, testId, adminFilters50, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.002", "Data @ 2uA", testData["value"]["data"], unitCode, unitId, testId, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.004", "Data @ 4uA", testData["value"]["data"], unitCode, unitId, testId, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.008", "Data @ 8uA", testData["value"]["data"], unitCode, unitId, testId, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.01",  "Data @ 10uA", testData["value"]["data"], unitCode, unitId, testId, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.02",  "Data @ 20uA",  testData["value"]["data"], unitCode, unitId, testId, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.06",  "Data @ 60uA", testData["value"]["data"], unitCode, unitId, testId, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.0004",  "Data @ 400nA",  testData["value"]["data"], unitCode, unitId, testId, centers, testData["value"]["data"]["Current @ 2V"])
+                prepareSummary(db, bdo, "0.001",  "Data @ 1000nA", testData["value"]["data"], unitCode, unitId, testId, centers, testData["value"]["data"]["Current @ 2V"])
 
                 if (testData["value"]["data"]["Current @ 2V"]) {
                     createSummary(db, "Current @ 2V", testData["value"]["data"], bdo, unitCode, testData["value"]["data"]["Current @ 2V"]["NA"].collect {
@@ -458,25 +458,25 @@ class SummarizeSyncCurrService {
             def bdo,
             def current,
             def currKey,
-            def data, def unitCode, def unitId, def testId, def adminFilters, def centers, def currentsAt2) {
+            def data, def unitCode, def unitId, def testId,  def centers, def currentsAt2) {
 
         Set filtered = new HashSet()
-        adminFilters.eachWithIndex { waferFilter, i ->
-            if (data[waferFilter.level1]) {
-                def unfiltered = (BasicDBObject) data[waferFilter.level1][waferFilter.level2]
-
-                if (unfiltered) {
-                    unfiltered.each { k2, v2 ->
-                        if (waferFilter.valFrom <= v2 && waferFilter.valTo >= v2 && i == 0) {
-                            filtered.add(k2)
-                        } else if ((waferFilter.valFrom > v2 || waferFilter.valTo < v2) && i > 0) {
-                            if (filtered.contains(k2))
-                                filtered.remove(k2)
-                        }
-                    }
-                }
-            }
-        }
+//        adminFilters.eachWithIndex { waferFilter, i ->
+//            if (data[waferFilter.level1]) {
+//                def unfiltered = (BasicDBObject) data[waferFilter.level1][waferFilter.level2]
+//
+//                if (unfiltered) {
+//                    unfiltered.each { k2, v2 ->
+//                        if (waferFilter.valFrom <= v2 && waferFilter.valTo >= v2 && i == 0) {
+//                            filtered.add(k2)
+//                        } else if ((waferFilter.valFrom > v2 || waferFilter.valTo < v2) && i > 0) {
+//                            if (filtered.contains(k2))
+//                                filtered.remove(k2)
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         try {
             createSummary2(db, currKey, data, bdo, unitCode, filtered, testId, centers, currentsAt2)

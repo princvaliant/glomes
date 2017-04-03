@@ -112,6 +112,10 @@ class CouponService {
                         }
                     }
 
+                    def subUnit = db.unit.find(new BasicDBObject("code", td.code), new BasicDBObject()).collect {
+                        it
+                    }[0]
+
                     if (hasData == true) {
                         def bdo2 = new BasicDBObject()
                         bdo2.put("value.code", td.code)
@@ -124,11 +128,6 @@ class CouponService {
                             db.testData.save([value: td])
                         }
 
-
-                        def subUnit = db.unit.find(new BasicDBObject("code", td.code), new BasicDBObject()).collect {
-                            it
-                        }[0]
-
                         bdo2.put("testDataIndex", [])
                         if (!subUnit["testDataIndex"]) {
                             bdo2["testDataIndex"].add(td.testId.toString().toLong())
@@ -137,6 +136,24 @@ class CouponService {
                             bdo2["testDataIndex"].add(td.testId.toString().toLong())
                         }
                         summarizeSyncCurrService.createSummaries(db, subUnit._id, subUnit.code, bdo2, null, null, td.testId.toString().toLong(), td.tkey, unit.mask, null)
+                    } else {
+                        //#TODO add logic to remove variables from coupons
+                        // Step through all variables in test_data_visualization and remove them from unit table for coupons
+                        // unitService.update
+                        //  contentService.getVariables(def category, def procKey, def taskKey, 'dc') {
+
+
+                        def bdo2 = new BasicDBObject()
+                        bdo2.put("id", subUnit["_id"])
+                        //Loop through variables
+
+                        bdo2.put(stage + "_summary", 'NN/AA')
+
+                        bdo2.put("processCategory", "Packages")
+                        bdo2.put("processKey", "iblu")
+                        bdo2.put("taskKey", tkey)
+                      //  unitService.update(bdo2, user, true)
+
                     }
                 }
             }
