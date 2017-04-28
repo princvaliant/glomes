@@ -15,6 +15,7 @@ class DataImportService {
 
     def mongo
     def unitService
+    def couponService
     def relSyncService
     def jmsService
     def summarizeSyncCurrService
@@ -776,24 +777,13 @@ class DataImportService {
 
         db.testData.save(testData)
 
-        if (var.value.tkey in ["top_test_visualization", "uniformity_test_visualization"]) {
-
-            // Move unit there
-            def buf = new Expando()
-            buf.isEngineering = true
-            buf.prior = 50
-            buf.processCategoryEng = "nwLED"
-            buf.processKeyEng = "test"
-            buf.taskKeyEng = var.value.tkey
-            buf.units = []
-            def n = [:]
-            n.put('transition', 'engineering')
-            n.put('id', unit["_id"])
-            buf.units.add(n)
-            unitService.move("admin", buf)
-        }
-
         summarizeSyncCurrService.createSummaries(db, unit._id, unit.code, udbo, null, null, var.value.testId.toString().toLong(), var.value.tkey, unit.mask, null)
+
+        try {
+            couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', unit.code, var.value.testId.toString().toLong())
+        } catch (Exception exc) {
+
+        }
     }
 
 
