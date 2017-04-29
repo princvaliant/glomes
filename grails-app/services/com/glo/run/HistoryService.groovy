@@ -180,7 +180,6 @@ class HistoryService {
 		hist = null		
 	}
 
-
 	private def saveUpdate(def db, def oldUnit, def newUnit, def options) {
 
 		DateFormat  df = new SimpleDateFormat("yyyy-MM-dd")
