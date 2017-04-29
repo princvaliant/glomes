@@ -382,7 +382,7 @@ class EquipmentService {
                 if (it.email) {
                     def em = it.email
 
-                    em = em.replace("glo-usa.com", "glo.se")
+                    em = em.replace("glo-usa.com","glo.se")
 
                     mailService.sendMail {
                         to em

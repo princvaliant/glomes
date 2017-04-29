@@ -49,18 +49,18 @@ grails {
 
 
 
-//        host = 'mail.valleytechllc.com'
-//        port = 25
-//        username = 'gl_alerts@valleytechllc.com'
-//        password = 'GLOnotes123'
+        host = 'mail.valleytechllc.com'
+        port = 25
+        username = 'alerts_gl@valleytechllc.com'
+        password = 'nE2uhec3umux'
 
 
 //        host = "192.168.20.21"
 //        port = 25
 
 
-        host = "192.168.0.125"
-        port = 25
+//        host = "192.168.0.125"
+//        port = 25
       //  username = "qunano\\alerts"
       //  password = "4U12124up!"
         props = [

@@ -574,7 +574,7 @@ class UploadQevController {
         def retList = [:]
         try {
 
-            bdo.put('value.code','HM6HIK020024PS');
+            bdo.put('value.code','HNC0099PS');
             //bdo.put('value.code', 'HM6JKK190007PS');
             //'HM6JK0020038PS'
             bdo.put("value.testId", [$gt: 170101000000])
