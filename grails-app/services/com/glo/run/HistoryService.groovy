@@ -149,35 +149,37 @@ class HistoryService {
 
 		def hist = createHistUnit(newUnit)
 		def histOld = db.history.find(new BasicDBObject("id", oldUnit._id))?.collect{it}[0]
-		hist.put("dataLog", [])
-		hist.put("files", [])
-		
-		def prevAudit = histOld["audit"][histOld["audit"].size() - 1]
-		prevAudit.get("dc")?.each { k, v ->
-			if (v.getClass() == com.mongodb.BasicDBObject && v.get("setting")?.get("propagate") == "false") {
-				histOld["audit"][histOld["audit"].size() - 1].("dc").put(k, "")
-			}
-		}
-		
-		def newAudit = createAudit(db, hist, newUnit, true)
-        newAudit.put("firstPassDate", newAudit.actualStart)
-        newAudit.put("numberOfPasses", 1)
-        insertMove(db, newUnit, newAudit, "")
+		if (histOld != null) {
+            hist.put("dataLog", [])
+            hist.put("files", [])
 
-		newAudit.put("last", true)
-		hist.put("audit", histOld.audit + [newAudit])
-		createNote(db, hist, newUnit)
-		upsertDc(hist, null, newUnit, false)
-		upsertDin(hist, null, newUnit, false)
-		upsertRecp(hist, null, newUnit, false)
-		upsertSpec(hist, newUnit)
-		hist.put("actualStart", new Date())
-        if (newUnit.dummy) {
-            hist.put('dummy','1')
+            def prevAudit = histOld["audit"][histOld["audit"].size() - 1]
+            prevAudit.get("dc")?.each { k, v ->
+                if (v.getClass() == com.mongodb.BasicDBObject && v.get("setting")?.get("propagate") == "false") {
+                    histOld["audit"][histOld["audit"].size() - 1].("dc").put(k, "")
+                }
+            }
+
+            def newAudit = createAudit(db, hist, newUnit, true)
+            newAudit.put("firstPassDate", newAudit.actualStart)
+            newAudit.put("numberOfPasses", 1)
+            insertMove(db, newUnit, newAudit, "")
+
+            newAudit.put("last", true)
+            hist.put("audit", histOld.audit + [newAudit])
+            createNote(db, hist, newUnit)
+            upsertDc(hist, null, newUnit, false)
+            upsertDin(hist, null, newUnit, false)
+            upsertRecp(hist, null, newUnit, false)
+            upsertSpec(hist, newUnit)
+            hist.put("actualStart", new Date())
+            if (newUnit.dummy) {
+                hist.put('dummy', '1')
+            }
+            db.history.save(hist)
+            historyDataService.init(hist, newUnit)
+            hist = null
         }
-		db.history.save(hist)
-		historyDataService.init(hist, newUnit)
-		hist = null		
 	}
 
 	private def saveUpdate(def db, def oldUnit, def newUnit, def options) {
@@ -654,6 +656,9 @@ class HistoryService {
 		bdo.put("n", valueNew)
 		bdo.put("d", new Date())
 		bdo.put("u", user)
+
+        // Take last 1000 i shiftaj dolje
+        hist["dataLog"] = hist["dataLog"].takeRight(2000)
 		hist["dataLog"].add(bdo)
 	}
 

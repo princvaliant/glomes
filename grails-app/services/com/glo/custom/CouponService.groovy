@@ -142,16 +142,17 @@ class CouponService {
                         // unitService.update
                         //  contentService.getVariables(def category, def procKey, def taskKey, 'dc') {
 
-
-                        //def bdo2 = new BasicDBObject()
-                        //bdo2.put("id", subUnit["_id"])
-                        //Loop through variables
-
-                        //bdo2.put(stage + "_summary", 'NN/AA')
-
-                        //bdo2.put("processCategory", "Packages")
-                        //bdo2.put("processKey", "iblu")
-                        //bdo2.put("taskKey", tkey)
+//                        def bdo2 = new BasicDBObject()
+//                        bdo2.put("id", subUnit["_id"])
+//                        //Loop through variables
+//
+//                        //contentService.getVariables(unit, 'epifab', 'test_data_visualization', 'dc') {}
+//
+//                        bdo2.put(stage + "_summary", 'NN/AA')
+//
+//                        bdo2.put("processCategory", "Packages")
+//                        bdo2.put("processKey", "iblu")
+//                        bdo2.put("taskKey", tkey)
                       //  unitService.update(bdo2, user, true)
 
                     }
