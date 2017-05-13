@@ -658,7 +658,7 @@ class HistoryService {
         bdo.put("u", user)
 
         // Take last 2000 i shiftaj dolje
-        if (hist["dataLog"].size() > 2000) {
+        if (hist["dataLog"] && hist["dataLog"].size() > 2000) {
             hist["dataLog"] = hist["dataLog"].takeRight(2000)
         }
         hist["dataLog"].add(bdo)

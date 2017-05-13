@@ -57,6 +57,7 @@ class CouponService {
         productMaskItems.each {
             coupons.add(it)
             def cpnCode = unit.code + "_" + it[0].trim()
+
             def subUnit = db.unit.find(new BasicDBObject("code", cpnCode), new BasicDBObject()).collect {
                 it
             }[0]
