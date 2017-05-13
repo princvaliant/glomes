@@ -361,7 +361,7 @@ class ProbeNewSyncService {
                                peakPower = it.photometric,
                                intPower = it.radiometric
 
-                        currsweep.add([curr, it.volt, it.radiometric, it.eqe, it.fwhm])
+                        currsweep.add([curr, it.volt, it.radiometric, 0, it.fwhm, 0, 0, it.wpe, 0, it.eqe])
 
                         def grpCurr = "Data @ " + curr.round() + "mA"
                         if (curr < 1) {
@@ -540,7 +540,6 @@ class ProbeNewSyncService {
                         if (currents) {
 
                             def ddd = currents.data.sort { it[0] }
-
                             List currs = ddd.collect { (double) (it[0] ?: 0) }
                             List currsw = ddd.collect { (double) (it[0] ?: 0) }
                             List currse = ddd.collect { (double) (it[0] ?: 0) }
@@ -550,10 +549,14 @@ class ProbeNewSyncService {
                             List eqes = ddd.collect { (double) (it[9] ?: 0) }
 
                             DescriptiveStatistics statsWpe = new DescriptiveStatistics((double[]) currents.data.collect {
-                                (double) (it[7])
+                                if (it[7] == null) 0
+                                else
+                                (double) (it[7] ?: 0)
                             })
                             DescriptiveStatistics statsEqe = new DescriptiveStatistics((double[]) currents.data.collect {
-                                (double) (it[9])
+                                if (it[9] == null) 0
+                                else
+                                (double) (it[9] ?: 0)
                             })
 
                             def maxWpe = statsWpe.getMax()
@@ -839,10 +842,10 @@ class ProbeNewSyncService {
                                 tValue.put("EQE leak WL corr @ " + k + " mA", v)
                             }
 
-                            maxWpe?.toString().isNumber() ? avgWpes.addValue(maxWpe) : ''
-                            maxEqe?.toString().isNumber() ? avgEqes.addValue(maxEqe) : ''
-                            jWpe?.toString().isNumber() ? avgJWpes.addValue(jWpe) : ''
-                            jEqe?.toString().isNumber() ? avgJEqes.addValue(jEqe) : ''
+                            maxWpe?.toString()?.isNumber() ? avgWpes.addValue(maxWpe) : ''
+                            maxEqe?.toString()?.isNumber() ? avgEqes.addValue(maxEqe) : ''
+                            jWpe?.toString()?.isNumber() ? avgJWpes.addValue(jWpe) : ''
+                            jEqe?.toString()?.isNumber() ? avgJEqes.addValue(jEqe) : ''
                         }
 
                         tValue.put("data", root)
