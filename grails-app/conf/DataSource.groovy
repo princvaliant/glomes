@@ -44,7 +44,7 @@ environments {
 
 		grails {
 			mongo {
-				host = "calserver07"
+				host = "192.168.20.26"
 				port = 27017
 				user = "root"
 				pwd = "mongodb"
@@ -99,7 +99,7 @@ environments {
 
 		grails {
 			mongo {
-                host = "calserver07"
+                host = "192.168.20.26"
                 port = 27017
                 user = "root"
                 pwd = "mongodb"

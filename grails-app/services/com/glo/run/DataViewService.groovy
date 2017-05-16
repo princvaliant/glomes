@@ -591,7 +591,7 @@ class DataViewService {
                             rowObj[formObj.title] = ""
                             rowObjF[formObj.path] = null
                             rowObjRaw[formObj.path] = null
-                            logr.warn("Calculation: " + dataView.id.toString() + ", " + formObj.title + ", " + exc.getMessage())
+                         //   logr.warn("Calculation: " + dataView.id.toString() + ", " + formObj.title + ", " + exc.getMessage())
                         }
                     }
 
