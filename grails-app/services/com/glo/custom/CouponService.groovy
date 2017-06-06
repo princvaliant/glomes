@@ -138,21 +138,22 @@ class CouponService {
                             bdo2["testDataIndex"].addAll(subUnit["testDataIndex"])
                             bdo2["testDataIndex"].add(td.testId.toString().toLong())
                         }
-                        summarizeSyncCurrService.createSummaries(db, subUnit._id, subUnit.code, bdo2, null, null, td.testId.toString().toLong(), td.tkey, unit.mask, null)
+                        summarizeSyncCurrService.createSummaries(db, subUnit._id, subUnit.code, bdo2, "C", "fabassembly", td.testId.toString().toLong(), td.tkey, unit.mask, null)
                     } else {
                         //add logic to remove variables from coupons
-                        def bdo2 = new BasicDBObject()
-                        bdo2.put("id", subUnit["_id"])
-                        //Loop through variables
-                        couponvars.each {
-                            if (it.name != 'actualStart') {
-                                bdo2.put(it.name, 'NN/AA')
-                            }
-                        }
-                        bdo2.put("processCategory", "C")
-                        bdo2.put("processKey", "fabassembly")
-                        bdo2.put("taskKey", "test_data_visualization")
-                        unitService.update(bdo2, user, false)
+//def couponvars = contentService.getStepVariables("C", "fabassembly", "test_data_visualization", "dc");
+//                        def bdo2 = new BasicDBObject()
+//                        bdo2.put("id", subUnit["_id"])
+//                        //Loop through variables
+//                        couponvars.each {
+//                            if (it.name != 'actualStart') {
+//                                bdo2.put(it.name, 'NN/AA')
+//                            }
+//                        }
+//                        bdo2.put("processCategory", "C")
+//                        bdo2.put("processKey", "fabassembly")
+//                        bdo2.put("taskKey", "test_data_visualization")
+//                        unitService.update(bdo2, user, false)
 
                     }
                 } catch (Exception exc) {

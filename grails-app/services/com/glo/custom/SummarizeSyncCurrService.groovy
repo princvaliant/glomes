@@ -160,9 +160,10 @@ class SummarizeSyncCurrService {
             bdo.put("processCategory", (pctg ?: "W"))
             bdo.put("processKey", (pkey ?: "epifab"))
             bdo.put("taskKey", tkey)
+            bdo.put("mask", mask)
             bdo.put("id", unitId)
 
-            unitService.update(bdo, "admin", true)
+            unitService.update(bdo, "admin", false)
         } else {
             db.unit.update(new BasicDBObject("code", unitCode), new BasicDBObject('$set', new BasicDBObject(getSyncVar(tkey), "FAIL")), false, false)
         }

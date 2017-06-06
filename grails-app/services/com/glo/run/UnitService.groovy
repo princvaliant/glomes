@@ -1343,7 +1343,7 @@ class UnitService {
                 isVars = true
             }
             def isOk = validate(it, vars, specVars, [])
-            if (isOk != "0" && isEng == "false") {
+            if (isOk != "0" && isEng == "false" && unit.tkey != "test_data_visualization") {
                 throw new RuntimeException("Validation of children units failed. Click down arrow on the unit to jump to children.")
             } else {
                 def n = [:]

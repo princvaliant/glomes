@@ -642,9 +642,9 @@ class HistoryService {
 
     private def createLog(def hist, def dir, def varName, def varType, def valueOld, def valueNew, def user, def pctg, def pkey, def tkey) {
 
-        if ((valueOld != null && valueOld == valueNew) || (valueOld == null && !valueNew)
-                || varType == "object" || varType == "objectArray")
-            return
+//        if ((valueOld != null && valueOld == valueNew) || (valueOld == null && !valueNew)
+//                || varType == "object" || varType == "objectArray")
+//            return
 
         def bdo = new BasicDBObject()
         bdo.put("k", dir)
@@ -658,14 +658,15 @@ class HistoryService {
         bdo.put("u", user)
 
         // Take last 2000 i shiftaj dolje
-//        def hdlsize = hist["dataLog"].size();
-//        if (hist["dataLog"] && hdlsize > 2000) {
-//            hist["dataLog"] = [];
-//            for (def i = hdlsize - 2000; i < hdlsize; i++) {
-//                hist["dataLog"].add= hist["dataLog"][i];
-//            }
-//        }
-//        hist["dataLog"].add(bdo)
+        def hdlsize = hist["dataLog"].size();
+        if (hist["dataLog"] && hdlsize > 3000) {
+            def r = [];
+            for (def i = hdlsize - 3000; i < hdlsize; i++) {
+                r.add= hist["dataLog"][i];
+            }
+            hist["dataLog"] = r;
+        }
+        hist["dataLog"].add(bdo)
     }
 
     def insertMove(def db, def unit, def audit, def end) {
