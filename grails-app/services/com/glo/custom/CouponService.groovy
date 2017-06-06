@@ -22,7 +22,7 @@ class CouponService {
     def contentService
     def summarizeSyncCurrService
 
-    def splitTestDataToCoupons(db, user, tkey, code, testId) {
+    def splitTestDataToCoupons(db, user, tkey, code, testId, couponvars) {
 
         // Check input parameters
         if (tkey != "test_data_visualization")
@@ -32,6 +32,7 @@ class CouponService {
             logr.error("code not specified.")
             return
         }
+
         // Check if unit exists
         def unit = db.unit.find(new BasicDBObject("code", code), new BasicDBObject()).collect {
             it
@@ -63,7 +64,7 @@ class CouponService {
             }[0]
             if (subUnit && subUnit.tkey != "test_data_visualization") {
                 // Move coupon to test_data_visualization step and record previous step where it needs to be moved back
-                moveBack.add([_id: subUnit._id, pctg: subUnit.pctg, pkey: subUnit.pkey, tkey: subUnit.tkey])
+                // moveBack.add([_id: subUnit._id, pctg: subUnit.pctg, pkey: subUnit.pkey, tkey: subUnit.tkey])
                 moveCoupon(subUnit._id, "C", "fabassembly", "test_data_visualization")
             } else if (!subUnit) {
                 // Create new coupon and put it in test_data_visualization step
@@ -72,14 +73,15 @@ class CouponService {
         }
 
         // Split test data from the wafers to coupons
-        try {
-            def bdo = new BasicDBObject()
-            bdo.put("value.code", code)
-            bdo.put("value.testId", testId)
-            bdo.put("value.tkey", "test_data_visualization")
-            def testData = db.testData.find(bdo).collect { it.value }[0]
-            if (testData) {
-                coupons.each { coupon ->
+
+        def bdo = new BasicDBObject()
+        bdo.put("value.code", code)
+        bdo.put("value.testId", testId)
+        bdo.put("value.tkey", "test_data_visualization")
+        def testData = db.testData.find(bdo).collect { it.value }[0]
+        if (testData) {
+            coupons.each { coupon ->
+                try {
                     def td = [:]
                     def codeSize = coupon[0].size()
                     td.syncType = testData.syncType
@@ -138,35 +140,27 @@ class CouponService {
                         }
                         summarizeSyncCurrService.createSummaries(db, subUnit._id, subUnit.code, bdo2, null, null, td.testId.toString().toLong(), td.tkey, unit.mask, null)
                     } else {
-                        //#TODO add logic to remove variables from coupons
-                        // Step through all variables in test_data_visualization and remove them from unit table for coupons
-                        // unitService.update
-                        //  contentService.getVariables(def category, def procKey, def taskKey, 'dc') {
-
-//                        def bdo2 = new BasicDBObject()
-//                        bdo2.put("id", subUnit["_id"])
-//                        //Loop through variables
-//
-//                        //contentService.getVariables(unit, 'epifab', 'test_data_visualization', 'dc') {}
-//
-//                        bdo2.put(stage + "_summary", 'NN/AA')
-//
-//                        bdo2.put("processCategory", "Packages")
-//                        bdo2.put("processKey", "iblu")
-//                        bdo2.put("taskKey", tkey)
-                      //  unitService.update(bdo2, user, true)
+                        //add logic to remove variables from coupons
+                        def bdo2 = new BasicDBObject()
+                        bdo2.put("id", subUnit["_id"])
+                        //Loop through variables
+                        couponvars.each {
+                            if (it.name != 'actualStart') {
+                                bdo2.put(it.name, 'NN/AA')
+                            }
+                        }
+                        bdo2.put("processCategory", "C")
+                        bdo2.put("processKey", "fabassembly")
+                        bdo2.put("taskKey", "test_data_visualization")
+                        unitService.update(bdo2, user, false)
 
                     }
+                } catch (Exception exc) {
+                    System.out.println(exc)
                 }
             }
-        } catch (Exception exc) {
-
         }
 
-        // If necessary move coupons back
-        moveBack.each {
-            moveCoupon(it._id, it.pctg, it.pkey, it.tkey)
-        }
     }
 
     def moveCoupon(_id, pctg, pkey, tkey) {
@@ -176,6 +170,7 @@ class CouponService {
         buf.processCategoryEng = pctg
         buf.processKeyEng = pkey
         buf.taskKeyEng = tkey
+        buf.overrideMove = true
         buf.units = []
         def n = [:]
         n.put('transition', 'engineering')

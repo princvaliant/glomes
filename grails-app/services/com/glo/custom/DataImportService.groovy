@@ -16,6 +16,7 @@ class DataImportService {
     def mongo
     def unitService
     def couponService
+    def contentService
     def relSyncService
     def jmsService
     def summarizeSyncCurrService
@@ -780,7 +781,8 @@ class DataImportService {
         summarizeSyncCurrService.createSummaries(db, unit._id, unit.code, udbo, null, null, var.value.testId.toString().toLong(), var.value.tkey, unit.mask, null)
 
         try {
-            couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', unit.code, var.value.testId.toString().toLong())
+            def couponvars = contentService.getVariables("C", "fabassembly", "test_data_visualization", "dc");
+            couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', unit.code, var.value.testId.toString().toLong(), couponvars)
         } catch (Exception exc) {
 
         }

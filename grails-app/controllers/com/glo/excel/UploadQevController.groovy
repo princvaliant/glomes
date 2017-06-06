@@ -610,7 +610,8 @@ class UploadQevController {
             }
             cc.each {
                 try {
-                    couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', it.code, it.testId)
+                    def couponvars = contentService.getVariables("C", "fabassembly", "test_data_visualization", "dc");
+                    couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', it.code, it.testId, couponvars)
                 } catch (Exception exc) {
                     render(exc.toString() + "<br/>")
                 }

@@ -658,10 +658,14 @@ class HistoryService {
         bdo.put("u", user)
 
         // Take last 2000 i shiftaj dolje
-        if (hist["dataLog"] && hist["dataLog"].size() > 2000) {
-            hist["dataLog"] = hist["dataLog"].takeRight(2000)
-        }
-        hist["dataLog"].add(bdo)
+//        def hdlsize = hist["dataLog"].size();
+//        if (hist["dataLog"] && hdlsize > 2000) {
+//            hist["dataLog"] = [];
+//            for (def i = hdlsize - 2000; i < hdlsize; i++) {
+//                hist["dataLog"].add= hist["dataLog"][i];
+//            }
+//        }
+//        hist["dataLog"].add(bdo)
     }
 
     def insertMove(def db, def unit, def audit, def end) {

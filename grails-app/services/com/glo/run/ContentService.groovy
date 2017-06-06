@@ -73,7 +73,7 @@ class ContentService {
             variables = variables.findAll { it.dir in dir }
         }
 
-        variables
+        return variables
     }
 
     def getProcessVariables(def category, def procKey, def dir) {
