@@ -15,6 +15,7 @@ class UploadQevController {
     def summarizeSyncCurrService
     def couponService
     def syncService
+    def contentService
     def importService
     def spcService
     def grailsApplication
@@ -574,48 +575,105 @@ class UploadQevController {
         def retList = [:]
         try {
 
-            bdo.put('value.code','HNC0099PS');
-            //bdo.put('value.code', 'HM6JKK190007PS');
-            //'HM6JK0020038PS'
-            bdo.put("value.testId", [$gt: 170101000000])
-            bdo.put("value.parentCode", null)
-            bdo.put("value.tkey", "test_data_visualization")
+            // Fix tags in wafer flow
+            def query = new BasicDBObject()
+            query.put("parentCode", null)
+            query.put("code", "AAF13150176P-01")
+            def df = new Date().clearTime() - 160
+            query.put("value.test_data_visualization.actualStart", new BasicDBObject('$gt', df))
+            query.put("unit.productCode", "100W")
+            def fields = new BasicDBObject()
+            fields.put("id", 1)
+            fields.put("_id", 1)
+            fields.put("code", 1)
+            fields.put("unit.mask", 1)
+            fields.put("value.tags", 1)
+            def units = db.dataReport.find(query, fields).collect { it }
+//            units.each {
+//                render(it.code + " " + it.mask + "<br/>")
+//                def tgs = []
+//                it.value.tags.each { tag ->
+//                    if (tag.indexOf('W') >= 0) {
+//                        tgs.add(tag)
+//                    }
+//                }
+//                db.dataReport.update([code: it.code], [$set:  ['value.tags': tgs]])
+//            }
 
-            def temp = db.testData.find(bdo, new BasicDBObject('value.data', 0)).addSpecial('$orderby', new BasicDBObject("value.testId", 1)).collect {
-                ["code": it.value.code, "testId": it.value.testId]
-            }
+            // Fix tags in coupon flow
+            def query2 = new BasicDBObject()
+            query2.put("parentCode", null)
+            def df2 = new Date().clearTime() - 160
+            query2.put("value.test_data_visualization.actualStart", new BasicDBObject('$gt', df))
+            query2.put("unit.product", "Coupon")
+            def fields2 = new BasicDBObject()
+            fields2.put("id", 1)
+            fields2.put("_id", 1)
+            fields2.put("code", 1)
+            fields2.put("unit.mask", 1)
+            fields2.put("value.tags", 1)
+            def units2 = db.dataReport.find(query2, fields2).collect { it }
+//            units2.each {
+//                render(it.code + " " + it.mask + "<br/>")
+//                def tgs = []
+//                it.value.tags.each { tag ->
+//                    if (tag.indexOf('C') >= 0) {
+//                        tgs.add(tag)
+//                    }
+//                }
+//                db.dataReport.update([code: it.code], [$set:  ['value.tags': tgs]])
+//            }
 
-//            def s = []
-//            temp.each {db.products.find({"limits.voice":{"$exists": true}).count()
-//                render(it.code + " " + it.testId + "<br/>")
-//                def unit = db.unit.find(["code": it.code], ['code': 1, 'testDataIndex': 1, mask: 1]).collect { it }[0]
-//                if (unit && unit.testDataIndex) {
-//                    s.add([tid: it._id, unitId: unit._id, code: it.code, testId: unit.testDataIndex[unit.testDataIndex.size() - 1], mask: unit.mask])
+            def couponvars = contentService.getStepVariables("C", "fabassembly", "test_data_visualization", "dc");
+
+            // Reset all coupons test data
+//            units2.each {
+//                try {
+//                    def bdo2 = new BasicDBObject()
+//                    def unt = db.unit.find(['code': it.code]).collect { it }[0]
+//                    if (unt) {
+//                        render(it.code + " " + it.unit.mask + "<br/>")
+//                        bdo2.put("id", unt["_id"])
+//                        couponvars.each { v ->
+//                            if (v.name != 'actualStart') {
+//                                bdo2.put(v.name, 'NN/AA')
+//                            }
+//                        }
+//                        bdo2.put("processCategory", "C")
+//                        bdo2.put("processKey", "fabassembly")
+//                        bdo2.put("taskKey", "test_data_visualization")
+//                        unitService.update(bdo2, 'admin', false)
+//                    }
+//                } catch (Exception exc) {
+//                    render('C' + exc.toString() + "<br/>")
 //                }
 //            }
-//            s.each {
-//                summarizeSyncCurrService.createSummaries(db, it.unitId, it.code, null, null, null, it.testId, "test_data_visualization", it.mask, null)
-//            }
 
-            def cc = []
-            temp.each {
-                render(it.code + " " + it.testId + "<br/>")
-                def unit = db.unit.find(["code": it.code], ['code': 1, 'testDataIndex': 1, mask: 1]).collect { it }[0]
-                if (unit && unit.testDataIndex) {
-                    unit.testDataIndex.each { testId ->
-                        cc.add([tid: it._id, unitId: unit._id, code: it.code, testId: testId, mask: unit.mask])
+            // Recalulate all test data for wafers
+            def tt = new BasicDBObject('$gt', 170101000000)
+            tt.put('$lt', 20000000000000)
+
+            units.each {
+                bdo.put("value.code", it.code)
+                bdo.put("value.testId", tt)
+                bdo.put("value.tkey", "test_data_visualization")
+
+                def temp = db.testData.find(bdo, new BasicDBObject('value.data', 0)).addSpecial('$orderby', new BasicDBObject("value.testId", 1)).collect { td ->
+                    ["code": td.value.code, unitId: it._id, "testId": td.value.testId, "mask": it.unit.mask]
+                }
+                temp.each { td ->
+                    try {
+                        render(td.code + " " + td.unitId + " " + td.testId + " " + td.mask + "<br/>")
+                        summarizeSyncCurrService.createSummaries(db, td.unitId, td.code, null, null, null, td.testId, "test_data_visualization", td.mask, null)
+                        couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', td.code, td.testId, couponvars)
+                    } catch (Exception exc) {
+
+                        render('W' + exc.toString() + "<br/>")
                     }
+                }
+            }
 
-                }
-            }
-            cc.each {
-                try {
-                    def couponvars = contentService.getVariables("C", "fabassembly", "test_data_visualization", "dc");
-                    couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', it.code, it.testId, couponvars)
-                } catch (Exception exc) {
-                    render(exc.toString() + "<br/>")
-                }
-            }
+
         }
         catch (Exception exc) {
             logr.error(exc.getMessage())

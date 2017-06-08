@@ -94,16 +94,17 @@ class BasicDataSyncService {
         def db = mongo.getDB("glo")
 
         !logr.isDebugEnabled() ?: logr.debug("test data sync job started.")
-
+        def couponvars = contentService.getStepVariables("C", "fabassembly", "test_data_visualization", "dc");
         // Create list of unique files grouped by wafer id
         units.keySet().each {
 
             def bdo = new BasicDBObject()
             bdo.put("value.code", it)
             bdo.put("value.tkey", "test_data_visualization")
+            bdo.put("value.testId", new BasicDBObject('$lt', 20000000000000))
 
-            def testData = db.testData.find(bdo, new BasicDBObject()).addSpecial('$orderby', new BasicDBObject("value.testId", -1)).collect { it }[0]
-            if (testData) {
+            def testDatas = db.testData.find(bdo, new BasicDBObject()).addSpecial('$orderby', new BasicDBObject("value.testId", -1)).collect { it }
+            testDatas.each { testData ->
                 def unit = db.unit.find([code: it], new BasicDBObject()).collect{it}[0]
                 unit.put("id", unit["_id"])
                 bdo.put("testDataIndex", [])
@@ -116,7 +117,6 @@ class BasicDataSyncService {
                 summarizeSyncCurrService.createSummaries(db, unit._id, unit.code, bdo, null, null, testData.value.testId.toString().toLong(), testData.value.tkey, unit.mask, null)
 
                 if (unit.pkey == 'epifab') {
-                    def couponvars = contentService.getVariables("C", "fabassembly", "test_data_visualization", "dc");
                     couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', unit.code, testData.value.testId.toString().toLong(), couponvars)
                 }
             }

@@ -662,7 +662,7 @@ class HistoryService {
         if (hist["dataLog"] && hdlsize > 3000) {
             def r = [];
             for (def i = hdlsize - 3000; i < hdlsize; i++) {
-                r.add= hist["dataLog"][i];
+                r.add(hist["dataLog"][i]);
             }
             hist["dataLog"] = r;
         }
