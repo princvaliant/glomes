@@ -101,10 +101,9 @@ class BasicDataSyncService {
             def bdo = new BasicDBObject()
             bdo.put("value.code", it)
             bdo.put("value.tkey", "test_data_visualization")
-            bdo.put("value.testId", new BasicDBObject('$lt', 20000000000000))
 
-            def testDatas = db.testData.find(bdo, new BasicDBObject()).addSpecial('$orderby', new BasicDBObject("value.testId", -1)).collect { it }
-            testDatas.each { testData ->
+            def testData = db.testData.find(bdo, new BasicDBObject()).addSpecial('$orderby', new BasicDBObject("value.testId", -1)).collect { it }[0]
+            if (testData) {
                 def unit = db.unit.find([code: it], new BasicDBObject()).collect{it}[0]
                 unit.put("id", unit["_id"])
                 bdo.put("testDataIndex", [])
@@ -116,7 +115,7 @@ class BasicDataSyncService {
                 }
                 summarizeSyncCurrService.createSummaries(db, unit._id, unit.code, bdo, null, null, testData.value.testId.toString().toLong(), testData.value.tkey, unit.mask, null)
 
-                if (unit.pkey == 'epifab') {
+                if (unit.pkey == 'epifab' && testData.value.testId.toString().toLong() < 20000000000000) {
                     couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', unit.code, testData.value.testId.toString().toLong(), couponvars)
                 }
             }
