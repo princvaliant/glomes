@@ -642,7 +642,7 @@ class UploadQevController {
                         bdo2.put("processCategory", "C")
                         bdo2.put("processKey", "fabassembly")
                         bdo2.put("taskKey", "test_data_visualization")
-                        unitService.update(bdo2, 'admin', false)
+                        unitService.update(bdo2, 'admin', true)
                     }
                 } catch (Exception exc) {
                     render('C' + exc.toString() + "<br/>")
@@ -709,42 +709,23 @@ class UploadQevController {
     def nidot = {
 
         def tkey = "ni_dot_test"
-
-        String dir = grailsApplication.config.glo.probeTestDirectory
-        String syncType = "PROBETEST|" + tkey
-
-        if (tkey in [
-                "nw_ito_dot_test",
-                "ito_dot_test"
-        ]) {
-            dir = grailsApplication.config.glo.itoProbeTestDirectory
-        }
-        if (tkey in ["fa_test"]) {
-            dir = grailsApplication.config.glo.faTestDirectory
-        }
-        if (!dir) {
-            throw new RuntimeException("Probe, ITO or FA test sync directory not specified")
-        }
-
+        String syncType = "PROBETESTNEW|" + tkey
 
         def db = mongo.getDB("glo")
         def query = new BasicDBObject()
         query.put("parentCode", null)
-        query.put("value.ni_dot_test.actualStart", new BasicDBObject('$exists', 1))
-        def df = new Date().clearTime() - 60
+        query.put("value.productCode", new BasicDBObject('$in', ['100W', '101W', '110W', '105W', '111W']))
+        def df = new Date().clearTime() - 20
         query.put("value.ni_dot_test.actualStart", new BasicDBObject('$gt', df))
         def fields = new BasicDBObject()
         fields.put("id", 1)
         fields.put("code", 1)
-        def units = db.dataReport.find(query, fields).collect { it }
 
-        int c = 0
         def unitsToBeSynched = [:]
-        units.each {
-
-            File f = new File(dir + "/" + it.code)
-            if (f.exists()) {
-                unitsToBeSynched.put(f, it)
+        db.dataReport.find(query, fields).collect {
+            def unit = db.unit.find(new BasicDBObject('code',it.code), new BasicDBObject()).collect {it}[0]
+            if (unit) {
+                unitsToBeSynched.put(unit, '')
             }
         }
 

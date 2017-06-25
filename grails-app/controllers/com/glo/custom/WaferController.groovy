@@ -1431,12 +1431,7 @@ class WaferController extends com.glo.run.Rest {
         XSSFCellStyle style = workbook.createCellStyle()
         XSSFCreationHelper createHelper = workbook.getCreationHelper();
         style.setDataFormat(createHelper.createDataFormat().getFormat("MM/dd/yyyy hh:mm"))
-        Set lst = new HashSet()
-        map.each { k, v ->
-            v.each { k2, v2 ->
-                lst.add(k2)
-            }
-        }
+
         map.each { k, v ->
             XSSFRow rowData = sheet.createRow(r)
             def c = 0
@@ -1453,7 +1448,7 @@ class WaferController extends com.glo.run.Rest {
             cellData = rowData.createCell(c)
             cellData.setCellValue(obj.date)
             cellData.setCellStyle(style)
-            lst.each { k2 ->
+            columns.each { k2 ->
                 def v2 = v[k2]
                 c++
                 cellData = rowData.createCell((int) c)

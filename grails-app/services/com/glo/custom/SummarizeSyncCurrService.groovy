@@ -163,7 +163,7 @@ class SummarizeSyncCurrService {
             bdo.put("mask", mask)
             bdo.put("id", unitId)
 
-            unitService.update(bdo, "admin", false)
+            unitService.update(bdo, "admin", true)
         } else {
             db.unit.update(new BasicDBObject("code", unitCode), new BasicDBObject('$set', new BasicDBObject(getSyncVar(tkey), "FAIL")), false, false)
         }

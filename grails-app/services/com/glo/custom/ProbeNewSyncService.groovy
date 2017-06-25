@@ -59,6 +59,8 @@ class ProbeNewSyncService {
                                     volt    : '$Volt',
                                     eqe     : '$eqe',
                                     wpe     : '$wpe',
+                                    eqec     : '$eqec',
+                                    wpec     : '$wpec',
                                     peak    : '$RawPeakWavelength',
                                     dominant: '$dominantWavelength',
                                     photometric: '$photometric',
@@ -361,7 +363,7 @@ class ProbeNewSyncService {
                                peakPower = it.photometric,
                                intPower = it.radiometric
 
-                        currsweep.add([curr, it.volt, it.radiometric, 0, it.fwhm, 0, 0, it.wpe, 0, it.eqe])
+                        currsweep.add([curr, it.volt, it.radiometric, it.wpe, it.fwhm, 0, it.wpec, it.eqe, it.eqec])
 
                         def grpCurr = "Data @ " + curr.round() + "mA"
                         if (curr < 1) {

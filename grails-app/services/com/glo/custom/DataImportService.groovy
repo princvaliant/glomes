@@ -1965,20 +1965,14 @@ class DataImportService {
         // Performance calculated values
         def radioPower = var.radiometric ? var.radiometric.toFloat() : -1
         def centroid = var.Centroid ? var.Centroid.toFloat() : -1
-        if (volt * current != 0 && !var.wpe) {
-            def vWpe = 100 * radioPower / (volt * current)
-            if (vWpe >= 100) vWpe = 0
-            objMeasure.put("wpe", vWpe.toString().toFloat())
-        } else {
-            objMeasure.put("wpe", var.wpe.toString().toFloat())
-        }
-        if (current != 0 && !var.eqe) {
-            def vEqe = 80.66 * radioPower * centroid / (current * 1000)   //  0.8066 * 100%   (e/hc)
-            if (vEqe >= 100) vEqe = 0
-            objMeasure.put("eqe", vEqe.toString().toFloat())
-        } else {
+        if (var.eqe)
             objMeasure.put("eqe", var.eqe.toString().toFloat())
-        }
+        if (var.wpe)
+            objMeasure.put("wpe", var.wpe.toString().toFloat())
+        if (var.eqec)
+            objMeasure.put("eqec", var.eqec.toString().toFloat())
+        if (var.wpec)
+            objMeasure.put("wpec", var.wpec.toString().toFloat())
 
         // Optical data
         objMeasure.put("IntegrationTime", var.IntegrationTime)
