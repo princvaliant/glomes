@@ -17,7 +17,7 @@ class ImportExperimentDataJob {
     }
 
 	def execute() {
-		if (grailsApplication.config.glo.tomcatServer == "calserver04") {
+		if (grailsApplication.config.glo.tomcatServer == "calserver20") {
             try {
          //       experimentDataService.importFiles()
             } catch (Exception exc) {

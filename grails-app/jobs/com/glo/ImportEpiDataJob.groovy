@@ -28,7 +28,7 @@ class ImportEpiDataJob {
 
 	def execute() {
 
-		if (grailsApplication.config.glo.tomcatServer == "calserver04") {
+		if (grailsApplication.config.glo.tomcatServer == "calserver20") {
 			
 			def u = grailsApplication.config.grails.serverURL + "/analyser/epi/"
 			def url = new URL(u)

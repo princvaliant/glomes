@@ -18,7 +18,7 @@ class TestDataImagesJob {
 
 	def execute() {
 
-		if (grailsApplication.config.glo.tomcatServer == "calserver04") {
+		if (grailsApplication.config.glo.tomcatServer == "calserver20") {
             try {
                 testDataImagesService.processAll()
             } catch (Exception exc) {

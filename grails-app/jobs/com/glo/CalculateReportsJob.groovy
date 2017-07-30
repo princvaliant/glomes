@@ -30,7 +30,7 @@ class CalculateReportsJob {
 
 	def execute() {
 
-		if (grailsApplication.config.glo.tomcatServer == "calserver04") {
+		if (grailsApplication.config.glo.tomcatServer == "calserver20") {
 		//	dataViewService.recalculateCharts()
 		//	spcService.recalculateCharts()
 		}

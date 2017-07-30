@@ -122,8 +122,11 @@ class EpiRunService {
 
 	
 	def importEpiData(def reactor) {
-	
-		def file = new File("\\\\calserver03\\Growth\\DB\\" + reactor.toUpperCase() + "RecLog\\RecLogDB_V3.mdb")
+
+
+     //   def file = new File("/Users/aleksandarvolos/Documents/sync/" + reactor.toUpperCase() + "RecLog\\RecLogDB_V3.mdb")
+
+	    def file = new File("\\\\calserver03\\Growth\\DB\\" + reactor.toUpperCase() + "RecLog\\RecLogDB_V3.mdb")
 		
 		// check the date on the file
 		if (!file.exists()  && !dateCheckerService.modified("EPIDATA2" + reactor.toUpperCase() , file) )
