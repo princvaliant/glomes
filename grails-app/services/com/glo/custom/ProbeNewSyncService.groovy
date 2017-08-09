@@ -582,8 +582,8 @@ class ProbeNewSyncService {
                                 List fwhms = ddd.collect { (double) (it[4] ?: 0) }
                                 List wpes = ddd.collect { (double) (it[3] ?: 0) }
                                 List eqes = ddd.collect { (double) (it[7] ?: 0) }
-                                List wpecs = ddd.collect { (double) (it[11] ?: 0) }
-                                List eqecs = ddd.collect { (double) (it[13] ?: 0) }
+                                List wpecs = ddd.collect { (double) (it[6] ?: 0) }
+                                List eqecs = ddd.collect { (double) (it[8] ?: 0) }
 
                                 DescriptiveStatistics statsWpe = new DescriptiveStatistics((double[]) currents.data.collect {
                                     if (it[3] == null) 0
@@ -615,10 +615,10 @@ class ProbeNewSyncService {
                                             avgWpe01.addValue(currrow[3])
                                             tValue.put("eqe01", currrow[7])
                                             avgEqe01.addValue(currrow[7])
-                                            tValue.put("wpec01", currrow[11])
-                                            avgWpec01.addValue(currrow[11])
-                                            tValue.put("eqec01", currrow[13])
-                                            avgEqec01.addValue(currrow[13])
+                                            tValue.put("wpec01", currrow[6])
+                                            avgWpec01.addValue(currrow[6])
+                                            tValue.put("eqec01", currrow[8])
+                                            avgEqec01.addValue(currrow[8])
                                         }
                                     }
 
@@ -633,10 +633,10 @@ class ProbeNewSyncService {
                                             tValue.put("eqe02", currrow[7])
                                             avgEqe02.addValue(currrow[7])
 
-                                            tValue.put("wpec02", currrow[11])
-                                            avgWpec02.addValue(currrow[11])
-                                            tValue.put("eqec02", currrow[13])
-                                            avgEqec02.addValue(currrow[13])
+                                            tValue.put("wpec02", currrow[6])
+                                            avgWpec02.addValue(currrow[6])
+                                            tValue.put("eqec02", currrow[8])
+                                            avgEqec02.addValue(currrow[8])
                                         }
                                     }
 
@@ -650,10 +650,10 @@ class ProbeNewSyncService {
                                             avgWpe04.addValue(currrow[3])
                                             tValue.put("eqe04", currrow[7])
                                             avgEqe04.addValue(currrow[7])
-                                            tValue.put("wpec04", currrow[11])
-                                            avgWpec04.addValue(currrow[11])
-                                            tValue.put("eqec04", currrow[13])
-                                            avgEqec04.addValue(currrow[13])
+                                            tValue.put("wpec04", currrow[6])
+                                            avgWpec04.addValue(currrow[6])
+                                            tValue.put("eqec04", currrow[8])
+                                            avgEqec04.addValue(currrow[8])
                                         }
                                     }
 
@@ -668,10 +668,10 @@ class ProbeNewSyncService {
                                         tValue.put("eqe06", currrow[7])
                                         avgEqe06.addValue(currrow[7])
 
-                                            tValue.put("wpec06", currrow[11])
-                                            avgWpec06.addValue(currrow[11])
-                                            tValue.put("eqec06", currrow[13])
-                                            avgEqec06.addValue(currrow[13])
+                                            tValue.put("wpec06", currrow[6])
+                                            avgWpec06.addValue(currrow[6])
+                                            tValue.put("eqec06", currrow[8])
+                                            avgEqec06.addValue(currrow[8])
                                         }
                                     }
 
@@ -686,10 +686,10 @@ class ProbeNewSyncService {
                                             tValue.put("eqe08", currrow[7])
                                             avgEqe08.addValue(currrow[7])
 
-                                            tValue.put("wpec08", currrow[11])
-                                            avgWpec08.addValue(currrow[11])
-                                            tValue.put("eqec08", currrow[13])
-                                            avgEqec08.addValue(currrow[13])
+                                            tValue.put("wpec08", currrow[6])
+                                            avgWpec08.addValue(currrow[6])
+                                            tValue.put("eqec08", currrow[8])
+                                            avgEqec08.addValue(currrow[8])
                                         }
                                     }
 
@@ -703,10 +703,10 @@ class ProbeNewSyncService {
                                             avgWpe1.addValue(currrow[3])
                                             tValue.put("eqe1", currrow[7])
                                             avgEqe1.addValue(currrow[7])
-                                            tValue.put("wpec1", currrow[11])
-                                            avgWpec1.addValue(currrow[11])
-                                            tValue.put("eqec1", currrow[13])
-                                            avgEqec1.addValue(currrow[13])
+                                            tValue.put("wpec1", currrow[6])
+                                            avgWpec1.addValue(currrow[6])
+                                            tValue.put("eqec1", currrow[8])
+                                            avgEqec1.addValue(currrow[8])
                                         }
                                     }
 
@@ -721,10 +721,10 @@ class ProbeNewSyncService {
                                             tValue.put("eqe2", currrow[7])
                                             avgEqe2.addValue(currrow[7])
 
-                                            tValue.put("wpec2", currrow[11])
-                                            avgWpec2.addValue(currrow[11])
-                                            tValue.put("eqec2", currrow[13])
-                                            avgEqec2.addValue(currrow[13])
+                                            tValue.put("wpec2", currrow[6])
+                                            avgWpec2.addValue(currrow[6])
+                                            tValue.put("eqec2", currrow[8])
+                                            avgEqec2.addValue(currrow[8])
                                         }
                                     }
 
@@ -738,10 +738,10 @@ class ProbeNewSyncService {
                                             avgWpe4.addValue(currrow[3])
                                             tValue.put("eqe4", currrow[7])
                                             avgEqe4.addValue(currrow[7])
-                                            tValue.put("wpec4", currrow[11])
-                                            avgWpec4.addValue(currrow[11])
-                                            tValue.put("eqec4", currrow[13])
-                                            avgEqec4.addValue(currrow[13])
+                                            tValue.put("wpec4", currrow[6])
+                                            avgWpec4.addValue(currrow[6])
+                                            tValue.put("eqec4", currrow[8])
+                                            avgEqec4.addValue(currrow[8])
                                         }
                                     }
 
@@ -756,10 +756,10 @@ class ProbeNewSyncService {
                                             tValue.put("eqe5", currrow[7])
                                             avgEqe5.addValue(currrow[7])
 
-                                            tValue.put("wpec5", currrow[11])
-                                            avgWpec5.addValue(currrow[11])
-                                            tValue.put("eqec5", currrow[13])
-                                            avgEqec5.addValue(currrow[13])
+                                            tValue.put("wpec5", currrow[6])
+                                            avgWpec5.addValue(currrow[6])
+                                            tValue.put("eqec5", currrow[8])
+                                            avgEqec5.addValue(currrow[8])
                                         }
                                     }
 
@@ -775,10 +775,10 @@ class ProbeNewSyncService {
                                             tValue.put("eqe10", currrow[7])
                                             avgEqe10.addValue(currrow[7])
 
-                                            tValue.put("wpec10", currrow[11])
-                                            avgWpec10.addValue(currrow[11])
-                                            tValue.put("eqec10", currrow[13])
-                                            avgEqec10.addValue(currrow[13])
+                                            tValue.put("wpec10", currrow[6])
+                                            avgWpec10.addValue(currrow[6])
+                                            tValue.put("eqec10", currrow[8])
+                                            avgEqec10.addValue(currrow[8])
                                         }
                                     }
                                 }
