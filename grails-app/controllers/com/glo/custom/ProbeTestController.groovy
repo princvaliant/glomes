@@ -63,17 +63,21 @@ class ProbeTestController extends com.glo.run.Rest {
 			def file = fileService.retrieveFile(fn)
 			if (file) {
 				file.writeTo(path + params.code + "_" + params.device + "_" + it + "mA.jpg")
-				exp.put("image", params.code + "_" + params.device + "_" + it + "mA.jpg")
-                exp.put('extens', 'jpg')
 			}
             def fn1 = params.code + "_" + params.device + "_" + it + "mA.png"
             def file1 = fileService.retrieveFile(fn)
             if (file1) {
                 file1.writeTo(path + params.code + "_" + params.device + "_" + it + "mA.png")
-                exp.put("image", params.code + "_" + params.device + "_" + it + "mA.png")
-                exp.put('extens', 'png')
             }
         }
+        def pwl = ret.value.data.peakWavelength[0].toFloat();
+        if (pwl > 570) {
+            exp.put("image", params.code + "_" + params.device + "_1mA.png")
+        } else {
+            exp.put("image", params.code + "_" + params.device + "_0.6mA.png")
+        }
+        exp.put('extens', 'png')
+
         exp.put("data", [:])
 
         def spectrums = [:]

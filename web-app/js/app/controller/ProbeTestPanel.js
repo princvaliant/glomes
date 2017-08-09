@@ -516,7 +516,7 @@ Ext.define('glo.controller.ProbeTestPanel', {
 				success : function(response) {
 					
 					var obj = Ext.decode(response.responseText);
-					
+
 					var d = Ext.getCmp('probeDeviceDataId');
 					d.setSource(obj.data);
 					

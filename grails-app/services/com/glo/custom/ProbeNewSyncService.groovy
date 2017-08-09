@@ -582,8 +582,8 @@ class ProbeNewSyncService {
                                 List fwhms = ddd.collect { (double) (it[4] ?: 0) }
                                 List wpes = ddd.collect { (double) (it[3] ?: 0) }
                                 List eqes = ddd.collect { (double) (it[7] ?: 0) }
-                                List wpecs = ddd.collect { (double) (it[6] ?: 0) }
-                                List eqecs = ddd.collect { (double) (it[8] ?: 0) }
+                                List wpecs = ddd.collect { (double) (it[11] ?: 0) }
+                                List eqecs = ddd.collect { (double) (it[13] ?: 0) }
 
                                 DescriptiveStatistics statsWpe = new DescriptiveStatistics((double[]) currents.data.collect {
                                     if (it[3] == null) 0
@@ -610,15 +610,15 @@ class ProbeNewSyncService {
                                         avgV01.addValue(currrow[1])
                                         tValue.put("fwhm01", currrow[4])
                                         avgFwhm01.addValue(currrow[4])
-                                        if (currrow[3] > 0  && currrow[6] > 0) {
+                                        if (currrow[3] > 0  && currrow[7] > 0) {
                                             tValue.put("wpe01", currrow[3])
                                             avgWpe01.addValue(currrow[3])
                                             tValue.put("eqe01", currrow[7])
                                             avgEqe01.addValue(currrow[7])
-                                            tValue.put("wpec01", currrow[6])
-                                            avgWpec01.addValue(currrow[6])
-                                            tValue.put("eqec01", currrow[8])
-                                            avgEqec01.addValue(currrow[8])
+                                            tValue.put("wpec01", currrow[11])
+                                            avgWpec01.addValue(currrow[11])
+                                            tValue.put("eqec01", currrow[13])
+                                            avgEqec01.addValue(currrow[13])
                                         }
                                     }
 
@@ -627,16 +627,16 @@ class ProbeNewSyncService {
                                         avgV02.addValue(currrow[1])
                                         tValue.put("fwhm02", currrow[4])
                                         avgFwhm02.addValue(currrow[4])
-                                        if (currrow[3] > 0  && currrow[6] > 0) {
+                                        if (currrow[3] > 0  && currrow[7] > 0) {
                                             tValue.put("wpe02", currrow[3])
                                             avgWpe02.addValue(currrow[3])
                                             tValue.put("eqe02", currrow[7])
                                             avgEqe02.addValue(currrow[7])
 
-                                            tValue.put("wpec02", currrow[6])
-                                            avgWpec02.addValue(currrow[6])
-                                            tValue.put("eqec02", currrow[8])
-                                            avgEqec02.addValue(currrow[8])
+                                            tValue.put("wpec02", currrow[11])
+                                            avgWpec02.addValue(currrow[11])
+                                            tValue.put("eqec02", currrow[13])
+                                            avgEqec02.addValue(currrow[13])
                                         }
                                     }
 
@@ -645,15 +645,15 @@ class ProbeNewSyncService {
                                         avgV04.addValue(currrow[1])
                                         tValue.put("fwhm04", currrow[4])
                                         avgFwhm04.addValue(currrow[4])
-                                        if (currrow[3] > 0  && currrow[6] > 0) {
+                                        if (currrow[3] > 0  && currrow[7] > 0) {
                                             tValue.put("wpe04", currrow[3])
                                             avgWpe04.addValue(currrow[3])
                                             tValue.put("eqe04", currrow[7])
                                             avgEqe04.addValue(currrow[7])
-                                            tValue.put("wpec04", currrow[6])
-                                            avgWpec04.addValue(currrow[6])
-                                            tValue.put("eqec04", currrow[8])
-                                            avgEqec04.addValue(currrow[8])
+                                            tValue.put("wpec04", currrow[11])
+                                            avgWpec04.addValue(currrow[11])
+                                            tValue.put("eqec04", currrow[13])
+                                            avgEqec04.addValue(currrow[13])
                                         }
                                     }
 
@@ -662,16 +662,16 @@ class ProbeNewSyncService {
                                         avgV06.addValue(currrow[1])
                                         tValue.put("fwhm06", currrow[4])
                                         avgFwhm06.addValue(currrow[4])
-                                        if (currrow[3] > 0  && currrow[6] > 0) {
+                                        if (currrow[3] > 0  && currrow[7] > 0) {
                                         tValue.put("wpe06", currrow[3])
                                         avgWpe06.addValue(currrow[3])
                                         tValue.put("eqe06", currrow[7])
                                         avgEqe06.addValue(currrow[7])
 
-                                            tValue.put("wpec06", currrow[6])
-                                            avgWpec06.addValue(currrow[6])
-                                            tValue.put("eqec06", currrow[8])
-                                            avgEqec06.addValue(currrow[8])
+                                            tValue.put("wpec06", currrow[11])
+                                            avgWpec06.addValue(currrow[11])
+                                            tValue.put("eqec06", currrow[13])
+                                            avgEqec06.addValue(currrow[13])
                                         }
                                     }
 
@@ -680,16 +680,16 @@ class ProbeNewSyncService {
                                         avgV08.addValue(currrow[1])
                                         tValue.put("fwhm08", currrow[4])
                                         avgFwhm08.addValue(currrow[4])
-                                        if (currrow[3] > 0  && currrow[6] > 0) {
+                                        if (currrow[3] > 0  && currrow[7] > 0) {
                                             tValue.put("wpe08", currrow[3])
                                             avgWpe08.addValue(currrow[3])
                                             tValue.put("eqe08", currrow[7])
                                             avgEqe08.addValue(currrow[7])
 
-                                            tValue.put("wpec08", currrow[6])
-                                            avgWpec08.addValue(currrow[6])
-                                            tValue.put("eqec08", currrow[8])
-                                            avgEqec08.addValue(currrow[8])
+                                            tValue.put("wpec08", currrow[11])
+                                            avgWpec08.addValue(currrow[11])
+                                            tValue.put("eqec08", currrow[13])
+                                            avgEqec08.addValue(currrow[13])
                                         }
                                     }
 
@@ -698,15 +698,15 @@ class ProbeNewSyncService {
                                         avgV1.addValue(currrow[1])
                                         tValue.put("fwhm1", currrow[4])
                                         avgFwhm1.addValue(currrow[4])
-                                        if (currrow[3] > 0  && currrow[6] > 0) {
+                                        if (currrow[3] > 0  && currrow[7] > 0) {
                                             tValue.put("wpe1", currrow[3])
                                             avgWpe1.addValue(currrow[3])
                                             tValue.put("eqe1", currrow[7])
                                             avgEqe1.addValue(currrow[7])
-                                            tValue.put("wpec1", currrow[6])
-                                            avgWpec1.addValue(currrow[6])
-                                            tValue.put("eqec1", currrow[8])
-                                            avgEqec1.addValue(currrow[8])
+                                            tValue.put("wpec1", currrow[11])
+                                            avgWpec1.addValue(currrow[11])
+                                            tValue.put("eqec1", currrow[13])
+                                            avgEqec1.addValue(currrow[13])
                                         }
                                     }
 
@@ -715,16 +715,16 @@ class ProbeNewSyncService {
                                         avgV2.addValue(currrow[1])
                                         tValue.put("fwhm2", currrow[4])
                                         avgFwhm2.addValue(currrow[4])
-                                        if (currrow[3] > 0 && currrow[6] > 0) {
+                                        if (currrow[3] > 0 && currrow[7] > 0) {
                                             tValue.put("wpe2", currrow[3])
                                             avgWpe2.addValue(currrow[3])
                                             tValue.put("eqe2", currrow[7])
                                             avgEqe2.addValue(currrow[7])
 
-                                            tValue.put("wpec2", currrow[6])
-                                            avgWpec2.addValue(currrow[6])
-                                            tValue.put("eqec2", currrow[8])
-                                            avgEqec2.addValue(currrow[8])
+                                            tValue.put("wpec2", currrow[11])
+                                            avgWpec2.addValue(currrow[11])
+                                            tValue.put("eqec2", currrow[13])
+                                            avgEqec2.addValue(currrow[13])
                                         }
                                     }
 
@@ -733,15 +733,15 @@ class ProbeNewSyncService {
                                         avgV4.addValue(currrow[1])
                                         tValue.put("fwhm4", currrow[4])
                                         avgFwhm4.addValue(currrow[4])
-                                        if (currrow[3] > 0 && currrow[6] > 0) {
+                                        if (currrow[3] > 0 && currrow[7] > 0) {
                                             tValue.put("wpe4", currrow[3])
                                             avgWpe4.addValue(currrow[3])
                                             tValue.put("eqe4", currrow[7])
                                             avgEqe4.addValue(currrow[7])
-                                            tValue.put("wpec4", currrow[6])
-                                            avgWpec4.addValue(currrow[6])
-                                            tValue.put("eqec4", currrow[8])
-                                            avgEqec4.addValue(currrow[8])
+                                            tValue.put("wpec4", currrow[11])
+                                            avgWpec4.addValue(currrow[11])
+                                            tValue.put("eqec4", currrow[13])
+                                            avgEqec4.addValue(currrow[13])
                                         }
                                     }
 
@@ -750,16 +750,16 @@ class ProbeNewSyncService {
                                         avgV5.addValue(currrow[1])
                                         tValue.put("fwhm5", currrow[4])
                                         avgFwhm5.addValue(currrow[4])
-                                        if (currrow[3] > 0 && currrow[6] > 0) {
+                                        if (currrow[3] > 0 && currrow[7] > 0) {
                                             tValue.put("wpe5", currrow[3])
                                             avgWpe5.addValue(currrow[3])
                                             tValue.put("eqe5", currrow[7])
                                             avgEqe5.addValue(currrow[7])
 
-                                            tValue.put("wpec5", currrow[6])
-                                            avgWpec5.addValue(currrow[6])
-                                            tValue.put("eqec5", currrow[8])
-                                            avgEqec5.addValue(currrow[8])
+                                            tValue.put("wpec5", currrow[11])
+                                            avgWpec5.addValue(currrow[11])
+                                            tValue.put("eqec5", currrow[13])
+                                            avgEqec5.addValue(currrow[13])
                                         }
                                     }
 
@@ -769,16 +769,16 @@ class ProbeNewSyncService {
                                         avgV10.addValue(currrow[1])
                                         tValue.put("fwhm10", currrow[4])
                                         avgFwhm10.addValue(currrow[4])
-                                        if (currrow[3] > 0 && currrow[6] > 0) {
+                                        if (currrow[3] > 0 && currrow[7] > 0) {
                                             tValue.put("wpe10", currrow[3])
                                             avgWpe10.addValue(currrow[3])
                                             tValue.put("eqe10", currrow[7])
                                             avgEqe10.addValue(currrow[7])
 
-                                            tValue.put("wpec10", currrow[6])
-                                            avgWpec10.addValue(currrow[6])
-                                            tValue.put("eqec10", currrow[8])
-                                            avgEqec10.addValue(currrow[8])
+                                            tValue.put("wpec10", currrow[11])
+                                            avgWpec10.addValue(currrow[11])
+                                            tValue.put("eqec10", currrow[13])
+                                            avgEqec10.addValue(currrow[13])
                                         }
                                     }
                                 }
@@ -1150,6 +1150,12 @@ class ProbeNewSyncService {
                     avg = avgEqe1.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("eqe1", avg)
+                    avg = avgWpec1.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("wpec1", avg)
+                    avg = avgEqec1.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("eqec1", avg)
                     avg = avgV1.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("v1", avg)
@@ -1166,6 +1172,12 @@ class ProbeNewSyncService {
                     avg = avgEqe2.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("eqe2", avg)
+                    avg = avgWpec2.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("wpec2", avg)
+                    avg = avgEqec2.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("eqec2", avg)
                     avg = avgV2.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("v2", avg)
@@ -1182,6 +1194,12 @@ class ProbeNewSyncService {
                     avg = avgEqe4.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("eqe4", avg)
+                    avg = avgWpec4.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("wpec4", avg)
+                    avg = avgEqec4.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("eqec4", avg)
                     avg = avgV4.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("v4", avg)
@@ -1198,6 +1216,12 @@ class ProbeNewSyncService {
                     avg = avgEqe5.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("eqe5", avg)
+                    avg = avgWpec5.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("wpec5", avg)
+                    avg = avgEqec5.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("eqec5", avg)
                     avg = avgV5.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("v5", avg)
@@ -1214,6 +1238,12 @@ class ProbeNewSyncService {
                     avg = avgEqe10.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("eqe10", avg)
+                    avg = avgWpec10.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("wpec10", avg)
+                    avg = avgEqec10.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("eqec10", avg)
                     avg = avgV10.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("v10", avg)
@@ -1224,37 +1254,6 @@ class ProbeNewSyncService {
                     if (!avg.isNaN())
                         bdoUnit.put("fwhm10", avg)
 
-                    avg = avgWpe20.getMean()
-                    if (!avg.isNaN())
-                        bdoUnit.put("wpe20", avg)
-                    avg = avgEqe20.getMean()
-                    if (!avg.isNaN())
-                        bdoUnit.put("eqe20", avg)
-                    avg = avgV20.getMean()
-                    if (!avg.isNaN())
-                        bdoUnit.put("v20", avg)
-                    avg = avgPeak20.getMean()
-                    if (!avg.isNaN())
-                        bdoUnit.put("peak20", avg)
-                    avg = avgFwhm20.getMean()
-                    if (!avg.isNaN())
-                        bdoUnit.put("fwhm20", avg)
-
-                    avg = avgWpe50.getMean()
-                    if (!avg.isNaN())
-                        bdoUnit.put("wpe50", avg)
-                    avg = avgEqe50.getMean()
-                    if (!avg.isNaN())
-                        bdoUnit.put("eqe50", avg)
-                    avg = avgV50.getMean()
-                    if (!avg.isNaN())
-                        bdoUnit.put("v50", avg)
-                    avg = avgPeak50.getMean()
-                    if (!avg.isNaN())
-                        bdoUnit.put("peak50", avg)
-                    avg = avgFwhm50.getMean()
-                    if (!avg.isNaN())
-                        bdoUnit.put("fwhm50", avg)
 
                     avg = avgWpe01.getMean()
                     if (!avg.isNaN())
@@ -1262,6 +1261,12 @@ class ProbeNewSyncService {
                     avg = avgEqe01.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("eqe01", avg)
+                    avg = avgWpec01.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("wpec01", avg)
+                    avg = avgEqec01.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("eqec01", avg)
                     avg = avgV01.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("v01", avg)
@@ -1278,6 +1283,12 @@ class ProbeNewSyncService {
                     avg = avgEqe02.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("eqe02", avg)
+                    avg = avgWpec02.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("wpec02", avg)
+                    avg = avgEqec02.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("eqec02", avg)
                     avg = avgV02.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("v02", avg)
@@ -1294,6 +1305,12 @@ class ProbeNewSyncService {
                     avg = avgEqe04.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("eqe04", avg)
+                    avg = avgWpec04.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("wpec04", avg)
+                    avg = avgEqec04.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("eqec04", avg)
                     avg = avgV04.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("v04", avg)
@@ -1310,6 +1327,12 @@ class ProbeNewSyncService {
                     avg = avgEqe06.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("eqe06", avg)
+                    avg = avgWpec06.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("wpec06", avg)
+                    avg = avgEqec06.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("eqec06", avg)
                     avg = avgV06.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("v06", avg)
@@ -1326,6 +1349,12 @@ class ProbeNewSyncService {
                     avg = avgEqe08.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("eqe08", avg)
+                    avg = avgWpec08.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("wpec08", avg)
+                    avg = avgEqec08.getMean()
+                    if (!avg.isNaN())
+                        bdoUnit.put("eqec08", avg)
                     avg = avgV08.getMean()
                     if (!avg.isNaN())
                         bdoUnit.put("v08", avg)

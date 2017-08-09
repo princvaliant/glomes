@@ -41,13 +41,13 @@ class ProbeTestImagesController {
 		def g = params
 
         def path = request.getSession().getServletContext().getRealPath("/")
-        [4,5,10,20].each {
+        [0.6, 1].each {
 
             def fn = params.code + "_" + params.device + "_" + it + "mA.jpg"
             def file = fileService.retrieveFile(fn)
             if (file) {
                 file.writeTo(path + params.code + "_" + params.device + "_" + it + "mA.jpg")
-                get (path + params.code + "_" + params.device + "_" + it + "mA.jpg", params.code + "_" + params.device, 500)
+                get (path + params.code + "_" + params.device + "_" + it + "mA.jpg", params.code + "_" + params.device + ' (' + it + ' mA)', 500)
             }
         }
 	}
