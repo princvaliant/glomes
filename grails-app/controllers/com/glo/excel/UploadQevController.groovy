@@ -716,8 +716,11 @@ class UploadQevController {
       //   query.put("code", 'HNC3563PS')
         query.put("parentCode", null)
         query.put("value.productCode", new BasicDBObject('$in', ['100', '100W', '101W', '110W', '105W', '111W']))
-        def df = new Date().clearTime() - 60
-        query.put("value.ni_dot_test.actualStart", new BasicDBObject('$gt', df))
+        def df = new Date().clearTime() - 12
+        def dt = new Date().clearTime() - 6
+        def dbo = new BasicDBObject('$gt', df)
+        dbo.put('$lte', dt)
+        query.put("value.ni_dot_test.actualStart", dbo)
         def fields = new BasicDBObject()
         fields.put("id", 1)
         fields.put("code", 1)

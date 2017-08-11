@@ -36,7 +36,8 @@ class ProbeNewSyncService {
             def res = db.measures.aggregate(
                     [
                             $match: [
-                                    WaferID: it.code
+                                    WaferID: it.code,
+                                    TestType: 'ni_dot_test'
                             ]
                     ], [
                     $sort: [

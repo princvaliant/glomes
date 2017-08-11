@@ -70,11 +70,15 @@ class ProbeTestController extends com.glo.run.Rest {
                 file1.writeTo(path + params.code + "_" + params.device + "_" + it + "mA.png")
             }
         }
-        def pwl = ret.value.data.peakWavelength[0].toFloat();
-        if (pwl > 570) {
-            exp.put("image", params.code + "_" + params.device + "_1mA.png")
+        if (ret.value.data.peakWavelength) {
+            def pwl = ret.value.data.peakWavelength[0].toFloat();
+            if (pwl > 570) {
+                exp.put("image", params.code + "_" + params.device + "_1mA.png")
+            } else {
+                exp.put("image", params.code + "_" + params.device + "_0.6mA.png")
+            }
         } else {
-            exp.put("image", params.code + "_" + params.device + "_0.6mA.png")
+            exp.put("image", params.code + "_" + params.device + "_1mA.png")
         }
         exp.put('extens', 'png')
 
