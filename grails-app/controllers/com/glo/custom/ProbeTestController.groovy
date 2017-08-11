@@ -58,7 +58,6 @@ class ProbeTestController extends com.glo.run.Rest {
 		def exp = [:]
 		def path = request.getSession().getServletContext().getRealPath("/")
 		['0_1', '0_2','0_4','0_6','0_8', '0.2','0.4','0.6','0.8', '1', '2', '4','5','10'].each {
-			
 			def fn = params.code + "_" + params.device + "_" + it + "mA.jpg"
 			def file = fileService.retrieveFile(fn)
 			if (file) {
@@ -70,8 +69,9 @@ class ProbeTestController extends com.glo.run.Rest {
                 file1.writeTo(path + params.code + "_" + params.device + "_" + it + "mA.png")
             }
         }
-        if (ret.value.data.peakWavelength) {
-            def pwl = ret.value.data.peakWavelength[0].toFloat();
+        if (ret.value.data && ret.value.data["Data @ 1mA"] && ret.value.data["Data @ 1mA"]["Peak (nm)"] &&
+                ret.value.data["Data @ 1mA"]["Peak (nm)"][0]) {
+            def pwl = ret.value.data["Data @ 1mA"]["Peak (nm)"][0].toFloat();
             if (pwl > 570) {
                 exp.put("image", params.code + "_" + params.device + "_1mA.png")
             } else {
