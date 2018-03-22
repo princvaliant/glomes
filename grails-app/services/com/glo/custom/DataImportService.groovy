@@ -746,15 +746,16 @@ class DataImportService {
 
         def db = mongo.getDB("glo")
 
-        def unit = db.unit.find(new BasicDBObject("code", var.value.code)).collect { it }[0]
-        if (!unit) {
-            throw new RuntimeException("Unit with serial# " + var.value.code + " does not exist in MES")
-        }
-
-        if (!unitService.inStep(db, var.value.code, "", var.value.tkey)) {
-            if (!(var.value.tkey in ["top_test_visualization", "uniformity_test_visualization"]))
-                throw new RuntimeException("Unit " + var.value.code + " never passed through step " + var.value.tkey)
-        }
+//  Comment out unit check
+//        def unit = db.unit.find(new BasicDBObject("code", var.value.code)).collect { it }[0]
+//        if (!unit) {
+//            throw new RuntimeException("Unit with serial# " + var.value.code + " does not exist in MES")
+//        }
+//
+//        if (!unitService.inStep(db, var.value.code, "", var.value.tkey)) {
+//            if (!(var.value.tkey in ["top_test_visualization", "uniformity_test_visualization"]))
+//                throw new RuntimeException("Unit " + var.value.code + " never passed through step " + var.value.tkey)
+//        }
 
         def bdo = new BasicDBObject()
         bdo.put("value.code", var.value.code)
@@ -769,20 +770,20 @@ class DataImportService {
 
         def udbo = new BasicDBObject()
         udbo.put('devlist', var.value.devlist)
-        addTestId(unit, var.value.tkey, var.value.testId, udbo)
+   //     addTestId(unit, var.value.tkey, var.value.testId, udbo)
 
         testData["value"].put("date", new Date())
-        testData["value"].put("experimentId", unit["experimentId"])
+    //    testData["value"].put("experimentId", unit["experimentId"])
         testData["value"].put("parentCode", null)
         testData["value"].put("syncType", "C")
 
         db.testData.save(testData)
 
-        summarizeSyncCurrService.createSummaries(db, unit._id, unit.code, udbo, null, null, var.value.testId.toString().toLong(), var.value.tkey, unit.mask, null)
+   //     summarizeSyncCurrService.createSummaries(db, unit._id, unit.code, udbo, null, null, var.value.testId.toString().toLong(), var.value.tkey, unit.mask, null)
 
         try {
-            def couponvars = contentService.getStepVariables("C", "fabassembly", "test_data_visualization", "dc");
-            couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', unit.code, var.value.testId.toString().toLong(), couponvars)
+    //        def couponvars = contentService.getStepVariables("C", "fabassembly", "test_data_visualization", "dc");
+    //        couponService.splitTestDataToCoupons(db, 'admin', 'test_data_visualization', unit.code, var.value.testId.toString().toLong(), couponvars)
         } catch (Exception exc) {
 
         }
@@ -991,9 +992,9 @@ class DataImportService {
         def db = mongo.getDB("glo")
         def unitCode = var.WaferID + (var.DeviceID ? "_" + var.DeviceID : "")
 
-        if (!unitService.inStep(db, var.WaferID, "", tkey)) {
-            throw new RuntimeException("Unit " + unitCode + " never passed through step " + tkey)
-        }
+//        if (!unitService.inStep(db, var.WaferID, "", tkey)) {
+//            throw new RuntimeException("Unit " + unitCode + " never passed through step " + tkey)
+//        }
 
         def measure
         if (toSave) {
@@ -1002,18 +1003,18 @@ class DataImportService {
             measure = var
         }
 
-        def punit
-        punit = db.unit.find(new BasicDBObject("code", var.WaferID), new BasicDBObject()).collect { it }[0]
-        if (!punit[sync]) {
-            def bdoUnit = new BasicDBObject()
-            bdoUnit.put("id", punit["_id"])
-            bdoUnit.put(sync, "YES")
-            bdoUnit.put(sync + "Experiment", [punit.code])
-            bdoUnit.put("processCategory", pctg)
-            bdoUnit.put("processKey", pkey)
-            bdoUnit.put("taskKey", tkey)
-            unitService.update(bdoUnit, "admin", true)
-        }
+//        def punit
+//        punit = db.unit.find(new BasicDBObject("code", var.WaferID), new BasicDBObject()).collect { it }[0]
+//        if (!punit[sync]) {
+//            def bdoUnit = new BasicDBObject()
+//            bdoUnit.put("id", punit["_id"])
+//            bdoUnit.put(sync, "YES")
+//            bdoUnit.put(sync + "Experiment", [punit.code])
+//            bdoUnit.put("processCategory", pctg)
+//            bdoUnit.put("processKey", pkey)
+//            bdoUnit.put("taskKey", tkey)
+//            unitService.update(bdoUnit, "admin", true)
+//        }
     }
 
     def completeNIDOT(def var, def toSave) {

@@ -39,6 +39,10 @@ class ContentService {
             valPref = valPref.replace("AUTO3CHAR", sequenceGeneratorService.nextc(p.name).toString().padLeft(3, '0'))
         }
 
+        if (valPref?.indexOf("AUTONOSTRAIGHTLINE") >= 0) {
+            valPref = valPref.replace("AUTO3CHAR", sequenceGeneratorService.nextc(p.name).toString().padLeft(3, '0'))
+        }
+
         valPref
     }
 
